@@ -212,7 +212,6 @@ button, input { font-family: inherit; }
 
 .totals-note { margin-top: 10px; }
 
-.core-grid,
 .totals-grid,
 .near-grid {
   display: grid;
@@ -222,17 +221,11 @@ button, input { font-family: inherit; }
 .near-grid { grid-template-columns: 1fr; }
 
 @media (min-width: 800px) {
-  .core-grid { grid-template-columns: 1fr 1fr; }
   .totals-grid { grid-template-columns: 1fr 1fr 0.8fr; }
   .near-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
-@media (min-width: 1100px) {
-  .core-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
-}
-
-.card,
-.core-card {
+.card {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -246,45 +239,6 @@ button, input { font-family: inherit; }
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
-}
-
-.core-symbol {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-}
-
-.core-pair {
-  margin: 2px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 650;
-  letter-spacing: 0.04em;
-}
-
-.spotline {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  margin-top: 8px;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 12px;
-}
-
-.book-row {
-  display: grid;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.style-name {
-  margin: 0 0 6px;
-  color: var(--green);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.08em;
 }
 
 .sn {
@@ -340,7 +294,6 @@ button, input { font-family: inherit; }
 .delta.up { background: var(--up-bg); color: var(--up); }
 .delta.flat { background: var(--flat-bg); color: #3e4b59; }
 
-.seed-line,
 .mini {
   margin-top: 6px;
   color: var(--muted);
@@ -350,8 +303,6 @@ button, input { font-family: inherit; }
 .mini.down { color: var(--down); }
 .mini.up { color: var(--up); }
 .mini.flat { color: var(--muted); }
-
-.seed-line { font-family: var(--mono); font-size: 11px; }
 
 .stat-grid {
   display: grid;
@@ -434,17 +385,6 @@ button, input { font-family: inherit; }
   color: white;
 }
 
-.scroll-hint {
-  display: none;
-  margin: 0 0 6px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-@media (max-width: 800px) {
-  .scroll-hint { display: block; }
-}
-
 .table-scroll {
   overflow-x: auto;
   border: 1px solid var(--line);
@@ -458,6 +398,8 @@ table {
   border-collapse: collapse;
   min-width: 760px;
 }
+
+#books-table { min-width: 0; }
 
 th, td {
   padding: 8px 10px;
@@ -515,7 +457,6 @@ th.sym { z-index: 2; background: #f6f8fb; }
 .eq { font-size: 13.5px; }
 
 @media (max-width: 800px) {
-  #books-table { min-width: 680px; }
   #books-table th,
   #books-table td { padding: 7px 7px; }
   #books-table td.sym,

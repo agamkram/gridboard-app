@@ -78,13 +78,6 @@
     return n.toLocaleString("en-US", { minimumFractionDigits: min, maximumFractionDigits: max });
   }
 
-  function formatSeed(v) {
-    if (v == null || v === "" || v === "—") return "—";
-    var n = num(v);
-    if (n == null) return String(v);
-    return formatPrice(n);
-  }
-
   function formatEt(iso) {
     var d = new Date(iso);
     if (Number.isNaN(d.getTime())) return iso ? String(iso) : "—";
@@ -121,15 +114,6 @@
     return String(v || "").toUpperCase();
   }
 
-  function coreSet(data) {
-    var list = Array.isArray(data.core_symbols) && data.core_symbols.length
-      ? data.core_symbols
-      : ["ADA", "ETH", "BTC", "ZEC"];
-    var set = {};
-    list.forEach(function (s) { set[upper(s)] = true; });
-    return set;
-  }
-
   function hotMap(data) {
     var hot = data.rollup && data.rollup.hot;
     var map = {};
@@ -158,10 +142,6 @@
     return set;
   }
 
-  function isCore(row) {
-    return !!coreSet(state.data)[upper(row.symbol)];
-  }
-
   function isHot(row) {
     return !!hotMap(state.data)[upper(row.symbol)];
   }
@@ -176,54 +156,12 @@
     return num(row.neutral_equity) == null || num(row.long_equity) == null;
   }
 
-  function findPair(symbol) {
-    var s = upper(symbol);
-    var found = null;
-    pairsOf(state.data).some(function (row) {
-      if (upper(row.symbol) === s) {
-        found = row;
-        return true;
-      }
-      return false;
-    });
-    return found;
-  }
-
   function deltaChip(delta, pct, caption) {
     var box = el("div", { class: "delta " + tone(delta) }, [
       el("div", { class: "delta-main", text: signedUsd(delta, moneyDigits(delta)) }),
       el("div", { class: "delta-sub", text: signedPct(pct) + (caption ? " " + caption : "") }),
     ]);
     return box;
-  }
-
-  function bookBlock(label, equity, seed, orders, capital) {
-    var block = el("div", { class: "book" }, [
-      el("div", { class: "style-name", text: label }),
-    ]);
-    var n = num(equity);
-    var sn = el("div", { class: "sn" }, [
-      el("div", {}, [
-        el("span", { class: "k", text: "START" }),
-        el("div", { class: "start-num", text: usd(capital, 0) }),
-      ]),
-      el("div", {}, [
-        el("span", { class: "k", text: "NOW" }),
-        el("div", { class: "now-num", text: n == null ? "—" : usd(n, 2) }),
-      ]),
-    ]);
-    block.append(sn);
-    if (n == null) {
-      block.append(el("p", { class: "mini", text: "No mark in this snapshot." }));
-    } else {
-      var d = n - capital;
-      block.append(deltaChip(d, (d / capital) * 100, "vs $10k seed"));
-    }
-    var ord = num(orders);
-    var ordText = ord == null ? "orders —" : ord + " open";
-    block.append(el("div", { class: "seed-line", text: "seed " + formatSeed(seed) }));
-    block.append(el("div", { class: "mini", text: ordText }));
-    return block;
   }
 
   function renderFeed(data) {
@@ -242,38 +180,6 @@
       banner.hidden = true;
       banner.textContent = "";
     }
-  }
-
-  function renderCore(data) {
-    var symbols = Array.isArray(data.core_symbols) && data.core_symbols.length
-      ? data.core_symbols
-      : ["ADA", "ETH", "BTC", "ZEC"];
-    var capital = capitalOf(data);
-    var grid = el("div", { class: "core-grid" });
-    symbols.forEach(function (symbol) {
-      var row = findPair(symbol);
-      var card = el("article", { class: "core-card" });
-      card.append(el("h3", { class: "core-symbol", text: symbol }));
-      card.append(el("p", { class: "core-pair", text: row && row.pair ? row.pair : "—" }));
-      var spot = row ? num(row.spot) : null;
-      var pct = row ? num(row.pct_vs_seed) : null;
-      card.append(el("div", { class: "spotline" }, [
-        el("span", { text: "spot " + (spot == null ? "—" : formatPrice(spot)) }),
-        el("span", { text: "vs seed " + (pct == null ? "—" : signedPct(pct)) }),
-      ]));
-      if (!row) {
-        card.append(el("p", { class: "empty", text: "Not in this snapshot." }));
-      } else {
-        card.append(el("div", { class: "book-row" }, [
-          bookBlock("NEUTRAL", row.neutral_equity, row.neutral_seed, row.neutral_orders, capital),
-          bookBlock("LONG", row.long_equity, row.long_seed, row.long_orders, capital),
-        ]));
-      }
-      grid.append(card);
-    });
-    var host = document.getElementById("core");
-    grid.id = "core";
-    host.replaceWith(grid);
   }
 
   function describeThreat(item) {
@@ -459,8 +365,6 @@
 
   function sortValue(row, key) {
     if (key === "symbol") return String(row.symbol || "");
-    if (key === "spot") return num(row.spot);
-    if (key === "pct") return num(row.pct_vs_seed);
     if (key === "neutral") return num(row.neutral_equity);
     if (key === "long") return num(row.long_equity);
     return null;
@@ -490,7 +394,6 @@
       var hay = [row.symbol, row.pair, row.neutral_ws, row.long_ws].join(" ").toLowerCase();
       if (hay.indexOf(q) === -1) return false;
     }
-    if (state.filter === "core") return isCore(row);
     if (state.filter === "hot") return isHot(row);
     if (state.filter === "threat") return isThreat(row);
     if (state.filter === "unseeded") return isUnseeded(row);
@@ -522,7 +425,7 @@
     var frag = document.createDocumentFragment();
     if (!rows.length) {
       frag.append(el("tr", {}, [
-        el("td", { class: "empty", colspan: "7", text: "No pairs match." }),
+        el("td", { class: "empty", colspan: "3", text: "No pairs match." }),
       ]));
     }
     rows.forEach(function (row) {
@@ -534,33 +437,15 @@
       tr.append(el("td", { class: "sym" }, [
         el("span", { class: "sym-name", text: row.symbol || "—" }),
       ]));
-      tr.append(el("td", { class: "num" }, [
-        el("div", { class: "eq", text: num(row.spot) == null ? "—" : formatPrice(num(row.spot)) }),
-      ]));
-      tr.append(el("td", { class: "num" }, [
-        el("div", { class: "eq", text: num(row.pct_vs_seed) == null ? "—" : signedPct(num(row.pct_vs_seed)) }),
-      ]));
       tr.append(equityCell(row.neutral_equity, capital));
       tr.append(equityCell(row.long_equity, capital));
-      tr.append(el("td", { class: "num" }, [
-        el("div", { class: "mini", text: "N " + formatSeed(row.neutral_seed) }),
-        el("div", { class: "mini", text: "L " + formatSeed(row.long_seed) }),
-      ]));
-      var nOrd = num(row.neutral_orders);
-      var lOrd = num(row.long_orders);
-      var ord = el("div", {
-        class: "eq" + ((nOrd != null && nOrd !== 6) || (lOrd != null && lOrd !== 6) ? " mini down" : ""),
-        text: (nOrd == null ? "—" : String(nOrd)) + " · " + (lOrd == null ? "—" : String(lOrd)),
-      });
-      tr.append(el("td", { class: "num" }, [ord]));
       frag.append(tr);
     });
     body.replaceChildren(frag);
 
     var all = pairsOf(data);
-    var counts = { all: all.length, core: 0, hot: 0, threat: 0, unseeded: 0, filled: 0 };
+    var counts = { all: all.length, hot: 0, threat: 0, unseeded: 0, filled: 0 };
     all.forEach(function (row) {
-      if (isCore(row)) counts.core += 1;
       if (isHot(row)) counts.hot += 1;
       if (isThreat(row)) counts.threat += 1;
       if (isUnseeded(row)) counts.unseeded += 1;
@@ -570,7 +455,6 @@
       var key = btn.getAttribute("data-filter");
       var labels = {
         all: "All",
-        core: "Core",
         hot: "Hot",
         threat: "Threats",
         unseeded: "Unseeded",
@@ -640,7 +524,6 @@
 
   function render() {
     renderFeed(state.data);
-    renderCore(state.data);
     renderNear(state.data);
     renderTotals(state.data);
     renderBooks();

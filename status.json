@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "4:01 PM ET",
-  "headline": "1 fill since last digest",
+  "updated_et": "6:32 PM ET",
+  "headline": "4 fills since last digest",
   "fee_label": "0.80%",
   "capital_per_book": 10000,
   "spacing": "geometric 5% (r=1.05)",
@@ -15,39 +15,103 @@
     "BTC",
     "ZEC"
   ],
-  "threats": [],
+  "threats": [
+    {
+      "symbol": "STX",
+      "pct_vs_seed": 6.87,
+      "note": "near upper band"
+    },
+    {
+      "symbol": "NIGHT",
+      "pct_vs_seed": 6.12,
+      "note": "near upper band"
+    },
+    {
+      "symbol": "MON",
+      "pct_vs_seed": 6.05,
+      "note": "near upper band"
+    },
+    {
+      "symbol": "GRASS",
+      "pct_vs_seed": -6.0,
+      "note": "near lower band"
+    },
+    {
+      "symbol": "ZRO",
+      "pct_vs_seed": 5.96,
+      "note": "near upper band"
+    },
+    {
+      "symbol": "QNT",
+      "pct_vs_seed": -4.78,
+      "note": "near lower band"
+    },
+    {
+      "symbol": "PENGU",
+      "pct_vs_seed": -4.11,
+      "note": "near lower band"
+    }
+  ],
   "rollup": {
     "other_pairs": 71,
-    "n_quiet": 70,
-    "l_quiet": 71,
-    "n_fills": 1,
-    "l_fills": 0,
-    "continuous_fills_since_last_ping": 1,
-    "hot": {
-      "LIGHTER": {
-        "until": "2026-09-30T17:21:21.333087-04:00",
-        "last_fill": "2026-09-30T15:51:21.333087-04:00",
-        "fills": 1,
-        "remaining_s": 4769,
-        "quiet_s": 630
-      }
-    }
+    "n_quiet": 69,
+    "l_quiet": 69,
+    "n_fills": 2,
+    "l_fills": 2
   },
   "fills": [
     {
-      "ts": "2026-09-30T15:51:21.334612-04:00",
-      "cycle": 36,
-      "mode": "full",
-      "symbol": "LIGHTER",
+      "symbol": "STX",
       "style": "Neutral",
-      "workspace": "mark-10k-lighter",
-      "side": "buy",
-      "price": 3.827,
-      "volume": 452.4236,
-      "reladder_side": "sell",
-      "reladder_price": 4.018,
+      "side": "sell",
+      "price": 0.37,
+      "reladder_side": "buy",
+      "reladder_price": 0.3524,
       "placed": true,
-      "note": "ok"
+      "ts": "2026-09-30T18:20:46.542658-04:00",
+      "source": "continuous_reladder"
+    },
+    {
+      "symbol": "STX",
+      "style": "Long",
+      "workspace": "mark-10k-stx-geo",
+      "side": "sell",
+      "price": 0.3768,
+      "volume": 3459.07772686,
+      "reladder_side": "buy",
+      "reladder_price": 0.3589,
+      "placed": true,
+      "note": "ok",
+      "ts": "2026-09-30T18:26:48.504068-04:00",
+      "source": "continuous_reladder"
+    },
+    {
+      "symbol": "ZRO",
+      "style": "Long",
+      "workspace": "mark-10k-zro-geo",
+      "side": "sell",
+      "price": 1.744,
+      "volume": 747.48605,
+      "reladder_side": "buy",
+      "reladder_price": 1.661,
+      "placed": true,
+      "note": "ok",
+      "ts": "2026-09-30T18:28:05.916724-04:00",
+      "source": "continuous_reladder"
+    },
+    {
+      "symbol": "ZRO",
+      "style": "Neutral",
+      "workspace": "mark-10k-zro",
+      "side": "sell",
+      "price": 1.754,
+      "volume": 1039.1714,
+      "reladder_side": "buy",
+      "reladder_price": 1.67,
+      "placed": true,
+      "note": "ok",
+      "ts": "2026-09-30T18:31:11.617869-04:00",
+      "source": "continuous_reladder"
     }
   ],
   "pairs": [
@@ -56,35 +120,33 @@
       "pair": "QNTUSD",
       "neutral_ws": "mark-10k-qnt",
       "long_ws": "mark-10k-qnt-geo",
-      "neutral_equity": 9813.37,
-      "neutral_seed": 301.61,
+      "neutral_equity": 9716.244570847097,
       "neutral_orders": 6,
-      "long_equity": 9923.23,
-      "long_seed": 294.88,
-      "long_orders": 6
+      "long_equity": 9857.111293984219,
+      "long_orders": 6,
+      "pct_vs_seed": -4.78,
+      "threat": "near lower band"
     },
     {
       "symbol": "GRASS",
       "pair": "GRASSUSD",
       "neutral_ws": "mark-10k-grass",
       "long_ws": "mark-10k-grass-geo",
-      "neutral_equity": 9687.25,
-      "neutral_seed": 0.7406,
+      "neutral_equity": 9630.499894608736,
       "neutral_orders": 6,
-      "long_equity": 9978.74,
-      "long_seed": 0.7002,
-      "long_orders": 6
+      "long_equity": 9934.833156602608,
+      "long_orders": 6,
+      "pct_vs_seed": -6.0,
+      "threat": "near lower band"
     },
     {
       "symbol": "ONDO",
       "pair": "ONDOUSD",
       "neutral_ws": "mark-10k-ondo",
       "long_ws": "mark-10k-ondo-geo",
-      "neutral_equity": 9752.18,
-      "neutral_seed": 0.51164,
+      "neutral_equity": 9882.534882933476,
       "neutral_orders": 6,
-      "long_equity": 9978.9,
-      "long_seed": 0.4886,
+      "long_equity": 10078.77960191308,
       "long_orders": 6
     },
     {
@@ -92,11 +154,9 @@
       "pair": "HBARUSD",
       "neutral_ws": "mark-10k-hbar",
       "long_ws": "mark-10k-hbar-geo",
-      "neutral_equity": 9977.77,
-      "neutral_seed": 0.10806,
+      "neutral_equity": 9850.677513939107,
       "neutral_orders": 6,
-      "long_equity": 9987.45,
-      "long_seed": 0.10785,
+      "long_equity": 9860.053278009096,
       "long_orders": 6
     },
     {
@@ -104,11 +164,9 @@
       "pair": "FETUSD",
       "neutral_ws": "mark-10k-fet",
       "long_ws": "mark-10k-fet-geo",
-      "neutral_equity": 9923.19,
-      "neutral_seed": 0.2259,
+      "neutral_equity": 10006.412277935457,
       "neutral_orders": 6,
-      "long_equity": 9969.17,
-      "long_seed": 0.2238,
+      "long_equity": 10053.430402111671,
       "long_orders": 6
     },
     {
@@ -116,23 +174,21 @@
       "pair": "ZROUSD",
       "neutral_ws": "mark-10k-zro",
       "long_ws": "mark-10k-zro-geo",
-      "neutral_equity": 9742.81,
-      "neutral_seed": 1.753,
+      "neutral_equity": 10033.32005582016,
       "neutral_orders": 6,
-      "long_equity": 10011.1,
-      "long_seed": 1.661,
-      "long_orders": 6
+      "long_equity": 10229.40047963792,
+      "long_orders": 6,
+      "pct_vs_seed": 5.96,
+      "threat": "near upper band"
     },
     {
       "symbol": "XPL",
       "pair": "XPLUSD",
       "neutral_ws": "mark-10k-xpl",
       "long_ws": "mark-10k-xpl-geo",
-      "neutral_equity": 9757.57,
-      "neutral_seed": 0.0958,
+      "neutral_equity": 9934.583334951103,
       "neutral_orders": 6,
-      "long_equity": 9965.65,
-      "long_seed": 0.0918,
+      "long_equity": 10101.025854282849,
       "long_orders": 6
     },
     {
@@ -140,11 +196,9 @@
       "pair": "NEARUSD",
       "neutral_ws": "mark-10k-near",
       "long_ws": "mark-10k-near-geo",
-      "neutral_equity": 9915.15,
-      "neutral_seed": 5.4501,
+      "neutral_equity": 9891.473549150662,
       "neutral_orders": 6,
-      "long_equity": 9963.44,
-      "long_seed": 5.3971,
+      "long_equity": 9939.535255179968,
       "long_orders": 6
     },
     {
@@ -152,11 +206,9 @@
       "pair": "LIGHTERUSD",
       "neutral_ws": "mark-10k-lighter",
       "long_ws": "mark-10k-lighter-geo",
-      "neutral_equity": 9810.75,
-      "neutral_seed": 4.018,
+      "neutral_equity": 9976.28107533632,
       "neutral_orders": 6,
-      "long_equity": 9975.64,
-      "long_seed": 3.885,
+      "long_equity": 10086.7193723608,
       "long_orders": 6
     },
     {
@@ -164,11 +216,9 @@
       "pair": "PUMPUSD",
       "neutral_ws": "mark-10k-pump",
       "long_ws": "mark-10k-pump-geo",
-      "neutral_equity": 9935.05,
-      "neutral_seed": 0.005892,
+      "neutral_equity": 10015.041777475937,
       "neutral_orders": 6,
-      "long_equity": 9995.26,
-      "long_seed": 0.005821,
+      "long_equity": 10076.130274773852,
       "long_orders": 6
     },
     {
@@ -176,11 +226,9 @@
       "pair": "SUIUSD",
       "neutral_ws": "mark-10k-sui",
       "long_ws": "mark-10k-sui-geo",
-      "neutral_equity": 9781.88,
-      "neutral_seed": 1.2008,
+      "neutral_equity": 9822.021194353343,
       "neutral_orders": 6,
-      "long_equity": 9980.12,
-      "long_seed": 1.1531,
+      "long_equity": 10021.82075337728,
       "long_orders": 6
     },
     {
@@ -188,11 +236,9 @@
       "pair": "ZBCNUSD",
       "neutral_ws": "mark-10k-zbcn",
       "long_ws": "mark-10k-zbcn-geo",
-      "neutral_equity": 9867.23,
-      "neutral_seed": 0.002624,
+      "neutral_equity": 9907.068499803094,
       "neutral_orders": 6,
-      "long_equity": 9948.55,
-      "long_seed": 0.002581,
+      "long_equity": 9989.09463876377,
       "long_orders": 6
     },
     {
@@ -200,143 +246,121 @@
       "pair": "DASHUSD",
       "neutral_ws": "mark-10k-dash",
       "long_ws": "mark-10k-dash-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9849.507109457632,
+      "neutral_orders": 6,
+      "long_equity": 9943.761420277542,
+      "long_orders": 6
     },
     {
       "symbol": "FIL",
       "pair": "FILUSD",
       "neutral_ws": "mark-10k-fil",
       "long_ws": "mark-10k-fil-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9839.06939968999,
+      "neutral_orders": 6,
+      "long_equity": 9993.951302203734,
+      "long_orders": 6
     },
     {
       "symbol": "ALGO",
       "pair": "ALGOUSD",
       "neutral_ws": "mark-10k-algo",
       "long_ws": "mark-10k-algo-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9929.524491636543,
+      "neutral_orders": 6,
+      "long_equity": 9967.482142379926,
+      "long_orders": 6
     },
     {
       "symbol": "BONK",
       "pair": "BONKUSD",
       "neutral_ws": "mark-10k-bonk",
       "long_ws": "mark-10k-bonk-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9842.184090825045,
+      "neutral_orders": 6,
+      "long_equity": 9994.745089046855,
+      "long_orders": 6
     },
     {
       "symbol": "MON",
       "pair": "MONUSD",
       "neutral_ws": "mark-10k-mon",
       "long_ws": "mark-10k-mon-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": 9994.83,
-      "long_seed": 0.02875,
-      "long_orders": 6
+      "neutral_equity": 10225.710449226204,
+      "neutral_orders": 6,
+      "long_equity": 10200.0684372004,
+      "long_orders": 6,
+      "pct_vs_seed": 6.05,
+      "threat": "near upper band"
     },
     {
       "symbol": "CRV",
       "pair": "CRVUSD",
       "neutral_ws": "mark-10k-crv",
       "long_ws": "mark-10k-crv-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 10010.877662995075,
+      "neutral_orders": 6,
+      "long_equity": 10067.16672935887,
+      "long_orders": 6
     },
     {
       "symbol": "FARTCOIN",
       "pair": "FARTCOINUSD",
       "neutral_ws": "mark-10k-fartcoin",
       "long_ws": "mark-10k-fartcoin-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9855.627785726592,
+      "neutral_orders": 6,
+      "long_equity": 9935.085270488367,
+      "long_orders": 6
     },
     {
       "symbol": "DRV",
       "pair": "DRVUSD",
       "neutral_ws": "mark-10k-drv",
       "long_ws": "mark-10k-drv-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 10022.381619993592,
+      "neutral_orders": 6,
+      "long_equity": 9947.35374076596,
+      "long_orders": 6
     },
     {
       "symbol": "OP",
       "pair": "OPUSD",
       "neutral_ws": "mark-10k-op",
       "long_ws": "mark-10k-op-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9836.963672712576,
+      "neutral_orders": 6,
+      "long_equity": 9964.098213522817,
+      "long_orders": 6
     },
     {
       "symbol": "SEI",
       "pair": "SEIUSD",
       "neutral_ws": "mark-10k-sei",
       "long_ws": "mark-10k-sei-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9931.654292547968,
+      "neutral_orders": 6,
+      "long_equity": 10037.279683716528,
+      "long_orders": 6
     },
     {
       "symbol": "JUP",
       "pair": "JUPUSD",
       "neutral_ws": "mark-10k-jup",
       "long_ws": "mark-10k-jup-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9942.605118071568,
+      "neutral_orders": 6,
+      "long_equity": 10016.503280891222,
+      "long_orders": 6
     },
     {
       "symbol": "AVAX",
       "pair": "AVAXUSD",
       "neutral_ws": "mark-10k-avax",
       "long_ws": "mark-10k-avax-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": 9964.4,
-      "long_seed": 10.932,
+      "neutral_equity": 9927.48381171336,
+      "neutral_orders": 6,
+      "long_equity": 9968.93573396217,
       "long_orders": 6
     },
     {
@@ -344,71 +368,59 @@
       "pair": "ENAUSD",
       "neutral_ws": "mark-10k-ena",
       "long_ws": "mark-10k-ena-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9814.6277711038,
+      "neutral_orders": 6,
+      "long_equity": 9915.324969065392,
+      "long_orders": 6
     },
     {
       "symbol": "LTC",
       "pair": "LTCUSD",
       "neutral_ws": "mark-10k-ltc",
       "long_ws": "mark-10k-ltc-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9951.49911816795,
+      "neutral_orders": 6,
+      "long_equity": 10042.015043146075,
+      "long_orders": 6
     },
     {
       "symbol": "ICP",
       "pair": "ICPUSD",
       "neutral_ws": "mark-10k-icp",
       "long_ws": "mark-10k-icp-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9770.95597572219,
+      "neutral_orders": 6,
+      "long_equity": 9871.101939204136,
+      "long_orders": 6
     },
     {
       "symbol": "ARB",
       "pair": "ARBUSD",
       "neutral_ws": "mark-10k-arb",
       "long_ws": "mark-10k-arb-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9904.93527509044,
+      "neutral_orders": 6,
+      "long_equity": 9972.495894910671,
+      "long_orders": 6
     },
     {
       "symbol": "AAVE",
       "pair": "AAVEUSD",
       "neutral_ws": "mark-10k-aave",
       "long_ws": "mark-10k-aave-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9904.111588922717,
+      "neutral_orders": 6,
+      "long_equity": 9992.222302381264,
+      "long_orders": 6
     },
     {
       "symbol": "UNI",
       "pair": "UNIUSD",
       "neutral_ws": "mark-10k-uni",
       "long_ws": "mark-10k-uni-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": 9965.6,
-      "long_seed": 8.8991,
+      "neutral_equity": 9884.559924633995,
+      "neutral_orders": 6,
+      "long_equity": 9940.450763245793,
       "long_orders": 6
     },
     {
@@ -416,49 +428,45 @@
       "pair": "SYRUPUSD",
       "neutral_ws": "mark-10k-syrup",
       "long_ws": "mark-10k-syrup-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9854.663346854417,
+      "neutral_orders": 6,
+      "long_equity": 9919.36586466125,
+      "long_orders": 6
     },
     {
       "symbol": "PENGU",
       "pair": "PENGUUSD",
       "neutral_ws": "mark-10k-pengu",
       "long_ws": "mark-10k-pengu-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9749.650549929804,
+      "neutral_orders": 6,
+      "long_equity": 9913.631637128734,
+      "long_orders": 6,
+      "pct_vs_seed": -4.11,
+      "threat": "near lower band"
     },
     {
       "symbol": "ZEC",
       "pair": "ZECUSD",
       "neutral_ws": "mark-10k-zec",
       "long_ws": "mark-10k-zec-geo",
-      "neutral_equity": 9925.514534383796,
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": 9932.987907503588,
-      "long_seed": 1426.59,
+      "neutral_equity": 9960.672654690996,
+      "neutral_orders": 6,
+      "long_equity": 9968.212144705589,
       "long_orders": 6,
-      "spot": null,
-      "pct_vs_seed": null
+      "spot": 1429.08,
+      "pct_vs_seed": 0.02,
+      "neutral_seed": 1428.76,
+      "long_seed": 1426.59
     },
     {
       "symbol": "TAO",
       "pair": "TAOUSD",
       "neutral_ws": "mark-10k-tao",
       "long_ws": "mark-10k-tao-geo",
-      "neutral_equity": 9854.0,
-      "neutral_seed": 309.18,
+      "neutral_equity": 9852.199928253223,
       "neutral_orders": 6,
-      "long_equity": 9968.94,
-      "long_seed": 302.02,
+      "long_equity": 9967.0909264202,
       "long_orders": 6
     },
     {
@@ -466,11 +474,9 @@
       "pair": "MINAUSD",
       "neutral_ws": "mark-10k-mina",
       "long_ws": "mark-10k-mina-geo",
-      "neutral_equity": 9886.86,
-      "neutral_seed": 0.14712,
+      "neutral_equity": 9830.736937640288,
       "neutral_orders": 6,
-      "long_equity": 9968.2,
-      "long_seed": 0.1447,
+      "long_equity": 9910.954245784942,
       "long_orders": 6
     },
     {
@@ -478,11 +484,9 @@
       "pair": "SN64USD",
       "neutral_ws": "mark-10k-sn64",
       "long_ws": "mark-10k-sn64-geo",
-      "neutral_equity": 9933.11,
-      "neutral_seed": 21.236,
+      "neutral_equity": 9945.31605312704,
       "neutral_orders": 6,
-      "long_equity": 9933.35,
-      "long_seed": 21.236,
+      "long_equity": 9945.51465069792,
       "long_orders": 6
     },
     {
@@ -490,11 +494,9 @@
       "pair": "CCUSD",
       "neutral_ws": "mark-10k-cc",
       "long_ws": "mark-10k-cc-geo",
-      "neutral_equity": 9968.26,
-      "neutral_seed": 0.12504,
+      "neutral_equity": 9998.797402643617,
       "neutral_orders": 6,
-      "long_equity": 9946.97,
-      "long_seed": 0.12558,
+      "long_equity": 9977.336432973794,
       "long_orders": 6
     },
     {
@@ -502,11 +504,9 @@
       "pair": "INJUSD",
       "neutral_ws": "mark-10k-inj",
       "long_ws": "mark-10k-inj-geo",
-      "neutral_equity": 9898.68,
-      "neutral_seed": 7.415,
+      "neutral_equity": 9970.323802667643,
       "neutral_orders": 6,
-      "long_equity": 9954.2,
-      "long_seed": 7.332,
+      "long_equity": 10026.63192278342,
       "long_orders": 6
     },
     {
@@ -514,11 +514,9 @@
       "pair": "MORPHOUSD",
       "neutral_ws": "mark-10k-morpho",
       "long_ws": "mark-10k-morpho-geo",
-      "neutral_equity": 9861.44,
-      "neutral_seed": 2.5408,
+      "neutral_equity": 9884.488953605985,
       "neutral_orders": 6,
-      "long_equity": 9954.29,
-      "long_seed": 2.4932,
+      "long_equity": 9977.778019811993,
       "long_orders": 6
     },
     {
@@ -526,23 +524,21 @@
       "pair": "NIGHTUSD",
       "neutral_ws": "mark-10k-night",
       "long_ws": "mark-10k-night-geo",
-      "neutral_equity": 9952.36,
-      "neutral_seed": 0.03739,
+      "neutral_equity": 10220.159027325015,
       "neutral_orders": 6,
-      "long_equity": 9919.44,
-      "long_seed": 0.03764,
-      "long_orders": 6
+      "long_equity": 10200.672061713378,
+      "long_orders": 6,
+      "pct_vs_seed": 6.12,
+      "threat": "near upper band"
     },
     {
       "symbol": "DOT",
       "pair": "DOTUSD",
       "neutral_ws": "mark-10k-dot",
       "long_ws": "mark-10k-dot-geo",
-      "neutral_equity": 9906.47,
-      "neutral_seed": 1.2431,
+      "neutral_equity": 9932.800743481257,
       "neutral_orders": 6,
-      "long_equity": 9962.71,
-      "long_seed": 1.229,
+      "long_equity": 9989.370171343811,
       "long_orders": 6
     },
     {
@@ -550,11 +546,9 @@
       "pair": "COMPUSD",
       "neutral_ws": "mark-10k-comp",
       "long_ws": "mark-10k-comp-geo",
-      "neutral_equity": 9861.47,
-      "neutral_seed": 25.12,
+      "neutral_equity": 9865.427180171213,
       "neutral_orders": 6,
-      "long_equity": 9954.21,
-      "long_seed": 24.65,
+      "long_equity": 9958.237392208648,
       "long_orders": 6
     },
     {
@@ -562,11 +556,9 @@
       "pair": "LINKUSD",
       "neutral_ws": "mark-10k-link",
       "long_ws": "mark-10k-link-geo",
-      "neutral_equity": 9906.56,
-      "neutral_seed": 14.4394,
+      "neutral_equity": 9938.603683136227,
       "neutral_orders": 6,
-      "long_equity": 9953.74,
-      "long_seed": 14.3019,
+      "long_equity": 9986.088923022326,
       "long_orders": 6
     },
     {
@@ -574,11 +566,9 @@
       "pair": "PEPEUSD",
       "neutral_ws": "mark-10k-pepe",
       "long_ws": "mark-10k-pepe-geo",
-      "neutral_equity": 9867.06,
-      "neutral_seed": 4.363e-06,
+      "neutral_equity": 9884.118250693216,
       "neutral_orders": 6,
-      "long_equity": 9963.78,
-      "long_seed": 4.278e-06,
+      "long_equity": 9981.179562564033,
       "long_orders": 6
     },
     {
@@ -586,25 +576,23 @@
       "pair": "ADAUSD",
       "neutral_ws": "mark-10k",
       "long_ws": "mark-10k-geo",
-      "neutral_equity": 9897.720781654863,
-      "neutral_seed": 0.245731,
+      "neutral_equity": 9974.689867672443,
       "neutral_orders": 6,
-      "long_equity": 9944.030375126147,
-      "long_seed": 0.243429,
+      "long_equity": 10021.735623114811,
       "long_orders": 6,
-      "spot": null,
-      "pct_vs_seed": null
+      "spot": 0.246317,
+      "pct_vs_seed": 0.24,
+      "neutral_seed": 0.245731,
+      "long_seed": 0.243429
     },
     {
       "symbol": "TON",
       "pair": "TONUSD",
       "neutral_ws": "mark-10k-ton",
       "long_ws": "mark-10k-ton-geo",
-      "neutral_equity": 10009.53,
-      "neutral_seed": 1.512,
+      "neutral_equity": 9973.4224155776,
       "neutral_orders": 6,
-      "long_equity": 9963.4,
-      "long_seed": 1.526,
+      "long_equity": 9927.47944043712,
       "long_orders": 6
     },
     {
@@ -612,11 +600,9 @@
       "pair": "SHIBUSD",
       "neutral_ws": "mark-10k-shib",
       "long_ws": "mark-10k-shib-geo",
-      "neutral_equity": 9878.63,
-      "neutral_seed": 5.831e-06,
+      "neutral_equity": 9902.454463775219,
       "neutral_orders": 6,
-      "long_equity": 9963.69,
-      "long_seed": 5.731e-06,
+      "long_equity": 9987.984873851585,
       "long_orders": 6
     },
     {
@@ -624,11 +610,9 @@
       "pair": "BCHUSD",
       "neutral_ws": "mark-10k-bch",
       "long_ws": "mark-10k-bch-geo",
-      "neutral_equity": 9895.88,
-      "neutral_seed": 309.94,
+      "neutral_equity": 9896.2005032212,
       "neutral_orders": 6,
-      "long_equity": 9957.54,
-      "long_seed": 306.09,
+      "long_equity": 9957.861867256806,
       "long_orders": 6
     },
     {
@@ -636,11 +620,9 @@
       "pair": "XRPUSD",
       "neutral_ws": "mark-10k-xrp",
       "long_ws": "mark-10k-xrp-geo",
-      "neutral_equity": 9911.97,
-      "neutral_seed": 1.5096,
+      "neutral_equity": 9899.411638445035,
       "neutral_orders": 6,
-      "long_equity": 9965.33,
-      "long_seed": 1.4934,
+      "long_equity": 9952.63888902181,
       "long_orders": 6
     },
     {
@@ -648,11 +630,9 @@
       "pair": "HYPEUSD",
       "neutral_ws": "mark-10k-hype",
       "long_ws": "mark-10k-hype-geo",
-      "neutral_equity": 9915.82,
-      "neutral_seed": 90.36,
+      "neutral_equity": 10010.275374770536,
       "neutral_orders": 6,
-      "long_equity": 9955.32,
-      "long_seed": 89.63,
+      "long_equity": 10051.095698695182,
       "long_orders": 6
     },
     {
@@ -660,39 +640,37 @@
       "pair": "XBTUSD",
       "neutral_ws": "mark-10k-btc",
       "long_ws": "mark-10k-btc-geo",
-      "neutral_equity": 9930.351606617633,
-      "neutral_seed": 84045.2,
+      "neutral_equity": 9944.066920369632,
       "neutral_orders": 6,
-      "long_equity": 9944.436248733184,
-      "long_seed": 83805.7,
+      "long_equity": 9958.191855997184,
       "long_orders": 6,
-      "spot": null,
-      "pct_vs_seed": null
+      "spot": 83769.9,
+      "pct_vs_seed": -0.33,
+      "neutral_seed": 84045.2,
+      "long_seed": 83805.7
     },
     {
       "symbol": "ETH",
       "pair": "ETHUSD",
       "neutral_ws": "mark-10k-eth",
       "long_ws": "mark-10k-eth-geo",
-      "neutral_equity": 9937.261393935565,
-      "neutral_seed": 2680.99,
+      "neutral_equity": 9971.935342607365,
       "neutral_orders": 6,
-      "long_equity": 9946.803578859743,
-      "long_seed": 2675.82,
+      "long_equity": 9981.542966861944,
       "long_orders": 6,
-      "spot": null,
-      "pct_vs_seed": null
+      "spot": 2688.63,
+      "pct_vs_seed": 0.28,
+      "neutral_seed": 2680.99,
+      "long_seed": 2675.82
     },
     {
       "symbol": "SOL",
       "pair": "SOLUSD",
       "neutral_ws": "mark-10k-sol",
       "long_ws": "mark-10k-sol-geo",
-      "neutral_equity": 9864.6,
-      "neutral_seed": 120.28,
+      "neutral_equity": 9876.972245990766,
       "neutral_orders": 6,
-      "long_equity": 9959.48,
-      "long_seed": 117.98,
+      "long_equity": 9972.09206591454,
       "long_orders": 6
     },
     {
@@ -700,83 +678,69 @@
       "pair": "XDGUSD",
       "neutral_ws": "mark-10k-doge",
       "long_ws": "mark-10k-doge-geo",
-      "neutral_equity": 9917.88,
-      "neutral_seed": 0.0950837,
+      "neutral_equity": 9931.779658123542,
       "neutral_orders": 6,
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "long_equity": 9975.957799678512,
+      "long_orders": 6
     },
     {
       "symbol": "TRX",
       "pair": "TRXUSD",
       "neutral_ws": "mark-10k-trx",
       "long_ws": "mark-10k-trx-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9955.825866291703,
+      "neutral_orders": 6,
+      "long_equity": 9958.835445149129,
+      "long_orders": 6
     },
     {
       "symbol": "ATOM",
       "pair": "ATOMUSD",
       "neutral_ws": "mark-10k-atom",
       "long_ws": "mark-10k-atom-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9913.387855854493,
+      "neutral_orders": 6,
+      "long_equity": 9986.390232893556,
+      "long_orders": 6
     },
     {
       "symbol": "XLM",
       "pair": "XLMUSD",
       "neutral_ws": "mark-10k-xlm",
       "long_ws": "mark-10k-xlm-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 10000.473858177946,
+      "neutral_orders": 6,
+      "long_equity": 9966.177004085024,
+      "long_orders": 6
     },
     {
       "symbol": "APT",
       "pair": "APTUSD",
       "neutral_ws": "mark-10k-apt",
       "long_ws": "mark-10k-apt-geo",
-      "neutral_equity": 9837.64,
-      "neutral_seed": 0.7951,
+      "neutral_equity": 9804.622552361829,
       "neutral_orders": 6,
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "long_equity": 9919.97482423024,
+      "long_orders": 6
     },
     {
       "symbol": "POL",
       "pair": "POLUSD",
       "neutral_ws": "mark-10k-pol",
       "long_ws": "mark-10k-pol-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9901.8597853438,
+      "neutral_orders": 6,
+      "long_equity": 9971.351211201203,
+      "long_orders": 6
     },
     {
       "symbol": "RENDER",
       "pair": "RENDERUSD",
       "neutral_ws": "mark-10k-render",
       "long_ws": "mark-10k-render-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": 9955.1,
-      "long_seed": 1.911,
+      "neutral_equity": 9881.42091240008,
+      "neutral_orders": 6,
+      "long_equity": 9970.684783606082,
       "long_orders": 6
     },
     {
@@ -784,35 +748,29 @@
       "pair": "IMXUSD",
       "neutral_ws": "mark-10k-imx",
       "long_ws": "mark-10k-imx-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9874.974109849574,
+      "neutral_orders": 6,
+      "long_equity": 9966.020919126897,
+      "long_orders": 6
     },
     {
       "symbol": "WIF",
       "pair": "WIFUSD",
       "neutral_ws": "mark-10k-wif",
       "long_ws": "mark-10k-wif-geo",
-      "neutral_equity": "\u2014",
-      "neutral_seed": "ERR",
-      "neutral_orders": "\u2014",
-      "long_equity": "\u2014",
-      "long_seed": "ERR",
-      "long_orders": "\u2014"
+      "neutral_equity": 9881.909153689649,
+      "neutral_orders": 6,
+      "long_equity": 9988.3522909864,
+      "long_orders": 6
     },
     {
       "symbol": "FLOKI",
       "pair": "FLOKIUSD",
       "neutral_ws": "mark-10k-floki",
       "long_ws": "mark-10k-floki-geo",
-      "neutral_equity": 9896.69,
-      "neutral_seed": 2.795e-05,
+      "neutral_equity": 9909.078549335509,
       "neutral_orders": 6,
-      "long_equity": 9952.98,
-      "long_seed": 2.763e-05,
+      "long_equity": 9965.591174741501,
       "long_orders": 6
     },
     {
@@ -820,11 +778,9 @@
       "pair": "BNBUSD",
       "neutral_ws": "mark-10k-bnb",
       "long_ws": "mark-10k-bnb-geo",
-      "neutral_equity": 9942.51,
-      "neutral_seed": 769.68,
+      "neutral_equity": 9947.5345879696,
       "neutral_orders": 6,
-      "long_equity": 9959.0,
-      "long_seed": 767.12,
+      "long_equity": 9964.0500252544,
       "long_orders": 6
     },
     {
@@ -832,11 +788,9 @@
       "pair": "ETCUSD",
       "neutral_ws": "mark-10k-etc",
       "long_ws": "mark-10k-etc-geo",
-      "neutral_equity": 9845.67,
-      "neutral_seed": 9.037,
+      "neutral_equity": 9865.967734290905,
       "neutral_orders": 6,
-      "long_equity": 9948.87,
-      "long_seed": 8.848,
+      "long_equity": 9969.707537835597,
       "long_orders": 6
     },
     {
@@ -844,11 +798,9 @@
       "pair": "XMRUSD",
       "neutral_ws": "mark-10k-xmr",
       "long_ws": "mark-10k-xmr-geo",
-      "neutral_equity": 9942.74,
-      "neutral_seed": 545.02,
+      "neutral_equity": 9910.241285024964,
       "neutral_orders": 6,
-      "long_equity": 9955.94,
-      "long_seed": 543.57,
+      "long_equity": 9923.363642737802,
       "long_orders": 6
     },
     {
@@ -856,23 +808,21 @@
       "pair": "STXUSD",
       "neutral_ws": "mark-10k-stx",
       "long_ws": "mark-10k-stx-geo",
-      "neutral_equity": 10075.74,
-      "neutral_seed": 0.3524,
+      "neutral_equity": 10252.343717156382,
       "neutral_orders": 6,
-      "long_equity": 9983.79,
-      "long_seed": 0.3589,
-      "long_orders": 6
+      "long_equity": 10191.28976555754,
+      "long_orders": 6,
+      "pct_vs_seed": 6.87,
+      "threat": "near upper band"
     },
     {
       "symbol": "TIA",
       "pair": "TIAUSD",
       "neutral_ws": "mark-10k-tia",
       "long_ws": "mark-10k-tia-geo",
-      "neutral_equity": 9862.87,
-      "neutral_seed": 0.4492,
+      "neutral_equity": 9870.613499348729,
       "neutral_orders": 6,
-      "long_equity": 9951.12,
-      "long_seed": 0.4412,
+      "long_equity": 9959.026016753856,
       "long_orders": 6
     },
     {
@@ -880,11 +830,9 @@
       "pair": "RUNEUSD",
       "neutral_ws": "mark-10k-rune",
       "long_ws": "mark-10k-rune-geo",
-      "neutral_equity": 9917.24,
-      "neutral_seed": 0.806,
+      "neutral_equity": 9941.85474024191,
       "neutral_orders": 6,
-      "long_equity": 9947.8,
-      "long_seed": 0.801,
+      "long_equity": 9972.63444384848,
       "long_orders": 6
     },
     {
@@ -892,11 +840,9 @@
       "pair": "LDOUSD",
       "neutral_ws": "mark-10k-ldo",
       "long_ws": "mark-10k-ldo-geo",
-      "neutral_equity": 9864.93,
-      "neutral_seed": 0.468,
+      "neutral_equity": 9843.728802062169,
       "neutral_orders": 6,
-      "long_equity": 9938.53,
-      "long_seed": 0.461,
+      "long_equity": 9916.917384237673,
       "long_orders": 6
     },
     {
@@ -904,11 +850,9 @@
       "pair": "GRTUSD",
       "neutral_ws": "mark-10k-grt",
       "long_ws": "mark-10k-grt-geo",
-      "neutral_equity": 9867.82,
-      "neutral_seed": 0.02948,
+      "neutral_equity": 9940.146511865742,
       "neutral_orders": 6,
-      "long_equity": 9953.11,
-      "long_seed": 0.02897,
+      "long_equity": 10027.301587301587,
       "long_orders": 6
     },
     {
@@ -916,11 +860,9 @@
       "pair": "SANDUSD",
       "neutral_ws": "mark-10k-sand",
       "long_ws": "mark-10k-sand-geo",
-      "neutral_equity": 9814.84,
-      "neutral_seed": 0.0442,
+      "neutral_equity": 9882.027303020532,
       "neutral_orders": 6,
-      "long_equity": 9937.01,
-      "long_seed": 0.0431,
+      "long_equity": 10006.382506382506,
       "long_orders": 6
     },
     {
@@ -928,11 +870,9 @@
       "pair": "MANAUSD",
       "neutral_ws": "mark-10k-mana",
       "long_ws": "mark-10k-mana-geo",
-      "neutral_equity": 9875.21,
-      "neutral_seed": 0.09022,
+      "neutral_equity": 9910.914236495646,
       "neutral_orders": 6,
-      "long_equity": 9956.99,
-      "long_seed": 0.08873,
+      "long_equity": 9993.304297764762,
       "long_orders": 6
     },
     {
@@ -940,11 +880,9 @@
       "pair": "AXSUSD",
       "neutral_ws": "mark-10k-axs",
       "long_ws": "mark-10k-axs-geo",
-      "neutral_equity": 9874.79,
-      "neutral_seed": 1.16,
+      "neutral_equity": 9891.899288451088,
       "neutral_orders": 6,
-      "long_equity": 9947.25,
-      "long_seed": 1.143,
+      "long_equity": 9964.626247463455,
       "long_orders": 6
     },
     {
@@ -952,11 +890,9 @@
       "pair": "APEUSD",
       "neutral_ws": "mark-10k-ape",
       "long_ws": "mark-10k-ape-geo",
-      "neutral_equity": 9836.96,
-      "neutral_seed": 0.1532,
+      "neutral_equity": 9866.159020835317,
       "neutral_orders": 6,
-      "long_equity": 9956.77,
-      "long_seed": 0.1495,
+      "long_equity": 9986.79027764435,
       "long_orders": 6
     }
   ]

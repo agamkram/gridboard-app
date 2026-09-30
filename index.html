@@ -54,15 +54,6 @@
     </noscript>
 
     <main>
-      <section class="section" id="core-section" aria-labelledby="core-title">
-        <div class="section-head">
-          <h2 class="section-title" id="core-title">Core</h2>
-        </div>
-        <div class="core-grid" id="core">
-          <p class="empty">Loading core books…</p>
-        </div>
-      </section>
-
       <section class="section" id="near-section" aria-labelledby="near-title">
         <div class="section-head">
           <h2 class="section-title" id="near-title">Threats and near band</h2>
@@ -94,14 +85,12 @@
           </label>
           <div class="chips" id="chips" role="toolbar" aria-label="Pair filters">
             <button type="button" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" data-filter="core" aria-pressed="false">Core</button>
             <button type="button" data-filter="hot" aria-pressed="false">Hot</button>
             <button type="button" data-filter="threat" aria-pressed="false">Threats</button>
             <button type="button" data-filter="unseeded" aria-pressed="false">Unseeded</button>
             <button type="button" data-filter="filled" aria-pressed="false">Filled</button>
           </div>
         </div>
-        <p class="scroll-hint">Swipe sideways for every column.</p>
         <div class="table-scroll">
           <table id="books-table">
             <caption class="sr-only">Neutral and Long paper books for each USD pair</caption>
@@ -111,24 +100,16 @@
                   <button type="button" data-sort="symbol" data-label="Pair">Pair</button>
                 </th>
                 <th class="num" scope="col" aria-sort="none">
-                  <button type="button" data-sort="spot" data-label="Spot">Spot</button>
-                </th>
-                <th class="num" scope="col" aria-sort="none">
-                  <button type="button" data-sort="pct" data-label="vs seed">vs seed</button>
-                </th>
-                <th class="num" scope="col" aria-sort="none">
                   <button type="button" data-sort="neutral" data-label="Neutral">Neutral</button>
                 </th>
                 <th class="num" scope="col" aria-sort="none">
                   <button type="button" data-sort="long" data-label="Long">Long</button>
                 </th>
-                <th class="num" scope="col">Seeds</th>
-                <th class="num" scope="col">Orders</th>
               </tr>
             </thead>
             <tbody id="books-body">
               <tr>
-                <td class="empty" colspan="7">Loading pairs…</td>
+                <td class="empty" colspan="3">Loading pairs…</td>
               </tr>
             </tbody>
           </table>
