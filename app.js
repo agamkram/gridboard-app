@@ -1,0 +1,727 @@
+/* GridBoard — read-only. The only request is status.json. No orders, no Kraken API. */
+(function () {
+  var state = {
+    data: null,
+    query: "",
+    filter: "all",
+    sortKey: "symbol",
+    sortDir: "asc",
+  };
+
+  function num(v) {
+    if (typeof v === "number" && Number.isFinite(v)) return v;
+    if (typeof v === "string" && v.trim() !== "" && Number.isFinite(Number(v))) return Number(v);
+    return null;
+  }
+
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    var a = attrs || {};
+    Object.keys(a).forEach(function (key) {
+      var value = a[key];
+      if (value == null || value === false) return;
+      if (key === "class") node.className = value;
+      else if (key === "text") node.textContent = String(value);
+      else node.setAttribute(key, String(value));
+    });
+    (children || []).forEach(function (child) {
+      if (child == null || child === false) return;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    });
+    return node;
+  }
+
+  function usd(n, digits) {
+    return Math.abs(n).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    });
+  }
+
+  function signedUsd(n, digits) {
+    var body = usd(n, digits);
+    if (n < -0.0000001) return "−" + body;
+    if (n > 0.0000001) return "+" + body;
+    return body;
+  }
+
+  function signedPct(n) {
+    var body = Math.abs(n).toFixed(2) + "%";
+    if (n < 0) return "−" + body;
+    if (n > 0) return "+" + body;
+    return body;
+  }
+
+  function moneyDigits(n) {
+    return Math.abs(n) >= 100 ? 0 : 2;
+  }
+
+  function tone(delta) {
+    if (delta == null || Math.abs(delta) < 0.005) return "flat";
+    return delta < 0 ? "down" : "up";
+  }
+
+  function formatPrice(n) {
+    if (!Number.isFinite(n)) return "—";
+    var abs = Math.abs(n);
+    if (abs === 0) return "0";
+    var min = 0;
+    var max = 12;
+    if (abs >= 100) {
+      min = 2;
+      max = 2;
+    } else if (abs >= 1) max = 4;
+    else if (abs >= 0.01) max = 6;
+    else if (abs >= 0.0001) max = 8;
+    return n.toLocaleString("en-US", { minimumFractionDigits: min, maximumFractionDigits: max });
+  }
+
+  function formatSeed(v) {
+    if (v == null || v === "" || v === "—") return "—";
+    var n = num(v);
+    if (n == null) return String(v);
+    return formatPrice(n);
+  }
+
+  function formatEt(iso) {
+    var d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso ? String(iso) : "—";
+    return d.toLocaleString("en-US", {
+      timeZone: "America/New_York",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+  }
+
+  function formatDuration(seconds) {
+    if (!Number.isFinite(seconds)) return "—";
+    var s = Math.max(0, Math.round(seconds));
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    if (h > 0) return h + "h " + m + "m";
+    if (m > 0) return m + "m";
+    return s + "s";
+  }
+
+  function capitalOf(data) {
+    var n = num(data.capital_per_book);
+    return n == null ? 10000 : n;
+  }
+
+  function pairsOf(data) {
+    return Array.isArray(data.pairs) ? data.pairs : [];
+  }
+
+  function upper(v) {
+    return String(v || "").toUpperCase();
+  }
+
+  function coreSet(data) {
+    var list = Array.isArray(data.core_symbols) && data.core_symbols.length
+      ? data.core_symbols
+      : ["ADA", "ETH", "BTC", "ZEC"];
+    var set = {};
+    list.forEach(function (s) { set[upper(s)] = true; });
+    return set;
+  }
+
+  function hotMap(data) {
+    var hot = data.rollup && data.rollup.hot;
+    var map = {};
+    if (!hot || typeof hot !== "object") return map;
+    Object.keys(hot).forEach(function (k) { map[upper(k)] = hot[k]; });
+    return map;
+  }
+
+  function threatSet(data) {
+    var set = {};
+    (Array.isArray(data.threats) ? data.threats : []).forEach(function (t) {
+      if (typeof t === "string") set[upper(t)] = true;
+      else if (t && typeof t === "object") {
+        if (t.symbol) set[upper(t.symbol)] = true;
+        if (t.pair) set[upper(t.pair)] = true;
+      }
+    });
+    return set;
+  }
+
+  function filledSet(data) {
+    var set = {};
+    (Array.isArray(data.fills) ? data.fills : []).forEach(function (f) {
+      if (f && f.symbol) set[upper(f.symbol)] = true;
+    });
+    return set;
+  }
+
+  function isCore(row) {
+    return !!coreSet(state.data)[upper(row.symbol)];
+  }
+
+  function isHot(row) {
+    return !!hotMap(state.data)[upper(row.symbol)];
+  }
+
+  function isThreat(row) {
+    if (row.threat) return true;
+    var set = threatSet(state.data);
+    return !!set[upper(row.symbol)] || !!set[upper(row.pair)];
+  }
+
+  function isUnseeded(row) {
+    return num(row.neutral_equity) == null || num(row.long_equity) == null;
+  }
+
+  function findPair(symbol) {
+    var s = upper(symbol);
+    var found = null;
+    pairsOf(state.data).some(function (row) {
+      if (upper(row.symbol) === s) {
+        found = row;
+        return true;
+      }
+      return false;
+    });
+    return found;
+  }
+
+  function deltaChip(delta, pct, caption) {
+    var box = el("div", { class: "delta " + tone(delta) }, [
+      el("div", { class: "delta-main", text: signedUsd(delta, moneyDigits(delta)) }),
+      el("div", { class: "delta-sub", text: signedPct(pct) + (caption ? " " + caption : "") }),
+    ]);
+    return box;
+  }
+
+  function bookBlock(label, equity, seed, orders, capital) {
+    var block = el("div", { class: "book" }, [
+      el("div", { class: "style-name", text: label }),
+    ]);
+    var n = num(equity);
+    var sn = el("div", { class: "sn" }, [
+      el("div", {}, [
+        el("span", { class: "k", text: "START" }),
+        el("div", { class: "start-num", text: usd(capital, 0) }),
+      ]),
+      el("div", {}, [
+        el("span", { class: "k", text: "NOW" }),
+        el("div", { class: "now-num", text: n == null ? "—" : usd(n, 2) }),
+      ]),
+    ]);
+    block.append(sn);
+    if (n == null) {
+      block.append(el("p", { class: "mini", text: "No mark in this snapshot." }));
+    } else {
+      var d = n - capital;
+      block.append(deltaChip(d, (d / capital) * 100, "vs $10k seed"));
+    }
+    var ord = num(orders);
+    var ordText = ord == null ? "orders —" : ord + " open";
+    block.append(el("div", { class: "seed-line", text: "seed " + formatSeed(seed) }));
+    block.append(el("div", { class: "mini", text: ordText }));
+    return block;
+  }
+
+  function renderFeed(data) {
+    var fee = data.fee_label || "0.80%";
+    document.getElementById("fee-pill").textContent = "Trade fee " + fee;
+    document.getElementById("spacing").textContent = data.spacing || "geometric 5% (r=1.05)";
+    var line = [data.updated_et, data.headline].filter(Boolean).join(" · ");
+    document.getElementById("app-feed").textContent = line || "Snapshot loaded";
+    var specs = [data.neutral_spec, data.long_spec].filter(Boolean).join("  ·  ");
+    document.getElementById("specs").textContent = specs;
+    var banner = document.getElementById("banner");
+    if (data.paper_only === false) {
+      banner.hidden = false;
+      banner.textContent = "This snapshot is not flagged paper_only. GridBoard still cannot place orders.";
+    } else {
+      banner.hidden = true;
+      banner.textContent = "";
+    }
+  }
+
+  function renderCore(data) {
+    var symbols = Array.isArray(data.core_symbols) && data.core_symbols.length
+      ? data.core_symbols
+      : ["ADA", "ETH", "BTC", "ZEC"];
+    var capital = capitalOf(data);
+    var grid = el("div", { class: "core-grid" });
+    symbols.forEach(function (symbol) {
+      var row = findPair(symbol);
+      var card = el("article", { class: "core-card" });
+      card.append(el("h3", { class: "core-symbol", text: symbol }));
+      card.append(el("p", { class: "core-pair", text: row && row.pair ? row.pair : "—" }));
+      var spot = row ? num(row.spot) : null;
+      var pct = row ? num(row.pct_vs_seed) : null;
+      card.append(el("div", { class: "spotline" }, [
+        el("span", { text: "spot " + (spot == null ? "—" : formatPrice(spot)) }),
+        el("span", { text: "vs seed " + (pct == null ? "—" : signedPct(pct)) }),
+      ]));
+      if (!row) {
+        card.append(el("p", { class: "empty", text: "Not in this snapshot." }));
+      } else {
+        card.append(el("div", { class: "book-row" }, [
+          bookBlock("NEUTRAL", row.neutral_equity, row.neutral_seed, row.neutral_orders, capital),
+          bookBlock("LONG", row.long_equity, row.long_seed, row.long_orders, capital),
+        ]));
+      }
+      grid.append(card);
+    });
+    var host = document.getElementById("core");
+    grid.id = "core";
+    host.replaceWith(grid);
+  }
+
+  function describeThreat(item) {
+    if (typeof item === "string") return "";
+    var skip = { symbol: 1, pair: 1, detail: 1 };
+    var parts = [];
+    Object.keys(item).forEach(function (key) {
+      if (skip[key]) return;
+      var v = item[key];
+      if (v == null || v === "" || typeof v === "object") return;
+      parts.push(key.replace(/_/g, " ") + " " + v);
+    });
+    return parts.join(" · ");
+  }
+
+  function renderNear(data) {
+    var threats = Array.isArray(data.threats) ? data.threats.slice() : [];
+    var seen = {};
+    threats.forEach(function (t) {
+      if (typeof t === "string") seen[upper(t)] = true;
+      else if (t && t.symbol) seen[upper(t.symbol)] = true;
+    });
+    pairsOf(data).forEach(function (row) {
+      if (!row.threat || seen[upper(row.symbol)]) return;
+      seen[upper(row.symbol)] = true;
+      threats.push({ symbol: row.symbol, pair: row.pair, detail: row.threat });
+    });
+
+    var threatCard = el("article", { class: "card" }, [
+      el("h3", { class: "card-title", text: "Threat band" }),
+    ]);
+    if (!threats.length) {
+      threatCard.append(el("p", { class: "empty", text: "No pairs are sitting on a threat band." }));
+    } else {
+      threats.forEach(function (item) {
+        var symbol = typeof item === "string" ? item : (item.symbol || item.pair || "Threat");
+        var detail = typeof item === "string"
+          ? ""
+          : (item.detail != null && typeof item.detail !== "object" ? String(item.detail) : describeThreat(item));
+        var box = el("div", { class: "threat-item" }, [
+          el("div", { class: "sym-name", text: String(symbol) }),
+        ]);
+        if (detail) box.append(el("div", { class: "mini", text: detail }));
+        threatCard.append(box);
+      });
+    }
+
+    var rollup = data.rollup && typeof data.rollup === "object" ? data.rollup : {};
+    var tiles = [
+      ["Neutral quiet", rollup.n_quiet],
+      ["Long quiet", rollup.l_quiet],
+      ["Neutral fills", rollup.n_fills],
+      ["Long fills", rollup.l_fills],
+      ["Other pairs", rollup.other_pairs],
+      ["Since last ping", rollup.continuous_fills_since_last_ping],
+    ];
+    var stats = el("div", { class: "stat-grid" });
+    tiles.forEach(function (pair) {
+      var value = pair[1];
+      stats.append(el("div", {}, [
+        el("span", { class: "k", text: pair[0] }),
+        el("span", { class: "stat-v", text: value == null || value === "" ? "—" : Number(value).toLocaleString("en-US") }),
+      ]));
+    });
+    var rollupCard = el("article", { class: "card" }, [
+      el("h3", { class: "card-title", text: "Rollup" }),
+      stats,
+    ]);
+
+    var hot = data.rollup && data.rollup.hot;
+    var hotCard = el("article", { class: "card" }, [
+      el("h3", { class: "card-title", text: "Hot watch" }),
+    ]);
+    var names = hot && typeof hot === "object" ? Object.keys(hot) : [];
+    if (!names.length) {
+      hotCard.append(el("p", { class: "empty", text: "No names are in the fast poll." }));
+    } else {
+      names.forEach(function (symbol) {
+        var info = hot[symbol];
+        var box = el("div", { class: "hot-item" }, [
+          el("div", { class: "sym-name", text: symbol }),
+        ]);
+        if (!info || typeof info !== "object") {
+          box.append(el("div", { class: "mini", text: info == null ? "Hot" : String(info) }));
+        } else {
+          var bits = [];
+          var fills = num(info.fills);
+          if (fills != null) bits.push(fills + (fills === 1 ? " fill" : " fills"));
+          var quiet = num(info.quiet_s);
+          if (quiet != null) bits.push("quiet " + formatDuration(quiet));
+          var left = num(info.remaining_s);
+          if (left != null) bits.push(left > 0 ? formatDuration(left) + " left" : "window ended");
+          box.append(el("div", { class: "mini", text: bits.join(" · ") || "Hot" }));
+          if (info.last_fill) box.append(el("div", { class: "mini", text: "Last fill " + formatEt(info.last_fill) }));
+        }
+        hotCard.append(box);
+      });
+    }
+
+    var wrap = el("div", { class: "near-grid" }, [threatCard, rollupCard, hotCard]);
+    var host = document.getElementById("near");
+    host.replaceChildren(wrap);
+  }
+
+  function sideStats(rows, key, capital) {
+    var sum = 0;
+    var count = 0;
+    var missing = 0;
+    rows.forEach(function (row) {
+      var v = num(row[key]);
+      if (v == null) missing += 1;
+      else {
+        sum += v;
+        count += 1;
+      }
+    });
+    var baseline = capital * rows.length;
+    return {
+      sum: sum,
+      count: count,
+      missing: missing,
+      baseline: baseline,
+      gap: sum - baseline,
+      pricedGap: sum - capital * count,
+    };
+  }
+
+  function totalsCard(title, stats, capital) {
+    var card = el("article", { class: "card" }, [
+      el("h3", { class: "card-title", text: title }),
+    ]);
+    card.append(el("div", { class: "sn" }, [
+      el("div", {}, [
+        el("span", { class: "k", text: "START" }),
+        el("div", { class: "start-num", text: usd(stats.baseline, 0) }),
+      ]),
+      el("div", {}, [
+        el("span", { class: "k", text: "NOW" }),
+        el("div", { class: "now-num", text: stats.count ? usd(stats.sum, 2) : "—" }),
+      ]),
+    ]));
+    card.append(el("p", { class: "mini", text: usd(capital, 0) + " × " + (stats.count + stats.missing) }));
+    if (stats.count) {
+      var pricedPct = stats.count ? (stats.pricedGap / (capital * stats.count)) * 100 : 0;
+      card.append(deltaChip(stats.gap, (stats.gap / stats.baseline) * 100, "vs baseline"));
+      if (stats.missing) {
+        card.append(deltaChip(stats.pricedGap, pricedPct, "on priced books"));
+        card.append(el("p", { class: "mini", text: stats.missing + " unseeded, left out of NOW" }));
+      }
+    } else {
+      card.append(el("p", { class: "mini", text: "No priced books in this snapshot." }));
+    }
+    return card;
+  }
+
+  function renderTotals(data) {
+    var rows = pairsOf(data);
+    var capital = capitalOf(data);
+    var neutral = sideStats(rows, "neutral_equity", capital);
+    var long = sideStats(rows, "long_equity", capital);
+    var scanned = num(data.scanned);
+    var scan = el("article", { class: "card" }, [
+      el("h3", { class: "card-title", text: "Scanned" }),
+      el("div", { class: "scanned-num", text: scanned == null ? "—" : scanned.toLocaleString("en-US") }),
+      el("p", { class: "mini", text: rows.length + " pairs · Neutral + Long" }),
+    ]);
+    var host = document.getElementById("totals");
+    host.replaceChildren(
+      totalsCard("Neutral", neutral, capital),
+      totalsCard("Long", long, capital),
+      scan
+    );
+    var together = neutral.sum + long.sum;
+    var books = rows.length * 2;
+    var note = "Neutral NOW " + (neutral.count ? usd(neutral.sum, 2) : "—")
+      + " and Long NOW " + (long.count ? usd(long.sum, 2) : "—")
+      + " versus " + usd(capital * books, 0) + " (" + usd(capital, 0) + " × " + books + " books).";
+    if (neutral.missing || long.missing) {
+      note += " Unseeded books are omitted from NOW, so most of the baseline gap is a missing mark, not a priced drawdown.";
+    }
+    document.getElementById("totals-note").textContent = note;
+  }
+
+  function sortValue(row, key) {
+    if (key === "symbol") return String(row.symbol || "");
+    if (key === "spot") return num(row.spot);
+    if (key === "pct") return num(row.pct_vs_seed);
+    if (key === "neutral") return num(row.neutral_equity);
+    if (key === "long") return num(row.long_equity);
+    return null;
+  }
+
+  function compare(a, b) {
+    var va = sortValue(a, state.sortKey);
+    var vb = sortValue(b, state.sortKey);
+    if (typeof va === "string" || typeof vb === "string") {
+      var cs = String(va == null ? "" : va).localeCompare(String(vb == null ? "" : vb));
+      if (cs === 0) cs = String(a.symbol || "").localeCompare(String(b.symbol || ""));
+      return state.sortDir === "asc" ? cs : -cs;
+    }
+    var na = va == null;
+    var nb = vb == null;
+    if (na && nb) return String(a.symbol || "").localeCompare(String(b.symbol || ""));
+    if (na) return 1;
+    if (nb) return -1;
+    var c = va - vb;
+    if (c === 0) c = String(a.symbol || "").localeCompare(String(b.symbol || ""));
+    return state.sortDir === "asc" ? c : -c;
+  }
+
+  function visible(row) {
+    var q = state.query.trim().toLowerCase();
+    if (q) {
+      var hay = [row.symbol, row.pair, row.neutral_ws, row.long_ws].join(" ").toLowerCase();
+      if (hay.indexOf(q) === -1) return false;
+    }
+    if (state.filter === "core") return isCore(row);
+    if (state.filter === "hot") return isHot(row);
+    if (state.filter === "threat") return isThreat(row);
+    if (state.filter === "unseeded") return isUnseeded(row);
+    if (state.filter === "filled") return !!filledSet(state.data)[upper(row.symbol)];
+    return true;
+  }
+
+  function badges(row) {
+    var out = [];
+    if (isCore(row)) out.push(["core", "Core"]);
+    if (isHot(row)) out.push(["hot", "Hot"]);
+    if (isThreat(row)) out.push(["threat", "Threat"]);
+    if (num(row.neutral_equity) == null) out.push(["gap", "N unseeded"]);
+    if (num(row.long_equity) == null) out.push(["gap", "L unseeded"]);
+    return out;
+  }
+
+  function equityCell(equity, capital) {
+    var n = num(equity);
+    var td = el("td", { class: "num" }, [
+      el("div", { class: "eq", text: n == null ? "—" : usd(n, 2) }),
+    ]);
+    if (n != null) {
+      var d = n - capital;
+      td.append(el("div", {
+        class: "mini " + tone(d),
+        text: signedUsd(d, moneyDigits(d)) + " · " + signedPct((d / capital) * 100),
+      }));
+    }
+    return td;
+  }
+
+  function renderBooks() {
+    var data = state.data;
+    if (!data) return;
+    var capital = capitalOf(data);
+    var rows = pairsOf(data).filter(visible).sort(compare);
+    var body = document.getElementById("books-body");
+    var frag = document.createDocumentFragment();
+    if (!rows.length) {
+      frag.append(el("tr", {}, [
+        el("td", { class: "empty", colspan: "7", text: "No pairs match." }),
+      ]));
+    }
+    rows.forEach(function (row) {
+      var tr = el("tr");
+      var titleBits = [row.neutral_ws, row.long_ws].filter(Boolean);
+      if (titleBits.length) tr.title = titleBits.join(" · ");
+      if (isThreat(row)) tr.classList.add("is-threat");
+      else if (isHot(row)) tr.classList.add("is-hot");
+      if (num(row.neutral_equity) == null && num(row.long_equity) == null) tr.classList.add("is-gap");
+
+      var top = el("div", { class: "sym-line" }, [
+        el("span", { class: "sym-name", text: row.symbol || "—" }),
+      ]);
+      badges(row).forEach(function (b) {
+        top.append(el("span", { class: "badge " + b[0], text: b[1] }));
+      });
+      var sym = el("td", { class: "sym" }, [
+        top,
+        el("div", { class: "mini", text: row.pair || "" }),
+      ]);
+      tr.append(sym);
+      tr.append(el("td", { class: "num" }, [
+        el("div", { class: "eq", text: num(row.spot) == null ? "—" : formatPrice(num(row.spot)) }),
+      ]));
+      tr.append(el("td", { class: "num" }, [
+        el("div", { class: "eq", text: num(row.pct_vs_seed) == null ? "—" : signedPct(num(row.pct_vs_seed)) }),
+      ]));
+      tr.append(equityCell(row.neutral_equity, capital));
+      tr.append(equityCell(row.long_equity, capital));
+      tr.append(el("td", { class: "num" }, [
+        el("div", { class: "mini", text: "N " + formatSeed(row.neutral_seed) }),
+        el("div", { class: "mini", text: "L " + formatSeed(row.long_seed) }),
+      ]));
+      var nOrd = num(row.neutral_orders);
+      var lOrd = num(row.long_orders);
+      var ord = el("div", {
+        class: "eq" + ((nOrd != null && nOrd !== 6) || (lOrd != null && lOrd !== 6) ? " mini down" : ""),
+        text: (nOrd == null ? "—" : String(nOrd)) + " · " + (lOrd == null ? "—" : String(lOrd)),
+      });
+      tr.append(el("td", { class: "num" }, [ord]));
+      frag.append(tr);
+    });
+    body.replaceChildren(frag);
+
+    var all = pairsOf(data);
+    var counts = { all: all.length, core: 0, hot: 0, threat: 0, unseeded: 0, filled: 0 };
+    all.forEach(function (row) {
+      if (isCore(row)) counts.core += 1;
+      if (isHot(row)) counts.hot += 1;
+      if (isThreat(row)) counts.threat += 1;
+      if (isUnseeded(row)) counts.unseeded += 1;
+      if (filledSet(data)[upper(row.symbol)]) counts.filled += 1;
+    });
+    document.querySelectorAll("#chips [data-filter]").forEach(function (btn) {
+      var key = btn.getAttribute("data-filter");
+      var labels = {
+        all: "All",
+        core: "Core",
+        hot: "Hot",
+        threat: "Threats",
+        unseeded: "Unseeded",
+        filled: "Filled",
+      };
+      btn.textContent = labels[key] + " " + (counts[key] == null ? "" : counts[key]);
+      btn.setAttribute("aria-pressed", key === state.filter ? "true" : "false");
+    });
+    document.getElementById("book-count").textContent = "Showing " + rows.length + " of " + all.length;
+
+    document.querySelectorAll("#books-table [data-sort]").forEach(function (btn) {
+      var key = btn.getAttribute("data-sort");
+      var label = btn.getAttribute("data-label") || key;
+      var on = key === state.sortKey;
+      btn.textContent = label + (on ? (state.sortDir === "asc" ? " ↑" : " ↓") : "");
+      var th = btn.closest("th");
+      if (th) th.setAttribute("aria-sort", on ? (state.sortDir === "asc" ? "ascending" : "descending") : "none");
+    });
+  }
+
+  function renderFills(data) {
+    var fills = (Array.isArray(data.fills) ? data.fills.slice() : []).sort(function (a, b) {
+      return String(b && b.ts).localeCompare(String(a && a.ts));
+    });
+    var host = document.getElementById("fills");
+    if (!fills.length) {
+      host.replaceChildren(el("p", { class: "empty", text: "No fills on this snapshot." }));
+      return;
+    }
+    var table = el("table", { class: "fills-table" });
+    table.append(el("caption", { class: "sr-only", text: "Recent paper fills" }));
+    var head = el("tr");
+    ["When", "Pair", "Style", "Side", "Price", "Size", "Next rung", "Note"].forEach(function (label, i) {
+      head.append(el("th", { scope: "col", class: i >= 4 && i <= 6 ? "num" : "", text: label }));
+    });
+    table.append(el("thead", {}, [head]));
+    var body = el("tbody");
+    fills.forEach(function (fill) {
+      var side = String(fill.side || "").toLowerCase();
+      var next = [fill.reladder_side, num(fill.reladder_price) == null ? fill.reladder_price : formatPrice(num(fill.reladder_price))]
+        .filter(function (v) { return v != null && v !== ""; })
+        .join(" ");
+      var note = fill.placed === false ? "not placed" : (fill.note || "ok");
+      var when = el("td", {}, [
+        el("div", { text: formatEt(fill.ts) }),
+        el("div", { class: "mini", text: [fill.cycle != null ? "cycle " + fill.cycle : "", fill.mode || ""].filter(Boolean).join(" · ") }),
+      ]);
+      var tr = el("tr", {}, [
+        when,
+        el("td", {}, [
+          el("div", { class: "sym-name", text: fill.symbol || "—" }),
+          el("div", { class: "mini", text: fill.workspace || "" }),
+        ]),
+        el("td", { text: fill.style || "—" }),
+        el("td", {}, [el("span", { class: "side " + side, text: side || "—" })]),
+        el("td", { class: "num", text: num(fill.price) == null ? "—" : formatPrice(num(fill.price)) }),
+        el("td", { class: "num", text: num(fill.volume) == null ? "—" : num(fill.volume).toLocaleString("en-US", { maximumFractionDigits: 4 }) }),
+        el("td", { class: "num", text: next || "—" }),
+        el("td", { text: note }),
+      ]);
+      body.append(tr);
+    });
+    table.append(body);
+    var scroll = el("div", { class: "table-scroll" }, [table]);
+    host.replaceChildren(scroll);
+  }
+
+  function render() {
+    renderFeed(state.data);
+    renderCore(state.data);
+    renderNear(state.data);
+    renderTotals(state.data);
+    renderBooks();
+    renderFills(state.data);
+  }
+
+  function fail(message) {
+    document.getElementById("app-feed").textContent = "Could not read status.json.";
+    var banner = document.getElementById("banner");
+    banner.hidden = false;
+    banner.textContent = message;
+  }
+
+  function load() {
+    var feed = document.getElementById("app-feed");
+    var previous = feed.textContent;
+    feed.textContent = state.data ? "Reloading snapshot…" : "Loading paper snapshot…";
+    fetch("status.json", { cache: "no-cache", headers: { Accept: "application/json" } })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data || !Array.isArray(data.pairs)) throw new Error("status.json has no pairs");
+        state.data = data;
+        render();
+      })
+      .catch(function (err) {
+        console.error(err);
+        if (!state.data) fail("This board only reads the paper snapshot at status.json. Nothing was loaded.");
+        else {
+          feed.textContent = previous;
+          var banner = document.getElementById("banner");
+          banner.hidden = false;
+          banner.textContent = "Reload failed. The previous snapshot is still on screen.";
+        }
+      });
+  }
+
+  document.getElementById("reload").addEventListener("click", load);
+  document.getElementById("q").addEventListener("input", function (e) {
+    state.query = e.target.value;
+    renderBooks();
+  });
+  document.getElementById("chips").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-filter]");
+    if (!btn) return;
+    state.filter = btn.getAttribute("data-filter");
+    renderBooks();
+  });
+  document.getElementById("books-table").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-sort]");
+    if (!btn) return;
+    var key = btn.getAttribute("data-sort");
+    if (state.sortKey === key) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+    else {
+      state.sortKey = key;
+      state.sortDir = "asc";
+    }
+    renderBooks();
+  });
+
+  load();
+})();

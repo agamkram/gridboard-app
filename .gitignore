@@ -1,0 +1,10 @@
+.DS_Store
+.vercel
+.env
+.env.*
+*.log
+node_modules/
+__pycache__/
+*.pyc
+.local-cert.pem
+.local-key.pem

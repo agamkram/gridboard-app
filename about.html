@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f6f8">
+  <meta name="color-scheme" content="light">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="GridBoard">
+  <meta name="description" content="How GridBoard’s paper geometric grids work. Simulated books only. Not financial advice.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mark Maga">
+  <meta property="og:title" content="About — GridBoard">
+  <meta property="og:description" content="How GridBoard’s paper geometric grids work. Simulated books only. Not financial advice.">
+  <meta property="og:url" content="https://gridboard.markmaga.com/about.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="About — GridBoard">
+  <title>About — GridBoard</title>
+  <link rel="canonical" href="https://gridboard.markmaga.com/about.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap about-page">
+    <header class="app-header">
+      <div class="app-title-row">
+        <h1 class="app-title">GridBoard</h1>
+      </div>
+      <p class="app-kicker">About this board</p>
+      <div class="header-actions">
+        <a class="about-link" href="./">Back to the board</a>
+      </div>
+    </header>
+
+    <p class="about-lede">A public view of Mark Maga’s paper grid books. The money is simulated. This page does not place orders.</p>
+
+    <ul class="about-toc">
+      <li><a href="#what">What it is</a></li>
+      <li><a href="#styles">Neutral and Long</a></li>
+      <li><a href="#trade">How a fill works</a></li>
+      <li><a href="#hot">Hot watch</a></li>
+      <li><a href="#vol">Wild prices</a></li>
+      <li><a href="#board">What you see</a></li>
+    </ul>
+
+    <section class="about-block" id="what">
+      <h2>What it is</h2>
+      <p>GridBoard is the operations board for Mark’s geometric grids on Kraken. Every book is paper: a simulator keeps score with play money. Nothing here is a live account, and the site has no button that can send an order.</p>
+      <p>The universe is 75 Kraken pairs priced in US dollars. Each pair has two books, Neutral and Long, so there are 150 books. Each one starts with about $10,000.</p>
+      <p>The simulator charges 0.80% per side. That is Kraken’s entry-level fee, the rate you pay before volume discounts. A buy and a later sell each pay it.</p>
+      <p>Prices are spaced geometrically by 5%. The next rung is the last price times 1.05, or divided by 1.05. Five percent from the rung before it, not five percent of the original seed piled on in equal dollar steps.</p>
+    </section>
+
+    <section class="about-block" id="styles">
+      <h2>Neutral and Long</h2>
+      <p><strong>Neutral</strong> puts about half the $10,000 into the coin at the start. It then rests three buy limits under the price and three sell limits over it. There is depth if the market gaps down, and depth if it gaps up.</p>
+      <p><strong>Long</strong> also starts about half in the coin. It rests four buys and only two sells, so more of the ladder is below the price. The sells are small slices of the coins the book already holds, not a dump of the whole stack.</p>
+      <p>Both styles use the same 5% spacing. The difference is how many rungs sit below the price and how small the sells are.</p>
+    </section>
+
+    <section class="about-block" id="trade">
+      <h2>How a fill works</h2>
+      <p>The limits sit on the book and wait. They can fill whenever the market price crosses them. There is no clock that forces a trade.</p>
+      <p>When one fills, the simulator places the opposite limit one geometric step away. After a buy, that is a sell at the fill times 1.05. After a sell, that is a buy at the fill divided by 1.05. The new order lands on the same 5% ladder as the original seed, not on a rounder or nearer price.</p>
+      <p>The coins bought at the seed are not re-priced. Only a rung that actually fills creates the next rung.</p>
+    </section>
+
+    <section class="about-block" id="hot">
+      <h2>Hot watch</h2>
+      <p>Paper fills are not pushed over Kraken’s websockets. A watcher on Mark’s machine polls all 150 books and notices a fill that way.</p>
+      <p>After a fill, that pair’s Neutral book and Long book switch to a fast poll, about every 8 seconds, for about 90 minutes from the last fill. That stretch is the hot watch. The board marks the name while the window is open. When it ends, the pair drops back into the slower pass over the whole universe, about every 25 seconds.</p>
+      <p>A separate job, about every 15 minutes, only publishes the snapshot this site shows. That job does not place the next rung. The next order is placed by the watcher, not by the publish job, and not by this website.</p>
+    </section>
+
+    <section class="about-block" id="vol">
+      <h2>When prices get wild</h2>
+      <p>Right now every rung is 5% from the last. That 5% is a floor.</p>
+      <p class="about-note">The plan is to widen the gap when a coin’s recent volatility is wild, and to keep at least 5% when it is calm. A jumpy name would then trade less often and pay the 0.80% fee less often. That widening is not in the published snapshot yet. If you do not see a wider spacing in the feed, it is not running. This board will not pretend that it is.</p>
+    </section>
+
+    <section class="about-block" id="board">
+      <h2>What the board shows</h2>
+      <ul>
+        <li>Spot, and how far that spot is from the seed price, when the snapshot includes them.</li>
+        <li>Neutral and Long equity against the $10,000 start. A missing mark stays blank. It is not treated as a total loss.</li>
+        <li>Names sitting near the bottom or top of their ladder.</li>
+        <li>Recent paper fills, and which names are still in the hot watch.</li>
+        <li>Totals across the universe, and how many books the digest scanned.</li>
+      </ul>
+      <p>All of that comes from a file, <code>status.json</code>, refreshed by Mark’s ops jobs. The page only reads it. There is no account login and no Kraken connection from the browser.</p>
+    </section>
+
+    <p class="about-foot">Not financial advice · paper simulator · <a href="https://markmaga.com/">Mark Maga</a></p>
+  </div>
+
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

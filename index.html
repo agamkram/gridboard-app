@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f6f8">
+  <meta name="color-scheme" content="light">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="GridBoard">
+  <meta name="application-name" content="GridBoard">
+  <meta name="description" content="Read-only paper grid ops for 75 Kraken USD pairs. Neutral and Long books, $10,000 each. Not financial advice.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mark Maga">
+  <meta property="og:title" content="GridBoard">
+  <meta property="og:description" content="Read-only paper grid ops for 75 Kraken USD pairs. Neutral and Long books, $10,000 each. Not financial advice.">
+  <meta property="og:url" content="https://gridboard.markmaga.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GridBoard">
+  <meta name="twitter:description" content="Read-only paper grid ops for 75 Kraken USD pairs. Neutral and Long books, $10,000 each. Not financial advice.">
+  <title>GridBoard</title>
+  <link rel="canonical" href="https://gridboard.markmaga.com/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#books">Skip to pairs</a>
+  <div class="wrap">
+    <header class="app-header">
+      <div class="app-title-row">
+        <h1 class="app-title">GridBoard</h1>
+      </div>
+      <p class="app-kicker">Paper Grid Ops</p>
+      <div class="pill-row">
+        <p class="paper-pill">PAPER ONLY</p>
+        <p class="fee-pill" id="fee-pill">Trade fee 0.80%</p>
+      </div>
+      <p class="spacing" id="spacing">geometric 5% (r=1.05)</p>
+      <p class="app-feed" id="app-feed">Loading paper snapshot…</p>
+      <p class="specs" id="specs"></p>
+      <p class="banner" id="banner" hidden></p>
+      <div class="header-actions">
+        <a class="about-link" href="about.html">About</a>
+        <button type="button" class="reload" id="reload">Reload snapshot</button>
+      </div>
+    </header>
+
+    <noscript>
+      <p class="banner">JavaScript is off, so the board cannot read the snapshot. The file is still at status.json. This page never places orders.</p>
+    </noscript>
+
+    <main>
+      <section class="section" id="core-section" aria-labelledby="core-title">
+        <div class="section-head">
+          <h2 class="section-title" id="core-title">Core</h2>
+        </div>
+        <div class="core-grid" id="core">
+          <p class="empty">Loading core books…</p>
+        </div>
+      </section>
+
+      <section class="section" id="near-section" aria-labelledby="near-title">
+        <div class="section-head">
+          <h2 class="section-title" id="near-title">Threats and near band</h2>
+        </div>
+        <div id="near">
+          <p class="empty">Loading rollup…</p>
+        </div>
+      </section>
+
+      <section class="section" id="totals-section" aria-labelledby="totals-title">
+        <div class="section-head">
+          <h2 class="section-title" id="totals-title">Totals</h2>
+        </div>
+        <div class="totals-grid" id="totals">
+          <p class="empty">Loading totals…</p>
+        </div>
+        <p class="totals-note" id="totals-note"></p>
+      </section>
+
+      <section class="section" id="books" aria-labelledby="books-title">
+        <div class="section-head">
+          <h2 class="section-title" id="books-title">Pairs</h2>
+          <p class="section-note" id="book-count"></p>
+        </div>
+        <div class="toolbar">
+          <label class="search">
+            <span class="sr-only">Filter pairs</span>
+            <input id="q" type="search" placeholder="Filter symbol, pair, or workspace" autocomplete="off" enterkeyhint="search">
+          </label>
+          <div class="chips" id="chips" role="toolbar" aria-label="Pair filters">
+            <button type="button" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-filter="core" aria-pressed="false">Core</button>
+            <button type="button" data-filter="hot" aria-pressed="false">Hot</button>
+            <button type="button" data-filter="threat" aria-pressed="false">Threats</button>
+            <button type="button" data-filter="unseeded" aria-pressed="false">Unseeded</button>
+            <button type="button" data-filter="filled" aria-pressed="false">Filled</button>
+          </div>
+        </div>
+        <p class="scroll-hint">Swipe sideways for every column.</p>
+        <div class="table-scroll">
+          <table id="books-table">
+            <caption class="sr-only">Neutral and Long paper books for each USD pair</caption>
+            <thead>
+              <tr>
+                <th class="sym" scope="col" aria-sort="ascending">
+                  <button type="button" data-sort="symbol" data-label="Pair">Pair</button>
+                </th>
+                <th class="num" scope="col" aria-sort="none">
+                  <button type="button" data-sort="spot" data-label="Spot">Spot</button>
+                </th>
+                <th class="num" scope="col" aria-sort="none">
+                  <button type="button" data-sort="pct" data-label="vs seed">vs seed</button>
+                </th>
+                <th class="num" scope="col" aria-sort="none">
+                  <button type="button" data-sort="neutral" data-label="Neutral">Neutral</button>
+                </th>
+                <th class="num" scope="col" aria-sort="none">
+                  <button type="button" data-sort="long" data-label="Long">Long</button>
+                </th>
+                <th class="num" scope="col">Seeds</th>
+                <th class="num" scope="col">Orders</th>
+              </tr>
+            </thead>
+            <tbody id="books-body">
+              <tr>
+                <td class="empty" colspan="7">Loading pairs…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="fills-section" aria-labelledby="fills-title">
+        <div class="section-head">
+          <h2 class="section-title" id="fills-title">Fills</h2>
+        </div>
+        <div id="fills">
+          <p class="empty">Loading fills…</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="legend">
+      <p>Neutral 3+3 · Long 4+2 · paper simulator · not financial advice.</p>
+    </footer>
+  </div>
+
+  <!--
+    Vercel Web Analytics for a plain HTML site.
+    No @vercel/analytics package: this is the documented script tag.
+    Pageviews start after Analytics is enabled on the Vercel project.
+  -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
