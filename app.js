@@ -587,4 +587,12 @@
   });
 
   load();
+
+  function localHost() {
+    var host = location.hostname || "";
+    return host === "localhost" || host === "127.0.0.1" || /^\d+\.\d+\.\d+\.\d+$/.test(host);
+  }
+  if ("serviceWorker" in navigator && !localHost()) {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  }
 })();

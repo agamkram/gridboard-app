@@ -18,14 +18,37 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="GridBoard">
   <meta name="twitter:description" content="Read-only paper grid ops for 75 Kraken USD pairs. Neutral and Long books, $10,000 each. Not financial advice.">
+  <meta property="og:image" content="https://gridboard.markmaga.com/icon-512.png">
+  <meta name="twitter:image" content="https://gridboard.markmaga.com/icon-512.png">
   <title>GridBoard</title>
   <link rel="canonical" href="https://gridboard.markmaga.com/">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <script>
+    (function () {
+      try {
+        var host = location.hostname || "";
+        var local = host === "localhost" || host === "127.0.0.1" || /^\d+\.\d+\.\d+\.\d+$/.test(host);
+        if (local && navigator.serviceWorker) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (reg) { reg.unregister(); });
+          });
+          if (window.caches && caches.keys) {
+            caches.keys().then(function (keys) {
+              keys.forEach(function (k) { caches.delete(k); });
+            });
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=1">
 </head>
 <body>
   <a class="skip" href="#books">Skip to pairs</a>
@@ -138,8 +161,13 @@
   -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    if (!/^(localhost|127\.0\.0\.1|\d+\.\d+\.\d+\.\d+)$/.test(location.hostname)) {
+      var gbAnalytics = document.createElement("script");
+      gbAnalytics.defer = true;
+      gbAnalytics.src = "/_vercel/insights/script.js";
+      document.head.appendChild(gbAnalytics);
+    }
   </script>
-  <script defer src="/_vercel/insights/script.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=1"></script>
 </body>
 </html>
