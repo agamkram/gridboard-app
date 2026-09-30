@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="GridBoard is a read-only view of Mark Maga’s Kraken paper grid books. 75 USD pairs, Neutral and Long. Not live trading. Not financial advice.">
+  <meta property="og:title" content="GridBoard — Paper Grid Ops">
+  <meta property="og:description" content="Read-only paper grid books for 75 Kraken USD pairs. Not live trading.">
+  <meta property="og:url" content="https://gridboard.markmaga.com/">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://gridboard.markmaga.com/">
+  <title>GridBoard — Paper Grid Ops</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a class="skip" href="#pairs">Skip to pairs</a>
+  <div class="wrap">
+    <header class="top card">
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="7" fill="#f4f7fb" stroke="#d5deea"/>
+          <path d="M6 16h20" stroke="#1e3a5f" stroke-width="1.6"/>
+          <path d="M6 10.5h20M6 7h20" stroke="#d12626" stroke-width="1.4" stroke-dasharray="2.2 1.6"/>
+          <path d="M6 21.5h20M6 25.5h20" stroke="#17803d" stroke-width="1.4" stroke-dasharray="2.2 1.6"/>
+        </svg>
+        <div>
+          <h1>GridBoard</h1>
+          <p class="role">Paper Grid Ops</p>
+        </div>
+      </div>
+      <p class="stamp" id="stamp" aria-label="Paper only. This board does not trade.">Paper only</p>
+      <div class="meta">
+        <ul class="pills" id="pills">
+          <li>Trade fee 0.80%</li>
+          <li>Geometric 5%</li>
+          <li>$10,000 each book</li>
+        </ul>
+        <p class="when">
+          <span id="updated">Loading the paper feed…</span>
+          <button type="button" id="reload" class="text-btn">Reload</button>
+        </p>
+        <p class="headline" id="headline" hidden></p>
+        <p class="specs" id="specs">Neutral ~50% seed · 3 buys / 3 sells · Long ~50% seed · 4 buys / 2 sells</p>
+      </div>
+    </header>
+
+    <p class="banner" id="error" hidden role="alert"></p>
+
+    <main id="main">
+      <section aria-labelledby="core-title">
+        <div class="section-head">
+          <h2 id="core-title">Core</h2>
+          <p class="section-note">ADA · ETH · BTC · ZEC</p>
+        </div>
+        <div class="core-grid" id="core">
+          <p class="muted">Loading core books…</p>
+        </div>
+      </section>
+
+      <section class="split" aria-label="Threats and rollup">
+        <div>
+          <div class="section-head">
+            <h2 id="threat-title">Threats</h2>
+            <p class="section-note">Near band · <span id="threat-count">—</span></p>
+          </div>
+          <div class="card pad" id="threats"></div>
+        </div>
+        <div>
+          <div class="section-head">
+            <h2 id="rollup-title">Rollup</h2>
+            <p class="section-note">Quiet, fills, hot window</p>
+          </div>
+          <div class="card pad" id="rollup"></div>
+        </div>
+      </section>
+
+      <section aria-labelledby="totals-title">
+        <div class="section-head">
+          <h2 id="totals-title">Totals</h2>
+          <p class="section-note">Sums versus the $10k baseline</p>
+        </div>
+        <div class="totals" id="totals"></div>
+      </section>
+
+      <section id="pairs" aria-labelledby="pairs-title">
+        <div class="section-head">
+          <h2 id="pairs-title">Pairs</h2>
+          <p class="section-note" id="showing" aria-live="polite">Loading pairs…</p>
+        </div>
+        <div class="card table-card">
+          <div class="toolbar">
+            <label class="sr-only" for="q">Filter pairs</label>
+            <input id="q" class="search" type="search" placeholder="Filter symbol, pair, or workspace" autocomplete="off" enterkeyhint="search">
+            <div class="filters" role="group" aria-label="Filter books">
+              <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+              <button type="button" class="chip" data-filter="core" aria-pressed="false">Core</button>
+              <button type="button" class="chip" data-filter="hot" aria-pressed="false">Hot</button>
+              <button type="button" class="chip" data-filter="threat" aria-pressed="false">Threats</button>
+              <button type="button" class="chip" data-filter="gap" aria-pressed="false">Gaps</button>
+            </div>
+            <button type="button" class="chip" id="reset-sort" aria-pressed="true">Sort: attention</button>
+          </div>
+          <p class="sort-note" id="sort-note">Sorted by attention: unread books, threats, then the weakest equity.</p>
+          <p class="swipe">Swipe the table sideways for seeds, orders, and status.</p>
+          <div class="table-wrap">
+            <table id="book-table">
+              <caption class="sr-only">Paper grid books</caption>
+            </table>
+          </div>
+          <p id="table-empty" class="empty" hidden>No pairs match this filter.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="fills-title">
+        <div class="section-head">
+          <h2 id="fills-title">Fills</h2>
+          <p class="section-note"><span id="fill-count">—</span> in this digest</p>
+        </div>
+        <div class="card pad" id="fills-body"></div>
+      </section>
+    </main>
+
+    <footer class="legend-wrap">
+      <p class="legend">Neutral 3+3 · Long 4+2 · paper simulator · not financial advice.</p>
+      <p class="foot">
+        <span id="schema"></span>
+        Read-only board. The browser does not call Kraken.
+        <a href="https://markmaga.com">markmaga.com</a>
+      </p>
+    </footer>
+  </div>
+  <noscript>
+    <p class="banner wrap">GridBoard needs JavaScript to read status.json and draw the books.</p>
+  </noscript>
+  <script src="/app.js"></script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    if (!/^(localhost|127\.0\.0\.1|\d+\.\d+\.\d+\.\d+)?$/.test(location.hostname)) {
+      var gbAnalytics = document.createElement("script");
+      gbAnalytics.defer = true;
+      gbAnalytics.src = "/_vercel/insights/script.js";
+      document.head.appendChild(gbAnalytics);
+    }
+  </script>
+</body>
+</html>
