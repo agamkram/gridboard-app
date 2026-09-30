@@ -371,7 +371,9 @@ button, input { font-family: inherit; }
 
 .sym-name {
   font-weight: 700;
+  font-size: 15px;
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .empty {
@@ -454,14 +456,14 @@ button, input { font-family: inherit; }
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 880px;
+  min-width: 760px;
 }
 
 th, td {
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-bottom: 1px solid var(--line);
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 th {
@@ -500,36 +502,30 @@ td.sym, th.sym {
   position: sticky;
   left: 0;
   z-index: 1;
+  width: 1%;
+  white-space: nowrap;
   background: white;
   box-shadow: 1px 0 0 var(--line);
+  padding-left: 10px;
+  padding-right: 8px;
 }
 
 th.sym { z-index: 2; background: #f6f8fb; }
 
-.sym-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
+.eq { font-size: 13.5px; }
+
+@media (max-width: 800px) {
+  #books-table { min-width: 680px; }
+  #books-table th,
+  #books-table td { padding: 7px 7px; }
+  #books-table td.sym,
+  #books-table th.sym {
+    padding-left: 8px;
+    padding-right: 6px;
+  }
+  #books-table .sym-name { font-size: 15px; }
+  #books-table .eq { font-size: 13px; }
 }
-
-.eq { font-size: 13px; }
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 1px 6px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.badge.core { color: #314e86; background: #e8eef8; }
-.badge.hot { color: #8a5a12; background: #f8efdc; }
-.badge.threat { color: #9f2c24; background: #fde8e6; }
-.badge.gap { color: #526273; background: #eef1f4; }
 
 tbody tr.is-hot td { background: #fbf8f2; }
 tbody tr.is-threat td { background: #fff6f5; }

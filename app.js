@@ -498,16 +498,6 @@
     return true;
   }
 
-  function badges(row) {
-    var out = [];
-    if (isCore(row)) out.push(["core", "Core"]);
-    if (isHot(row)) out.push(["hot", "Hot"]);
-    if (isThreat(row)) out.push(["threat", "Threat"]);
-    if (num(row.neutral_equity) == null) out.push(["gap", "N unseeded"]);
-    if (num(row.long_equity) == null) out.push(["gap", "L unseeded"]);
-    return out;
-  }
-
   function equityCell(equity, capital) {
     var n = num(equity);
     var td = el("td", { class: "num" }, [
@@ -537,23 +527,13 @@
     }
     rows.forEach(function (row) {
       var tr = el("tr");
-      var titleBits = [row.neutral_ws, row.long_ws].filter(Boolean);
-      if (titleBits.length) tr.title = titleBits.join(" · ");
       if (isThreat(row)) tr.classList.add("is-threat");
       else if (isHot(row)) tr.classList.add("is-hot");
       if (num(row.neutral_equity) == null && num(row.long_equity) == null) tr.classList.add("is-gap");
 
-      var top = el("div", { class: "sym-line" }, [
+      tr.append(el("td", { class: "sym" }, [
         el("span", { class: "sym-name", text: row.symbol || "—" }),
-      ]);
-      badges(row).forEach(function (b) {
-        top.append(el("span", { class: "badge " + b[0], text: b[1] }));
-      });
-      var sym = el("td", { class: "sym" }, [
-        top,
-        el("div", { class: "mini", text: row.pair || "" }),
-      ]);
-      tr.append(sym);
+      ]));
       tr.append(el("td", { class: "num" }, [
         el("div", { class: "eq", text: num(row.spot) == null ? "—" : formatPrice(num(row.spot)) }),
       ]));
