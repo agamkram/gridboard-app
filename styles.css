@@ -449,12 +449,6 @@ tbody tr.is-gap .eq { color: #6a7785; }
 tbody tr:hover td { background: #f3f6fa; }
 tbody tr:last-child td { border-bottom: 0; }
 
-.fills-table { min-width: 760px; }
-
-.side { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 12px; }
-.side.buy { color: var(--green); }
-.side.sell { color: var(--down); }
-
 .about-page {
   width: min(720px, calc(100% - 28px));
 }

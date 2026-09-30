@@ -63,21 +63,6 @@
     return delta < 0 ? "down" : "up";
   }
 
-  function formatPrice(n) {
-    if (!Number.isFinite(n)) return "—";
-    var abs = Math.abs(n);
-    if (abs === 0) return "0";
-    var min = 0;
-    var max = 12;
-    if (abs >= 100) {
-      min = 2;
-      max = 2;
-    } else if (abs >= 1) max = 4;
-    else if (abs >= 0.01) max = 6;
-    else if (abs >= 0.0001) max = 8;
-    return n.toLocaleString("en-US", { minimumFractionDigits: min, maximumFractionDigits: max });
-  }
-
   function formatEt(iso) {
     var d = new Date(iso);
     if (Number.isNaN(d.getTime())) return iso ? String(iso) : "—";
@@ -437,59 +422,11 @@
     });
   }
 
-  function renderFills(data) {
-    var fills = (Array.isArray(data.fills) ? data.fills.slice() : []).sort(function (a, b) {
-      return String(b && b.ts).localeCompare(String(a && a.ts));
-    });
-    var host = document.getElementById("fills");
-    if (!fills.length) {
-      host.replaceChildren(el("p", { class: "empty", text: "No fills on this snapshot." }));
-      return;
-    }
-    var table = el("table", { class: "fills-table" });
-    table.append(el("caption", { class: "sr-only", text: "Recent paper fills" }));
-    var head = el("tr");
-    ["When", "Pair", "Style", "Side", "Price", "Size", "Next rung", "Note"].forEach(function (label, i) {
-      head.append(el("th", { scope: "col", class: i >= 4 && i <= 6 ? "num" : "", text: label }));
-    });
-    table.append(el("thead", {}, [head]));
-    var body = el("tbody");
-    fills.forEach(function (fill) {
-      var side = String(fill.side || "").toLowerCase();
-      var next = [fill.reladder_side, num(fill.reladder_price) == null ? fill.reladder_price : formatPrice(num(fill.reladder_price))]
-        .filter(function (v) { return v != null && v !== ""; })
-        .join(" ");
-      var note = fill.placed === false ? "not placed" : (fill.note || "ok");
-      var when = el("td", {}, [
-        el("div", { text: formatEt(fill.ts) }),
-        el("div", { class: "mini", text: [fill.cycle != null ? "cycle " + fill.cycle : "", fill.mode || ""].filter(Boolean).join(" · ") }),
-      ]);
-      var tr = el("tr", {}, [
-        when,
-        el("td", {}, [
-          el("div", { class: "sym-name", text: fill.symbol || "—" }),
-          el("div", { class: "mini", text: fill.workspace || "" }),
-        ]),
-        el("td", { text: fill.style || "—" }),
-        el("td", {}, [el("span", { class: "side " + side, text: side || "—" })]),
-        el("td", { class: "num", text: num(fill.price) == null ? "—" : formatPrice(num(fill.price)) }),
-        el("td", { class: "num", text: num(fill.volume) == null ? "—" : num(fill.volume).toLocaleString("en-US", { maximumFractionDigits: 4 }) }),
-        el("td", { class: "num", text: next || "—" }),
-        el("td", { text: note }),
-      ]);
-      body.append(tr);
-    });
-    table.append(body);
-    var scroll = el("div", { class: "table-scroll" }, [table]);
-    host.replaceChildren(scroll);
-  }
-
   function render() {
     renderFeed(state.data);
     renderNear(state.data);
     renderTotals(state.data);
     renderBooks();
-    renderFills(state.data);
   }
 
   function fail(message) {
