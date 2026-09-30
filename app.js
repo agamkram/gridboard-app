@@ -160,7 +160,7 @@
     var banner = document.getElementById("banner");
     if (data.paper_only === false) {
       banner.hidden = false;
-      banner.textContent = "This snapshot is not flagged paper_only. GridBoard still cannot place orders.";
+      banner.textContent = "This update is not marked as practice only. This site still cannot place orders.";
     } else {
       banner.hidden = true;
       banner.textContent = "";
@@ -214,11 +214,11 @@
 
     var hot = data.rollup && data.rollup.hot;
     var hotCard = el("article", { class: "card" }, [
-      el("h3", { class: "card-title", text: "Hot watch" }),
+      el("h3", { class: "card-title", text: "Closer check" }),
     ]);
     var names = hot && typeof hot === "object" ? Object.keys(hot) : [];
     if (!names.length) {
-      hotCard.append(el("p", { class: "empty", text: "No names are in the fast poll." }));
+      hotCard.append(el("p", { class: "empty", text: "No coins are being checked more often." }));
     } else {
       names.forEach(function (symbol) {
         var info = hot[symbol];
@@ -293,7 +293,7 @@
         card.append(el("p", { class: "mini", text: stats.missing + " unseeded, left out of NOW" }));
       }
     } else {
-      card.append(el("p", { class: "mini", text: "No priced books in this snapshot." }));
+      card.append(el("p", { class: "mini", text: "No priced accounts in this update." }));
     }
     return card;
   }
@@ -402,7 +402,7 @@
       var key = btn.getAttribute("data-filter");
       var labels = {
         all: "All",
-        hot: "Hot",
+        hot: "Closer",
         threat: "Threats",
         unseeded: "Unseeded",
         filled: "Filled",
@@ -430,7 +430,7 @@
   }
 
   function fail(message) {
-    document.getElementById("app-feed").textContent = "Could not read status.json.";
+    document.getElementById("app-feed").textContent = "Could not load the update.";
     var banner = document.getElementById("banner");
     banner.hidden = false;
     banner.textContent = message;
@@ -439,7 +439,7 @@
   function load() {
     var feed = document.getElementById("app-feed");
     var previous = feed.textContent;
-    feed.textContent = state.data ? "Reloading snapshot…" : "Loading paper snapshot…";
+    feed.textContent = state.data ? "Reloading…" : "Loading…";
     fetch("status.json", { cache: "no-cache", headers: { Accept: "application/json" } })
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
@@ -452,12 +452,12 @@
       })
       .catch(function (err) {
         console.error(err);
-        if (!state.data) fail("This board only reads the paper snapshot at status.json. Nothing was loaded.");
+        if (!state.data) fail("The update did not load.");
         else {
           feed.textContent = previous;
           var banner = document.getElementById("banner");
           banner.hidden = false;
-          banner.textContent = "Reload failed. The previous snapshot is still on screen.";
+          banner.textContent = "Reload failed. The numbers already on screen are still here.";
         }
       });
   }

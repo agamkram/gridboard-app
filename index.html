@@ -11,7 +11,7 @@
   <meta name="application-name" content="GridBoard">
   <meta name="description" content="Read-only paper grid ops for 75 Kraken USD pairs. Neutral and Long books, $10,000 each. Not financial advice.">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Mark Maga">
+  <meta property="og:site_name" content="GridBoard">
   <meta property="og:title" content="GridBoard">
   <meta property="og:description" content="Read-only paper grid ops for 75 Kraken USD pairs. Neutral and Long books, $10,000 each. Not financial advice.">
   <meta property="og:url" content="https://gridboard.markmaga.com/">
@@ -63,17 +63,17 @@
         <p class="fee-pill" id="fee-pill">Trade fee 0.80%</p>
       </div>
       <p class="spacing" id="spacing">geometric 5% (r=1.05)</p>
-      <p class="app-feed" id="app-feed">Loading paper snapshot…</p>
+      <p class="app-feed" id="app-feed">Loading…</p>
       <p class="specs" id="specs"></p>
       <p class="banner" id="banner" hidden></p>
       <div class="header-actions">
         <a class="about-link" href="about.html">About</a>
-        <button type="button" class="reload" id="reload">Reload snapshot</button>
+        <button type="button" class="reload" id="reload">Reload</button>
       </div>
     </header>
 
     <noscript>
-      <p class="banner">JavaScript is off, so the board cannot read the snapshot. The file is still at status.json. This page never places orders.</p>
+      <p class="banner">JavaScript is off, so the board cannot load. This page never places orders.</p>
     </noscript>
 
     <main>
@@ -103,7 +103,7 @@
         <div class="toolbar">
           <label class="search">
             <span class="sr-only">Filter pairs</span>
-            <input id="q" type="search" placeholder="Filter symbol, pair, or workspace" autocomplete="off" enterkeyhint="search">
+            <input id="q" type="search" placeholder="Filter by coin" autocomplete="off" enterkeyhint="search">
           </label>
           <div class="chips" id="chips" role="toolbar" aria-label="Pair filters">
             <button type="button" data-filter="all" aria-pressed="true">All</button>
