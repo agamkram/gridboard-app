@@ -214,11 +214,11 @@
 
     var hot = data.rollup && data.rollup.hot;
     var hotCard = el("article", { class: "card" }, [
-      el("h3", { class: "card-title", text: "Closer check" }),
+      el("h3", { class: "card-title", text: "Hot watch" }),
     ]);
     var names = hot && typeof hot === "object" ? Object.keys(hot) : [];
     if (!names.length) {
-      hotCard.append(el("p", { class: "empty", text: "No coins are being checked more often." }));
+      hotCard.append(el("p", { class: "empty", text: "No coins are on hot watch." }));
     } else {
       names.forEach(function (symbol) {
         var info = hot[symbol];
@@ -402,7 +402,7 @@
       var key = btn.getAttribute("data-filter");
       var labels = {
         all: "All",
-        hot: "Closer",
+        hot: "Hot",
         threat: "Threats",
         unseeded: "Unseeded",
         filled: "Filled",
