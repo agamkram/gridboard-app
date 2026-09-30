@@ -203,14 +203,11 @@ button, input { font-family: inherit; }
   color: #667585;
 }
 
-.section-note,
-.totals-note {
+.section-note {
   margin: 0;
   color: var(--muted);
   font-size: 13px;
 }
-
-.totals-note { margin-top: 10px; }
 
 .totals-grid,
 .near-grid {
@@ -221,8 +218,8 @@ button, input { font-family: inherit; }
 .near-grid { grid-template-columns: 1fr; }
 
 @media (min-width: 800px) {
-  .totals-grid { grid-template-columns: 1fr 1fr 0.8fr; }
-  .near-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .totals-grid { grid-template-columns: 1fr 1fr; }
+  .near-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .card {
@@ -257,7 +254,6 @@ button, input { font-family: inherit; }
 
 .now-num,
 .eq,
-.stat-v,
 .delta-main {
   font-family: var(--mono);
   font-weight: 600;
@@ -304,19 +300,6 @@ button, input { font-family: inherit; }
 .mini.up { color: var(--up); }
 .mini.flat { color: var(--muted); }
 
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 12px;
-}
-
-.stat-v {
-  display: block;
-  margin-top: 2px;
-  font-size: 16px;
-  color: var(--ink);
-}
-
 .hot-item + .hot-item,
 .threat-item + .threat-item { margin-top: 12px; }
 
@@ -331,14 +314,6 @@ button, input { font-family: inherit; }
   margin: 0;
   color: var(--muted);
   font-size: 14px;
-}
-
-.scanned-num {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 28px;
-  letter-spacing: -0.03em;
-  margin-top: 4px;
 }
 
 .toolbar {
@@ -479,15 +454,6 @@ tbody tr:last-child td { border-bottom: 0; }
 .side { font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 12px; }
 .side.buy { color: var(--green); }
 .side.sell { color: var(--down); }
-
-.legend {
-  margin-top: 28px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.legend p { margin: 0; }
 
 .about-page {
   width: min(720px, calc(100% - 28px));

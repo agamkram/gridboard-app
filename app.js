@@ -227,28 +227,6 @@
       });
     }
 
-    var rollup = data.rollup && typeof data.rollup === "object" ? data.rollup : {};
-    var tiles = [
-      ["Neutral quiet", rollup.n_quiet],
-      ["Long quiet", rollup.l_quiet],
-      ["Neutral fills", rollup.n_fills],
-      ["Long fills", rollup.l_fills],
-      ["Other pairs", rollup.other_pairs],
-      ["Since last ping", rollup.continuous_fills_since_last_ping],
-    ];
-    var stats = el("div", { class: "stat-grid" });
-    tiles.forEach(function (pair) {
-      var value = pair[1];
-      stats.append(el("div", {}, [
-        el("span", { class: "k", text: pair[0] }),
-        el("span", { class: "stat-v", text: value == null || value === "" ? "—" : Number(value).toLocaleString("en-US") }),
-      ]));
-    });
-    var rollupCard = el("article", { class: "card" }, [
-      el("h3", { class: "card-title", text: "Rollup" }),
-      stats,
-    ]);
-
     var hot = data.rollup && data.rollup.hot;
     var hotCard = el("article", { class: "card" }, [
       el("h3", { class: "card-title", text: "Hot watch" }),
@@ -279,7 +257,7 @@
       });
     }
 
-    var wrap = el("div", { class: "near-grid" }, [threatCard, rollupCard, hotCard]);
+    var wrap = el("div", { class: "near-grid" }, [threatCard, hotCard]);
     var host = document.getElementById("near");
     host.replaceChildren(wrap);
   }
@@ -340,27 +318,11 @@
     var capital = capitalOf(data);
     var neutral = sideStats(rows, "neutral_equity", capital);
     var long = sideStats(rows, "long_equity", capital);
-    var scanned = num(data.scanned);
-    var scan = el("article", { class: "card" }, [
-      el("h3", { class: "card-title", text: "Scanned" }),
-      el("div", { class: "scanned-num", text: scanned == null ? "—" : scanned.toLocaleString("en-US") }),
-      el("p", { class: "mini", text: rows.length + " pairs · Neutral + Long" }),
-    ]);
     var host = document.getElementById("totals");
     host.replaceChildren(
       totalsCard("Neutral", neutral, capital),
-      totalsCard("Long", long, capital),
-      scan
+      totalsCard("Long", long, capital)
     );
-    var together = neutral.sum + long.sum;
-    var books = rows.length * 2;
-    var note = "Neutral NOW " + (neutral.count ? usd(neutral.sum, 2) : "—")
-      + " and Long NOW " + (long.count ? usd(long.sum, 2) : "—")
-      + " versus " + usd(capital * books, 0) + " (" + usd(capital, 0) + " × " + books + " books).";
-    if (neutral.missing || long.missing) {
-      note += " Unseeded books are omitted from NOW, so most of the baseline gap is a missing mark, not a priced drawdown.";
-    }
-    document.getElementById("totals-note").textContent = note;
   }
 
   function sortValue(row, key) {
