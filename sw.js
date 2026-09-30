@@ -1,5 +1,5 @@
 /** Local: stay off. Production: versioned shell. Never cache status.json. */
-const CACHE = "gridboard-v1";
+const CACHE = "gridboard-v2";
 
 const SHELL = [
   "/",
