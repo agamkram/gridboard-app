@@ -107,18 +107,6 @@
     return map;
   }
 
-  function threatSet(data) {
-    var set = {};
-    (Array.isArray(data.threats) ? data.threats : []).forEach(function (t) {
-      if (typeof t === "string") set[upper(t)] = true;
-      else if (t && typeof t === "object") {
-        if (t.symbol) set[upper(t.symbol)] = true;
-        if (t.pair) set[upper(t.pair)] = true;
-      }
-    });
-    return set;
-  }
-
   function filledSet(data) {
     var set = {};
     (Array.isArray(data.fills) ? data.fills : []).forEach(function (f) {
@@ -129,12 +117,6 @@
 
   function isHot(row) {
     return !!hotMap(state.data)[upper(row.symbol)];
-  }
-
-  function isThreat(row) {
-    if (row.threat) return true;
-    var set = threatSet(state.data);
-    return !!set[upper(row.symbol)] || !!set[upper(row.pair)];
   }
 
   function isUnseeded(row) {
@@ -167,55 +149,9 @@
     }
   }
 
-  function describeThreat(item) {
-    if (typeof item === "string") return "";
-    var skip = { symbol: 1, pair: 1, detail: 1 };
-    var parts = [];
-    Object.keys(item).forEach(function (key) {
-      if (skip[key]) return;
-      var v = item[key];
-      if (v == null || v === "" || typeof v === "object") return;
-      parts.push(key.replace(/_/g, " ") + " " + v);
-    });
-    return parts.join(" · ");
-  }
-
   function renderNear(data) {
-    var threats = Array.isArray(data.threats) ? data.threats.slice() : [];
-    var seen = {};
-    threats.forEach(function (t) {
-      if (typeof t === "string") seen[upper(t)] = true;
-      else if (t && t.symbol) seen[upper(t.symbol)] = true;
-    });
-    pairsOf(data).forEach(function (row) {
-      if (!row.threat || seen[upper(row.symbol)]) return;
-      seen[upper(row.symbol)] = true;
-      threats.push({ symbol: row.symbol, pair: row.pair, detail: row.threat });
-    });
-
-    var threatCard = el("article", { class: "card" }, [
-      el("h3", { class: "card-title", text: "Threat band" }),
-    ]);
-    if (!threats.length) {
-      threatCard.append(el("p", { class: "empty", text: "No pairs are sitting on a threat band." }));
-    } else {
-      threats.forEach(function (item) {
-        var symbol = typeof item === "string" ? item : (item.symbol || item.pair || "Threat");
-        var detail = typeof item === "string"
-          ? ""
-          : (item.detail != null && typeof item.detail !== "object" ? String(item.detail) : describeThreat(item));
-        var box = el("div", { class: "threat-item" }, [
-          el("div", { class: "sym-name", text: String(symbol) }),
-        ]);
-        if (detail) box.append(el("div", { class: "mini", text: detail }));
-        threatCard.append(box);
-      });
-    }
-
     var hot = data.rollup && data.rollup.hot;
-    var hotCard = el("article", { class: "card" }, [
-      el("h3", { class: "card-title", text: "Hot watch" }),
-    ]);
+    var hotCard = el("article", { class: "card" });
     var names = hot && typeof hot === "object" ? Object.keys(hot) : [];
     if (!names.length) {
       hotCard.append(el("p", { class: "empty", text: "No coins are on hot watch." }));
@@ -242,7 +178,7 @@
       });
     }
 
-    var wrap = el("div", { class: "near-grid" }, [threatCard, hotCard]);
+    var wrap = el("div", { class: "near-grid" }, [hotCard]);
     var host = document.getElementById("near");
     host.replaceChildren(wrap);
   }
@@ -342,7 +278,6 @@
       if (hay.indexOf(q) === -1) return false;
     }
     if (state.filter === "hot") return isHot(row);
-    if (state.filter === "threat") return isThreat(row);
     if (state.filter === "unseeded") return isUnseeded(row);
     if (state.filter === "filled") return !!filledSet(state.data)[upper(row.symbol)];
     return true;
@@ -377,8 +312,7 @@
     }
     rows.forEach(function (row) {
       var tr = el("tr");
-      if (isThreat(row)) tr.classList.add("is-threat");
-      else if (isHot(row)) tr.classList.add("is-hot");
+      if (isHot(row)) tr.classList.add("is-hot");
       if (num(row.neutral_equity) == null && num(row.long_equity) == null) tr.classList.add("is-gap");
 
       tr.append(el("td", { class: "sym" }, [
@@ -391,10 +325,9 @@
     body.replaceChildren(frag);
 
     var all = pairsOf(data);
-    var counts = { all: all.length, hot: 0, threat: 0, unseeded: 0, filled: 0 };
+    var counts = { all: all.length, hot: 0, unseeded: 0, filled: 0 };
     all.forEach(function (row) {
       if (isHot(row)) counts.hot += 1;
-      if (isThreat(row)) counts.threat += 1;
       if (isUnseeded(row)) counts.unseeded += 1;
       if (filledSet(data)[upper(row.symbol)]) counts.filled += 1;
     });
@@ -403,7 +336,6 @@
       var labels = {
         all: "All",
         hot: "Hot",
-        threat: "Threats",
         unseeded: "Unseeded",
         filled: "Filled",
       };

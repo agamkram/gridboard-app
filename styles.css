@@ -219,7 +219,6 @@ button, input { font-family: inherit; }
 
 @media (min-width: 800px) {
   .totals-grid { grid-template-columns: 1fr 1fr; }
-  .near-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .card {
@@ -300,8 +299,7 @@ button, input { font-family: inherit; }
 .mini.up { color: var(--up); }
 .mini.flat { color: var(--muted); }
 
-.hot-item + .hot-item,
-.threat-item + .threat-item { margin-top: 12px; }
+.hot-item + .hot-item { margin-top: 12px; }
 
 .sym-name {
   font-weight: 700;
@@ -444,7 +442,6 @@ th.sym { z-index: 2; background: #f6f8fb; }
 }
 
 tbody tr.is-hot td { background: #fbf8f2; }
-tbody tr.is-threat td { background: #fff6f5; }
 tbody tr.is-gap .eq { color: #6a7785; }
 tbody tr:hover td { background: #f3f6fa; }
 tbody tr:last-child td { border-bottom: 0; }
