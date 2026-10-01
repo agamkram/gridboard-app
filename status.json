@@ -2,7 +2,7 @@
   "schema_version": 1,
   "paper_only": true,
   "updated_et": "10:29 AM ET",
-  "generated_at": "2026-10-01T10:29:50.055925-04:00",
+  "generated_at": "2026-10-01T10:35:17.626031-04:00",
   "headline": "36 recent fills",
   "fee_label": "0.80%",
   "capital_per_book": 10000,
@@ -70,113 +70,93 @@
         "until": "2026-10-01T10:37:54.684808-04:00",
         "last_fill": "2026-10-01T09:07:54.684808-04:00",
         "fills": 2,
-        "remaining_s": 484,
-        "quiet_s": 4915,
+        "remaining_s": 157,
+        "quiet_s": 5242,
         "fast_poll": false
       },
       "FET": {
         "until": "2026-10-01T10:39:23.563836-04:00",
         "last_fill": "2026-10-01T09:09:23.563836-04:00",
         "fills": 1,
-        "remaining_s": 573,
-        "quiet_s": 4826,
+        "remaining_s": 245,
+        "quiet_s": 5154,
         "fast_poll": false
       },
       "TIA": {
         "until": "2026-10-01T10:40:54.687948-04:00",
         "last_fill": "2026-10-01T09:10:54.687948-04:00",
         "fills": 1,
-        "remaining_s": 664,
-        "quiet_s": 4735,
+        "remaining_s": 337,
+        "quiet_s": 5062,
         "fast_poll": false
       },
       "GRASS": {
         "until": "2026-10-01T10:44:56.870042-04:00",
         "last_fill": "2026-10-01T09:14:56.870042-04:00",
         "fills": 1,
-        "remaining_s": 906,
-        "quiet_s": 4493,
+        "remaining_s": 579,
+        "quiet_s": 4820,
         "fast_poll": false
       },
       "DOT": {
         "until": "2026-10-01T10:45:57.045744-04:00",
         "last_fill": "2026-10-01T09:15:57.045744-04:00",
         "fills": 1,
-        "remaining_s": 966,
-        "quiet_s": 4433,
+        "remaining_s": 639,
+        "quiet_s": 4760,
         "fast_poll": false
       },
       "FARTCOIN": {
         "until": "2026-10-01T10:46:56.020583-04:00",
         "last_fill": "2026-10-01T09:16:56.020583-04:00",
         "fills": 1,
-        "remaining_s": 1025,
-        "quiet_s": 4374,
+        "remaining_s": 698,
+        "quiet_s": 4701,
         "fast_poll": false
       },
       "LIGHTER": {
         "until": "2026-10-01T10:54:31.642561-04:00",
         "last_fill": "2026-10-01T09:24:31.642561-04:00",
         "fills": 1,
-        "remaining_s": 1481,
-        "quiet_s": 3918,
+        "remaining_s": 1154,
+        "quiet_s": 4245,
         "fast_poll": false
       },
       "NIGHT": {
         "until": "2026-10-01T11:00:10.785297-04:00",
         "last_fill": "2026-10-01T09:30:10.785297-04:00",
         "fills": 3,
-        "remaining_s": 1820,
-        "quiet_s": 3579,
+        "remaining_s": 1493,
+        "quiet_s": 3906,
         "fast_poll": false
       },
       "QNT": {
         "until": "2026-10-01T11:06:32.757935-04:00",
         "last_fill": "2026-10-01T09:36:32.757935-04:00",
         "fills": 1,
-        "remaining_s": 2202,
-        "quiet_s": 3197,
+        "remaining_s": 1875,
+        "quiet_s": 3524,
         "fast_poll": false
       },
       "COMP": {
         "until": "2026-10-01T11:32:54.474914-04:00",
         "last_fill": "2026-10-01T10:02:54.474914-04:00",
         "fills": 1,
-        "remaining_s": 3784,
-        "quiet_s": 1615,
+        "remaining_s": 3456,
+        "quiet_s": 1943,
         "fast_poll": false
       },
       "AAVE": {
         "until": "2026-10-01T11:40:29.634275-04:00",
         "last_fill": "2026-10-01T10:10:29.634275-04:00",
         "fills": 1,
-        "remaining_s": 4239,
-        "quiet_s": 1160,
+        "remaining_s": 3912,
+        "quiet_s": 1487,
         "fast_poll": false
       }
     }
   },
   "fills": [
-    {
-      "symbol": "NIGHT",
-      "style": "Neutral",
-      "workspace": "mark-10k-night",
-      "side": "sell",
-      "price": 0.04328,
-      "volume": 44221.42694,
-      "reladder_side": "buy",
-      "reladder_price": 0.04122
-    },
-    {
-      "symbol": "QNT",
-      "style": "Long",
-      "workspace": "mark-10k-qnt-geo",
-      "side": "buy",
-      "price": 280.84,
-      "volume": 4.73412413,
-      "reladder_side": "sell",
-      "reladder_price": 294.88
-    },
     {
       "ts": "2026-10-01T02:35:55.769171-04:00",
       "cycle": 662,
@@ -343,6 +323,21 @@
       "note": "ok"
     },
     {
+      "ts": "2026-10-01T05:39:38.957189-04:00",
+      "cycle": 1433,
+      "mode": "full",
+      "symbol": "NIGHT",
+      "style": "Neutral",
+      "workspace": "mark-10k-night",
+      "side": "sell",
+      "price": 0.04328,
+      "volume": 44221.42694,
+      "reladder_side": "buy",
+      "reladder_price": 0.04122,
+      "placed": false,
+      "note": "duplicate_skip"
+    },
+    {
       "ts": "2026-10-01T05:50:00.871120-04:00",
       "cycle": 1498,
       "mode": "full",
@@ -446,6 +441,21 @@
       "reladder_price": 0.7053,
       "placed": true,
       "note": "ok"
+    },
+    {
+      "ts": "2026-10-01T06:57:21.532223-04:00",
+      "cycle": 1784,
+      "mode": "full",
+      "symbol": "QNT",
+      "style": "Long",
+      "workspace": "mark-10k-qnt-geo",
+      "side": "buy",
+      "price": 280.84,
+      "volume": 4.73412413,
+      "reladder_side": "sell",
+      "reladder_price": 294.88,
+      "placed": false,
+      "note": "duplicate_skip"
     },
     {
       "ts": "2026-10-01T07:38:06.281774-04:00",
