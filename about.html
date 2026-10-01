@@ -74,15 +74,15 @@
     <section class="about-block" id="what">
       <h2>What this is</h2>
       <p>GridBoard shows practice trades on Kraken. The money is not real. Nothing on this site can send an order, and there is no live account behind it.</p>
-      <p>There are 75 coins priced in US dollars. Each coin has two practice accounts, Neutral and Long. That makes 150 accounts. Each one starts with $10,000.</p>
+      <p>There are 75 tokens priced in US dollars. Each token has two practice accounts, Neutral and Long. That makes 150 accounts. Each one starts with $10,000.</p>
       <p>Each buy and each sell is charged 0.80%. That is the starting fee, before any discount for trading a lot.</p>
       <p>The buy and sell prices sit 5% apart. The next price is 5% above the one before it, or 5% below it. The gap is always 5% of the last price. It is not 5% of the original price, added again and again in equal dollar steps.</p>
     </section>
 
     <section class="about-block" id="styles">
       <h2>Neutral and Long</h2>
-      <p><strong>Neutral</strong> starts with about half of the $10,000 already in the coin. It then places three buy orders below the price and three sell orders above it. There are orders waiting if the price falls, and orders waiting if the price rises.</p>
-      <p><strong>Long</strong> also starts with about half in the coin. It places four buy orders below the price and only two sell orders above it, so more of the orders are waiting for a lower price. The sells are small pieces of the coins already held, not a sale of the whole pile.</p>
+      <p><strong>Neutral</strong> starts with about half of the $10,000 already in the token. It then places three buy orders below the price and three sell orders above it. There are orders waiting if the price falls, and orders waiting if the price rises.</p>
+      <p><strong>Long</strong> also starts with about half in the token. It places four buy orders below the price and only two sell orders above it, so more of the orders are waiting for a lower price. The sells are small pieces of the tokens already held, not a sale of the whole pile.</p>
       <p>Both use the same 5% gaps. They differ in how many orders sit below the price, and in how small the sells are.</p>
     </section>
 
@@ -90,29 +90,29 @@
       <h2>When an order fills</h2>
       <p>The orders wait. They can fill any time the market price reaches them. Nothing on a clock forces a trade.</p>
       <p>When one fills, the opposite order is placed one step away. After a buy, a sell is placed 5% higher. After a sell, a buy is placed 5% lower. The new price stays on the same 5% ladder. It is not moved to a rounder or nearer number.</p>
-      <p>Coins bought at the start keep their original price. Only an order that actually fills creates the next one.</p>
+      <p>Tokens bought at the start keep their original price. Only an order that actually fills creates the next one.</p>
     </section>
 
     <section class="about-block" id="check">
       <h2>Hot watch</h2>
-      <p>A hot watch is a coin that just traded and is being watched more closely.</p>
+      <p>A hot watch is a token that just traded and is being watched more closely.</p>
       <p>This site does not hear about a trade the moment it happens. A check looks through all 150 accounts and notices a trade that way.</p>
-      <p>After a trade, that coin’s Neutral account and Long account are checked more often, about every 8 seconds, for about 90 minutes after the last trade. The board marks the name while it is on hot watch. When the 90 minutes end, that coin goes back to the slower pass over all of the coins, about every 25 seconds.</p>
+      <p>After a trade, that token’s Neutral account and Long account are checked more often, about every 8 seconds, for about 90 minutes after the last trade. The board marks the name while it is on hot watch. When the 90 minutes end, that token goes back to the slower pass over all of the tokens, about every 25 seconds.</p>
       <p>A separate update, about every 15 minutes, is what this site shows. That update does not place the next order. The check that noticed the trade places the next order. This website does not.</p>
     </section>
 
     <section class="about-block" id="vol">
       <h2>When prices jump around</h2>
       <p>Right now every step is 5% from the last one. Five percent is the smallest gap.</p>
-      <p class="about-note">The plan is to widen the gap when a coin has been jumping around, and to keep at least 5% when it has been calm. A jumpy coin would then trade less often and pay the 0.80% fee less often. That wider gap is not running yet. If the board does not show a wider gap, it is not in use.</p>
+      <p class="about-note">The plan is to widen the gap when a token has been jumping around, and to keep at least 5% when it has been calm. A jumpy token would then trade less often and pay the 0.80% fee less often. That wider gap is not running yet. If the board does not show a wider gap, it is not in use.</p>
     </section>
 
     <section class="about-block" id="board">
       <h2>What the board shows</h2>
       <ul>
-        <li>Neutral and Long value compared with the $10,000 start. If a value is missing, it stays blank. A blank is not counted as a total loss.</li>
-        <li>Held, in its own column: the same $10,000 bought once at that coin’s Neutral start price and kept, after the one 0.80% buy fee.</li>
-        <li>Coins on hot watch: they just traded and are being watched more closely.</li>
+        <li>At work is the dollars in the token. Cash is what is still waiting to buy. Now is the whole account. The change from the $10,000 start includes the fee paid to buy the tokens. It is not a count of finished trades.</li>
+        <li>Buy & hold is the same $10,000 bought once at that token’s Neutral start price and kept, after the one 0.80% buy fee. All of it is at work. Cash is zero.</li>
+        <li>Tokens on hot watch: they just traded and are being watched more closely.</li>
         <li>Totals for Neutral and for Long.</li>
       </ul>
       <p>The page only reads a saved update. There is no account login, and the browser does not connect to Kraken.</p>

@@ -48,23 +48,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
-  <a class="skip" href="#books">Skip to pairs</a>
+  <a class="skip" href="#books">Skip to tokens</a>
   <div class="wrap">
     <header class="app-header">
       <div class="app-title-row">
         <h1 class="app-title">GridBoard</h1>
       </div>
-      <p class="app-kicker">Paper Grid Ops</p>
-      <div class="pill-row">
-        <p class="paper-pill">PAPER ONLY</p>
-        <p class="fee-pill" id="fee-pill">Trade fee 0.80%</p>
-      </div>
-      <p class="spacing" id="spacing">geometric 5% (r=1.05)</p>
-      <p class="app-feed" id="app-feed">Loading…</p>
-      <p class="specs" id="specs"></p>
+      <p class="purpose">This dashboard tracks 150 automated grids continuously managed by Grok Bot.</p>
       <p class="banner" id="banner" hidden></p>
       <div class="header-actions">
         <a class="about-link" href="about.html">About</a>
@@ -89,6 +82,7 @@
       <section class="section" id="totals-section" aria-labelledby="totals-title">
         <div class="section-head">
           <h2 class="section-title" id="totals-title">Totals</h2>
+          <p class="stamp" id="stamp"></p>
         </div>
         <div class="totals-grid" id="totals">
           <p class="empty">Loading totals…</p>
@@ -97,43 +91,36 @@
 
       <section class="section" id="books" aria-labelledby="books-title">
         <div class="section-head">
-          <h2 class="section-title" id="books-title">Pairs</h2>
-          <p class="section-note" id="book-count"></p>
-        </div>
-        <div class="toolbar">
-          <label class="search">
-            <span class="sr-only">Filter pairs</span>
-            <input id="q" type="search" placeholder="Filter by coin" autocomplete="off" enterkeyhint="search">
+          <h2 class="section-title" id="books-title">Tokens</h2>
+          <label class="sort-ctl">
+            <span class="sr-only">Sort tokens</span>
+            <select id="sort-select" aria-label="Sort tokens">
+              <option value="symbol:asc">Token A–Z</option>
+              <option value="neutral:desc">Neutral best</option>
+              <option value="neutral:asc">Neutral worst</option>
+              <option value="long:desc">Long best</option>
+              <option value="long:asc">Long worst</option>
+              <option value="held:desc">Held best</option>
+              <option value="held:asc">Held worst</option>
+              <option value="trades:desc">Most trades</option>
+            </select>
           </label>
-          <div class="chips" id="chips" role="toolbar" aria-label="Pair filters">
-            <button type="button" data-filter="all" aria-pressed="true">All</button>
-            <button type="button" data-filter="hot" aria-pressed="false">Hot</button>
-            <button type="button" data-filter="unseeded" aria-pressed="false">Unseeded</button>
-            <button type="button" data-filter="filled" aria-pressed="false">Filled</button>
-          </div>
         </div>
         <div class="table-scroll">
           <table id="books-table">
             <caption class="sr-only">Neutral, Long, and buy and hold for each coin</caption>
             <thead>
               <tr>
-                <th class="sym" scope="col" aria-sort="ascending">
-                  <button type="button" data-sort="symbol" data-label="Pair">Pair</button>
-                </th>
-                <th class="num" scope="col" aria-sort="none">
-                  <button type="button" data-sort="neutral" data-label="Neutral">Neutral</button>
-                </th>
-                <th class="num" scope="col" aria-sort="none">
-                  <button type="button" data-sort="long" data-label="Long">Long</button>
-                </th>
-                <th class="num" scope="col" aria-sort="none">
-                  <button type="button" data-sort="held" data-label="Held">Held</button>
-                </th>
+                <th class="sym" scope="col" aria-sort="ascending">Token</th>
+                <th class="num" scope="col" aria-sort="none">Neutral</th>
+                <th class="num" scope="col" aria-sort="none">Long</th>
+                <th class="num" scope="col" aria-sort="none">Held</th>
+                <th class="num trades-col" scope="col" aria-sort="none"><span class="th-buy">Buy</span><span class="th-sell">Sell</span></th>
               </tr>
             </thead>
             <tbody id="books-body">
               <tr>
-                <td class="empty" colspan="4">Loading pairs…</td>
+                <td class="empty" colspan="5">Loading tokens…</td>
               </tr>
             </tbody>
           </table>
@@ -156,6 +143,6 @@
       document.head.appendChild(gbAnalytics);
     }
   </script>
-  <script src="app.js?v=1"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

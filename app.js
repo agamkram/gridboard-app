@@ -144,14 +144,25 @@
     return box;
   }
 
+  function stampLine(data) {
+    var when = data._revised ? new Date(data._revised) : new Date();
+    if (Number.isNaN(when.getTime())) when = new Date();
+    var date = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/New_York",
+      month: "numeric",
+      day: "numeric",
+    }).format(when);
+    var time = data.updated_et || "";
+    return time ? date + "  " + time : date;
+  }
+
   function renderFeed(data) {
-    var fee = data.fee_label || "0.80%";
-    document.getElementById("fee-pill").textContent = "Trade fee " + fee;
-    document.getElementById("spacing").textContent = data.spacing || "geometric 5% (r=1.05)";
-    var line = [data.updated_et, data.headline].filter(Boolean).join(" · ");
-    document.getElementById("app-feed").textContent = line || "Snapshot loaded";
-    var specs = [data.neutral_spec, data.long_spec].filter(Boolean).join("  ·  ");
-    document.getElementById("specs").textContent = specs;
+    document.getElementById("stamp").textContent = stampLine(data);
+    var feed = document.getElementById("app-feed");
+    if (feed) {
+      feed.textContent = "";
+      feed.hidden = true;
+    }
     var banner = document.getElementById("banner");
     if (data.paper_only === false) {
       banner.hidden = false;
@@ -180,8 +191,6 @@
           var bits = [];
           var fills = num(info.fills);
           if (fills != null) bits.push(fills + (fills === 1 ? " fill" : " fills"));
-          var quiet = num(info.quiet_s);
-          if (quiet != null) bits.push("quiet " + formatDuration(quiet));
           var left = num(info.remaining_s);
           if (left != null) bits.push(left > 0 ? formatDuration(left) + " left" : "window ended");
           box.append(el("div", { class: "mini", text: bits.join(" · ") || "Hot" }));
@@ -219,30 +228,40 @@
     };
   }
 
-  function totalsCard(title, stats, capital) {
+  function sumField(rows, key) {
+    var sum = 0;
+    var count = 0;
+    var missing = 0;
+    rows.forEach(function (row) {
+      var v = num(row[key]);
+      if (v == null) missing += 1;
+      else {
+        sum += v;
+        count += 1;
+      }
+    });
+    return { sum: sum, count: count, missing: missing };
+  }
+
+  function moneyRow(label, value) {
+    return el("div", { class: "money-row" }, [
+      el("span", { class: "k", text: label }),
+      el("span", { class: "start-num", text: value == null ? "—" : usd(value, 0) }),
+    ]);
+  }
+
+  function totalsCard(title, atWork, cash, now, baseline) {
     var card = el("article", { class: "card" }, [
       el("h3", { class: "card-title", text: title }),
     ]);
-    card.append(el("div", { class: "sn" }, [
-      el("div", {}, [
-        el("span", { class: "k", text: "START" }),
-        el("div", { class: "start-num", text: usd(stats.baseline, 0) }),
-      ]),
-      el("div", {}, [
-        el("span", { class: "k", text: "NOW" }),
-        el("div", { class: "now-num", text: stats.count ? usd(stats.sum, 2) : "—" }),
-      ]),
-    ]));
-    card.append(el("p", { class: "mini", text: usd(capital, 0) + " × " + (stats.count + stats.missing) }));
-    if (stats.count) {
-      var pricedPct = stats.count ? (stats.pricedGap / (capital * stats.count)) * 100 : 0;
-      card.append(deltaChip(stats.gap, (stats.gap / stats.baseline) * 100, "vs start"));
-      if (stats.missing) {
-        card.append(deltaChip(stats.pricedGap, pricedPct, "on priced books"));
-        card.append(el("p", { class: "mini", text: stats.missing + " unseeded, left out of NOW" }));
-      }
-    } else {
-      card.append(el("p", { class: "mini", text: "No priced accounts in this update." }));
+    card.append(moneyRow("At work", atWork));
+    card.append(moneyRow("Cash", cash));
+    card.append(moneyRow("Now", now));
+    if (now != null && baseline) {
+      var gap = now - baseline;
+      var chip = deltaChip(gap, (gap / baseline) * 100, "vs start");
+      chip.classList.add("delta-corner");
+      card.append(chip);
     }
     return card;
   }
@@ -274,11 +293,18 @@
     var rows = pairsOf(data);
     var capital = capitalOf(data);
     var fee = feeRate(data);
+    var neutralNow = sideStats(rows, "neutral_equity", capital);
+    var longNow = sideStats(rows, "long_equity", capital);
+    var neutralCoin = sumField(rows, "neutral_coin_usd");
+    var neutralCash = sumField(rows, "neutral_cash_usd");
+    var longCoin = sumField(rows, "long_coin_usd");
+    var longCash = sumField(rows, "long_cash_usd");
+    var held = holdBook(rows, capital, fee);
     var host = document.getElementById("totals");
     host.replaceChildren(
-      totalsCard("Neutral", sideStats(rows, "neutral_equity", capital), capital),
-      totalsCard("Long", sideStats(rows, "long_equity", capital), capital),
-      totalsCard("Buy & hold", holdBook(rows, capital, fee), capital)
+      totalsCard("Neutral", neutralCoin.count ? neutralCoin.sum : null, neutralCash.count ? neutralCash.sum : null, neutralNow.count ? neutralNow.sum : null, neutralNow.baseline),
+      totalsCard("Long", longCoin.count ? longCoin.sum : null, longCash.count ? longCash.sum : null, longNow.count ? longNow.sum : null, longNow.baseline),
+      totalsCard("Buy & hold", held.count ? held.sum : null, held.count ? 0 : null, held.count ? held.sum : null, held.baseline)
     );
   }
 
@@ -287,6 +313,10 @@
     if (key === "neutral") return num(row.neutral_equity);
     if (key === "long") return num(row.long_equity);
     if (key === "held") return holdValue(capitalOf(state.data), row.neutral_seed, row.spot, feeRate(state.data));
+    if (key === "trades") {
+      var t = tradeCounts(row, state.data || {});
+      return (t.buys || 0) + (t.sells || 0);
+    }
     return null;
   }
 
@@ -309,11 +339,6 @@
   }
 
   function visible(row) {
-    var q = state.query.trim().toLowerCase();
-    if (q) {
-      var hay = [row.symbol, row.pair, row.neutral_ws, row.long_ws].join(" ").toLowerCase();
-      if (hay.indexOf(q) === -1) return false;
-    }
     if (state.filter === "hot") return isHot(row);
     if (state.filter === "unseeded") return isUnseeded(row);
     if (state.filter === "filled") return !!filledSet(state.data)[upper(row.symbol)];
@@ -329,10 +354,37 @@
       var d = n - capital;
       td.append(el("div", {
         class: "mini " + tone(d),
-        text: signedUsd(d, moneyDigits(d)) + " · " + signedPct((d / capital) * 100),
+        text: signedPct((d / capital) * 100),
       }));
     }
     return td;
+  }
+
+  function tradeCounts(row, data) {
+    var buys = num(row.buys);
+    if (buys == null) buys = num(row.buy_count);
+    var sells = num(row.sells);
+    if (sells == null) sells = num(row.sell_count);
+    var nb = num(row.neutral_buys);
+    var ns = num(row.neutral_sells);
+    var lb = num(row.long_buys);
+    var ls = num(row.long_sells);
+    if (nb != null || lb != null) buys = (nb || 0) + (lb || 0);
+    if (ns != null || ls != null) sells = (ns || 0) + (ls || 0);
+    if (buys == null || sells == null) {
+      var countedBuys = 0;
+      var countedSells = 0;
+      var sym = upper(row.symbol);
+      (Array.isArray(data.fills) ? data.fills : []).forEach(function (fill) {
+        if (!fill || upper(fill.symbol) !== sym) return;
+        var side = String(fill.side || "").toLowerCase();
+        if (side === "buy") countedBuys += 1;
+        else if (side === "sell") countedSells += 1;
+      });
+      if (buys == null) buys = countedBuys;
+      if (sells == null) sells = countedSells;
+    }
+    return { buys: buys, sells: sells };
   }
 
   function renderBooks() {
@@ -345,7 +397,7 @@
     var frag = document.createDocumentFragment();
     if (!rows.length) {
       frag.append(el("tr", {}, [
-        el("td", { class: "empty", colspan: "4", text: "No pairs match." }),
+        el("td", { class: "empty", colspan: "5", text: "No tokens match." }),
       ]));
     }
     rows.forEach(function (row) {
@@ -356,41 +408,35 @@
       tr.append(el("td", { class: "sym" }, [
         el("span", { class: "sym-name", text: row.symbol || "—" }),
       ]));
+      var trades = tradeCounts(row, data);
       tr.append(equityCell(row.neutral_equity, capital));
       tr.append(equityCell(row.long_equity, capital));
       tr.append(equityCell(holdValue(capital, row.neutral_seed, row.spot, fee), capital));
+      tr.append(el("td", { class: "num trades" }, [
+        el("span", { class: "buy-n", text: String(trades.buys) }),
+        el("span", { class: "trade-dot", text: "·" }),
+        el("span", { class: "sell-n", text: String(trades.sells) }),
+      ]));
       frag.append(tr);
     });
     body.replaceChildren(frag);
 
-    var all = pairsOf(data);
-    var counts = { all: all.length, hot: 0, unseeded: 0, filled: 0 };
-    all.forEach(function (row) {
-      if (isHot(row)) counts.hot += 1;
-      if (isUnseeded(row)) counts.unseeded += 1;
-      if (filledSet(data)[upper(row.symbol)]) counts.filled += 1;
-    });
-    document.querySelectorAll("#chips [data-filter]").forEach(function (btn) {
-      var key = btn.getAttribute("data-filter");
-      var labels = {
-        all: "All",
-        hot: "Hot",
-        unseeded: "Unseeded",
-        filled: "Filled",
-      };
-      btn.textContent = labels[key] + " " + (counts[key] == null ? "" : counts[key]);
-      btn.setAttribute("aria-pressed", key === state.filter ? "true" : "false");
-    });
-    document.getElementById("book-count").textContent = "Showing " + rows.length + " of " + all.length;
+    var sortSelect = document.getElementById("sort-select");
+    if (sortSelect) sortSelect.value = state.sortKey + ":" + state.sortDir;
 
-    document.querySelectorAll("#books-table [data-sort]").forEach(function (btn) {
-      var key = btn.getAttribute("data-sort");
-      var label = btn.getAttribute("data-label") || key;
-      var on = key === state.sortKey;
-      btn.textContent = label + (on ? (state.sortDir === "asc" ? " ↑" : " ↓") : "");
-      var th = btn.closest("th");
-      if (th) th.setAttribute("aria-sort", on ? (state.sortDir === "asc" ? "ascending" : "descending") : "none");
-    });
+    var aria = {
+      symbol: state.sortKey === "symbol" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
+      neutral: state.sortKey === "neutral" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
+      long: state.sortKey === "long" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
+      held: state.sortKey === "held" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
+      trades: state.sortKey === "trades" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
+    };
+    var heads = document.querySelectorAll("#books-table thead th");
+    if (heads[0]) heads[0].setAttribute("aria-sort", aria.symbol);
+    if (heads[1]) heads[1].setAttribute("aria-sort", aria.neutral);
+    if (heads[2]) heads[2].setAttribute("aria-sort", aria.long);
+    if (heads[3]) heads[3].setAttribute("aria-sort", aria.held);
+    if (heads[4]) heads[4].setAttribute("aria-sort", aria.trades);
   }
 
   function render() {
@@ -401,20 +447,22 @@
   }
 
   function fail(message) {
-    document.getElementById("app-feed").textContent = "Could not load the update.";
     var banner = document.getElementById("banner");
     banner.hidden = false;
     banner.textContent = message;
   }
 
   function load() {
-    var feed = document.getElementById("app-feed");
-    var previous = feed.textContent;
-    feed.textContent = state.data ? "Reloading…" : "Loading…";
+    var stamp = document.getElementById("stamp");
+    if (!state.data && stamp) stamp.textContent = "Loading…";
     fetch("status.json", { cache: "no-cache", headers: { Accept: "application/json" } })
       .then(function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.json();
+        var revised = res.headers.get("Last-Modified");
+        return res.json().then(function (data) {
+          if (data && typeof data === "object") data._revised = revised;
+          return data;
+        });
       })
       .then(function (data) {
         if (!data || !Array.isArray(data.pairs)) throw new Error("status.json has no pairs");
@@ -425,7 +473,6 @@
         console.error(err);
         if (!state.data) fail("The update did not load.");
         else {
-          feed.textContent = previous;
           var banner = document.getElementById("banner");
           banner.hidden = false;
           banner.textContent = "Reload failed. The numbers already on screen are still here.";
@@ -434,25 +481,10 @@
   }
 
   document.getElementById("reload").addEventListener("click", load);
-  document.getElementById("q").addEventListener("input", function (e) {
-    state.query = e.target.value;
-    renderBooks();
-  });
-  document.getElementById("chips").addEventListener("click", function (e) {
-    var btn = e.target.closest("[data-filter]");
-    if (!btn) return;
-    state.filter = btn.getAttribute("data-filter");
-    renderBooks();
-  });
-  document.getElementById("books-table").addEventListener("click", function (e) {
-    var btn = e.target.closest("[data-sort]");
-    if (!btn) return;
-    var key = btn.getAttribute("data-sort");
-    if (state.sortKey === key) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
-    else {
-      state.sortKey = key;
-      state.sortDir = "asc";
-    }
+  document.getElementById("sort-select").addEventListener("change", function () {
+    var parts = String(this.value || "symbol:asc").split(":");
+    state.sortKey = parts[0] || "symbol";
+    state.sortDir = parts[1] === "desc" ? "desc" : "asc";
     renderBooks();
   });
 
