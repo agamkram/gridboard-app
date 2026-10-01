@@ -530,16 +530,36 @@
     });
   }
 
-  function load() {
+  /* GitHub holds a snapshot for five minutes, so pressing Reload inside that
+     window redraws the same numbers and nothing on screen moves. Without a
+     word back the button reads as broken. */
+  function say(button, text) {
+    button.disabled = false;
+    button.textContent = text;
+    window.clearTimeout(button._revert);
+    button._revert = window.setTimeout(function () {
+      button.textContent = "Reload";
+    }, 2200);
+  }
+
+  function load(button) {
     var stamp = document.getElementById("stamp");
     if (!state.data && stamp) stamp.textContent = "Loading…";
+    var before = state.data ? state.data.generated_at : null;
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Checking…";
+    }
     loadSnapshot()
       .then(function (data) {
+        var moved = !before || data.generated_at !== before;
         state.data = data;
         render();
+        if (button) say(button, moved ? "Updated" : "No change yet");
       })
       .catch(function (err) {
         console.error(err);
+        if (button) say(button, "Failed");
         if (!state.data) fail("The update did not load.");
         else {
           var banner = document.getElementById("banner");
@@ -549,7 +569,9 @@
       });
   }
 
-  document.getElementById("reload").addEventListener("click", load);
+  document.getElementById("reload").addEventListener("click", function () {
+    load(this);
+  });
   document.getElementById("sort-select").addEventListener("change", function () {
     var parts = String(this.value || "symbol:asc").split(":");
     state.sortKey = parts[0] || "symbol";

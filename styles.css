@@ -122,6 +122,17 @@ button, input { font-family: inherit; }
 
 .reload:hover { color: var(--ink); }
 
+/* The label changes to report what a press found, so the pill is sized for
+   the longest of those words and does not jump the header around. */
+.reload {
+  min-width: 114px;
+  justify-content: center;
+}
+
+.reload:disabled {
+  opacity: 0.6;
+}
+
 .section { margin-top: 28px; }
 
 .section-head {
