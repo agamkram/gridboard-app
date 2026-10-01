@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "7:53 PM ET",
+  "updated_et": "8:09 PM ET",
   "headline": "quiet",
   "fee_label": "0.80%",
   "capital_per_book": 10000,
@@ -70,6 +70,8 @@
       "neutral_orders": 6,
       "long_equity": 9804.256697150719,
       "long_orders": 6,
+      "neutral_seed": 301.61,
+      "long_seed": 294.88,
       "pct_vs_seed": -5.39,
       "threat": "near lower band"
     },
@@ -82,6 +84,8 @@
       "neutral_orders": 6,
       "long_equity": 9922.085339036608,
       "long_orders": 6,
+      "neutral_seed": 0.7406,
+      "long_seed": 0.7002,
       "pct_vs_seed": -6.05,
       "threat": "near lower band"
     },
@@ -93,7 +97,9 @@
       "neutral_equity": 9870.612033555477,
       "neutral_orders": 6,
       "long_equity": 10069.64420510308,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.51164,
+      "long_seed": 0.4886
     },
     {
       "symbol": "HBAR",
@@ -103,7 +109,9 @@
       "neutral_equity": 9813.512985747406,
       "neutral_orders": 6,
       "long_equity": 9822.799155223296,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.10806,
+      "long_seed": 0.10785
     },
     {
       "symbol": "FET",
@@ -113,7 +121,9 @@
       "neutral_equity": 10012.982234836538,
       "neutral_orders": 6,
       "long_equity": 10060.082593609637,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.2259,
+      "long_seed": 0.2238
     },
     {
       "symbol": "ZRO",
@@ -124,6 +134,8 @@
       "neutral_orders": 6,
       "long_equity": 10191.27869091792,
       "long_orders": 6,
+      "neutral_seed": 1.753,
+      "long_seed": 1.661,
       "pct_vs_seed": 5.0,
       "threat": "near upper band"
     },
@@ -135,7 +147,9 @@
       "neutral_equity": 9941.663877098104,
       "neutral_orders": 6,
       "long_equity": 10106.441048015848,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.0958,
+      "long_seed": 0.0918
     },
     {
       "symbol": "NEAR",
@@ -145,7 +159,9 @@
       "neutral_equity": 9860.245090414377,
       "neutral_orders": 6,
       "long_equity": 9908.00528188654,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 5.4501,
+      "long_seed": 5.3971
     },
     {
       "symbol": "LIGHTER",
@@ -155,7 +171,9 @@
       "neutral_equity": 9926.85090653632,
       "neutral_orders": 6,
       "long_equity": 10035.6478927608,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 4.018,
+      "long_seed": 3.885
     },
     {
       "symbol": "PUMP",
@@ -165,7 +183,9 @@
       "neutral_equity": 9944.312416303817,
       "neutral_orders": 6,
       "long_equity": 10004.624068035731,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.005892,
+      "long_seed": 0.005821
     },
     {
       "symbol": "SUI",
@@ -175,7 +195,9 @@
       "neutral_equity": 9802.570591965345,
       "neutral_orders": 6,
       "long_equity": 10001.61316729728,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.2008,
+      "long_seed": 1.1531
     },
     {
       "symbol": "ZBCN",
@@ -185,7 +207,9 @@
       "neutral_equity": 10005.705787732533,
       "neutral_orders": 6,
       "long_equity": 10089.498106236131,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.002624,
+      "long_seed": 0.002581
     },
     {
       "symbol": "DASH",
@@ -195,7 +219,9 @@
       "neutral_equity": 9844.781700868632,
       "neutral_orders": 6,
       "long_equity": 9938.935492633342,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 61.876,
+      "long_seed": 60.694
     },
     {
       "symbol": "FIL",
@@ -205,7 +231,9 @@
       "neutral_equity": 9848.39330469057,
       "neutral_orders": 6,
       "long_equity": 10003.582986592693,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.065,
+      "long_seed": 1.032
     },
     {
       "symbol": "ALGO",
@@ -215,7 +243,9 @@
       "neutral_equity": 9895.971492740555,
       "neutral_orders": 6,
       "long_equity": 9933.678968794828,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.12567,
+      "long_seed": 0.12471
     },
     {
       "symbol": "BONK",
@@ -225,7 +255,9 @@
       "neutral_equity": 9871.717433198148,
       "neutral_orders": 6,
       "long_equity": 10025.266036501991,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 3.863e-06,
+      "long_seed": 3.745e-06
     },
     {
       "symbol": "MON",
@@ -236,6 +268,8 @@
       "neutral_orders": 6,
       "long_equity": 10377.494646443729,
       "long_orders": 6,
+      "neutral_seed": 0.02845,
+      "long_seed": 0.02875,
       "pct_vs_seed": 11.07,
       "threat": "near upper band"
     },
@@ -247,7 +281,9 @@
       "neutral_equity": 9971.443859610807,
       "neutral_orders": 6,
       "long_equity": 10027.215801391021,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.39242,
+      "long_seed": 0.38807
     },
     {
       "symbol": "FARTCOIN",
@@ -257,7 +293,9 @@
       "neutral_equity": 9852.875112330592,
       "neutral_orders": 6,
       "long_equity": 9932.289150161369,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.1806,
+      "long_seed": 0.1777
     },
     {
       "symbol": "DRV",
@@ -267,7 +305,9 @@
       "neutral_equity": 10046.354522372092,
       "neutral_orders": 6,
       "long_equity": 9970.99803567346,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.38285,
+      "long_seed": 0.38865
     },
     {
       "symbol": "OP",
@@ -277,7 +317,9 @@
       "neutral_equity": 9836.963672712576,
       "neutral_orders": 6,
       "long_equity": 9964.098213522817,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.1327,
+      "long_seed": 0.1293
     },
     {
       "symbol": "SEI",
@@ -287,7 +329,9 @@
       "neutral_equity": 9905.652628443968,
       "neutral_orders": 6,
       "long_equity": 10010.717500419529,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.07439,
+      "long_seed": 0.07283
     },
     {
       "symbol": "JUP",
@@ -297,7 +341,9 @@
       "neutral_equity": 9926.150506480568,
       "neutral_orders": 6,
       "long_equity": 9999.727934380222,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.33211,
+      "long_seed": 0.32723
     },
     {
       "symbol": "AVAX",
@@ -307,7 +353,9 @@
       "neutral_equity": 9920.28581793832,
       "neutral_orders": 6,
       "long_equity": 9961.67518329305,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 11.024,
+      "long_seed": 10.932
     },
     {
       "symbol": "ENA",
@@ -317,7 +365,9 @@
       "neutral_equity": 9827.0595638088,
       "neutral_orders": 6,
       "long_equity": 9924.673475395392,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.2725,
+      "long_seed": 0.2661
     },
     {
       "symbol": "LTC",
@@ -327,7 +377,9 @@
       "neutral_equity": 9950.027432228151,
       "neutral_orders": 6,
       "long_equity": 10040.516004929075,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 67.39,
+      "long_seed": 66.18
     },
     {
       "symbol": "ICP",
@@ -338,6 +390,8 @@
       "neutral_orders": 6,
       "long_equity": 9859.403077269497,
       "long_orders": 6,
+      "neutral_seed": 3.466,
+      "long_seed": 3.393,
       "pct_vs_seed": -4.04,
       "threat": "near lower band"
     },
@@ -349,7 +403,9 @@
       "neutral_equity": 9878.44814302344,
       "neutral_orders": 6,
       "long_equity": 9945.617327392672,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.206,
+      "long_seed": 0.2032
     },
     {
       "symbol": "AAVE",
@@ -359,7 +415,9 @@
       "neutral_equity": 9899.810558052915,
       "neutral_orders": 6,
       "long_equity": 9987.838736895665,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 161.4,
+      "long_seed": 158.55
     },
     {
       "symbol": "UNI",
@@ -369,7 +427,9 @@
       "neutral_equity": 9887.755756951246,
       "neutral_orders": 6,
       "long_equity": 9943.684928593779,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 9.001,
+      "long_seed": 8.8991
     },
     {
       "symbol": "SYRUP",
@@ -379,7 +439,9 @@
       "neutral_equity": 9870.008991281416,
       "neutral_orders": 6,
       "long_equity": 9934.922317666149,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.22929,
+      "long_seed": 0.22627
     },
     {
       "symbol": "PENGU",
@@ -389,7 +451,9 @@
       "neutral_equity": 9761.846860437983,
       "neutral_orders": 6,
       "long_equity": 9922.857274066655,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.010016,
+      "long_seed": 0.009689
     },
     {
       "symbol": "ZEC",
@@ -400,10 +464,10 @@
       "neutral_orders": 6,
       "long_equity": 9990.557955262588,
       "long_orders": 6,
-      "spot": 1436.46,
-      "pct_vs_seed": 0.54,
       "neutral_seed": 1428.76,
-      "long_seed": 1426.59
+      "long_seed": 1426.59,
+      "spot": 1436.46,
+      "pct_vs_seed": 0.54
     },
     {
       "symbol": "TAO",
@@ -413,7 +477,9 @@
       "neutral_equity": 9827.095505122224,
       "neutral_orders": 6,
       "long_equity": 9941.3822015052,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 309.1763,
+      "long_seed": 302.0235
     },
     {
       "symbol": "MINA",
@@ -423,7 +489,9 @@
       "neutral_equity": 9887.192010693145,
       "neutral_orders": 6,
       "long_equity": 9968.544662739554,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.14712,
+      "long_seed": 0.1447
     },
     {
       "symbol": "SN64",
@@ -433,7 +501,9 @@
       "neutral_equity": 9945.08124520704,
       "neutral_orders": 6,
       "long_equity": 9945.28069553792,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 21.236,
+      "long_seed": 21.236
     },
     {
       "symbol": "CC",
@@ -443,7 +513,9 @@
       "neutral_equity": 9998.797402643617,
       "neutral_orders": 6,
       "long_equity": 9977.336432973794,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.12504,
+      "long_seed": 0.12558
     },
     {
       "symbol": "INJ",
@@ -453,7 +525,9 @@
       "neutral_equity": 9957.601606157834,
       "neutral_orders": 6,
       "long_equity": 10013.770837665359,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 7.415,
+      "long_seed": 7.332
     },
     {
       "symbol": "MORPHO",
@@ -463,7 +537,9 @@
       "neutral_equity": 9862.147116717186,
       "neutral_orders": 6,
       "long_equity": 9955.010576255992,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 2.54084,
+      "long_seed": 2.49324
     },
     {
       "symbol": "NIGHT",
@@ -474,6 +550,8 @@
       "neutral_orders": 6,
       "long_equity": 10169.035702679777,
       "long_orders": 6,
+      "neutral_seed": 0.03739,
+      "long_seed": 0.03764,
       "pct_vs_seed": 4.95,
       "threat": "near upper band"
     },
@@ -485,7 +563,9 @@
       "neutral_equity": 9870.966321223912,
       "neutral_orders": 6,
       "long_equity": 9926.770496506831,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.2431,
+      "long_seed": 1.229
     },
     {
       "symbol": "COMP",
@@ -495,7 +575,9 @@
       "neutral_equity": 9881.236956936813,
       "neutral_orders": 6,
       "long_equity": 9974.361951201448,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 25.12,
+      "long_seed": 24.65
     },
     {
       "symbol": "LINK",
@@ -505,7 +587,9 @@
       "neutral_equity": 9931.647646442889,
       "neutral_orders": 6,
       "long_equity": 9979.066673159794,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 14.43938,
+      "long_seed": 14.30193
     },
     {
       "symbol": "PEPE",
@@ -515,7 +599,9 @@
       "neutral_equity": 9859.100601879145,
       "neutral_orders": 6,
       "long_equity": 9955.658752431438,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 4.363e-06,
+      "long_seed": 4.278e-06
     },
     {
       "symbol": "ADA",
@@ -526,10 +612,10 @@
       "neutral_orders": 6,
       "long_equity": 10024.95551012824,
       "long_orders": 6,
-      "spot": 0.246594,
-      "pct_vs_seed": 0.35,
       "neutral_seed": 0.245731,
-      "long_seed": 0.243429
+      "long_seed": 0.243429,
+      "spot": 0.246594,
+      "pct_vs_seed": 0.35
     },
     {
       "symbol": "TON",
@@ -539,7 +625,9 @@
       "neutral_equity": 9911.0491319776,
       "neutral_orders": 6,
       "long_equity": 9865.43465334712,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.512,
+      "long_seed": 1.526
     },
     {
       "symbol": "SHIB",
@@ -549,7 +637,9 @@
       "neutral_equity": 9887.13958996978,
       "neutral_orders": 6,
       "long_equity": 9972.36729220287,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 5.831e-06,
+      "long_seed": 5.731e-06
     },
     {
       "symbol": "BCH",
@@ -559,7 +649,9 @@
       "neutral_equity": 9894.9189330212,
       "neutral_orders": 6,
       "long_equity": 9956.564670706406,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 309.94,
+      "long_seed": 306.09
     },
     {
       "symbol": "XRP",
@@ -569,7 +661,9 @@
       "neutral_equity": 9891.655647901995,
       "neutral_orders": 6,
       "long_equity": 9944.799273419165,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.50964,
+      "long_seed": 1.49342
     },
     {
       "symbol": "HYPE",
@@ -579,7 +673,9 @@
       "neutral_equity": 9995.448786548835,
       "neutral_orders": 6,
       "long_equity": 10036.148313491383,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 90.36,
+      "long_seed": 89.63
     },
     {
       "symbol": "BTC",
@@ -590,10 +686,10 @@
       "neutral_orders": 6,
       "long_equity": 9947.082013125184,
       "long_orders": 6,
-      "spot": 83593.9,
-      "pct_vs_seed": -0.54,
       "neutral_seed": 84045.2,
-      "long_seed": 83805.7
+      "long_seed": 83805.7,
+      "spot": 83593.9,
+      "pct_vs_seed": -0.54
     },
     {
       "symbol": "ETH",
@@ -604,10 +700,10 @@
       "neutral_orders": 6,
       "long_equity": 9977.223715312044,
       "long_orders": 6,
-      "spot": 2685.12,
-      "pct_vs_seed": 0.15,
       "neutral_seed": 2680.99,
-      "long_seed": 2675.82
+      "long_seed": 2675.82,
+      "spot": 2685.12,
+      "pct_vs_seed": 0.15
     },
     {
       "symbol": "SOL",
@@ -617,7 +713,9 @@
       "neutral_equity": 9867.071412737167,
       "neutral_orders": 6,
       "long_equity": 9962.002429585738,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 120.28,
+      "long_seed": 117.98
     },
     {
       "symbol": "DOGE",
@@ -627,7 +725,9 @@
       "neutral_equity": 9928.732732005357,
       "neutral_orders": 6,
       "long_equity": 9972.882185769544,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.0950837,
+      "long_seed": 0.0942394
     },
     {
       "symbol": "TRX",
@@ -637,7 +737,9 @@
       "neutral_equity": 9954.166902151495,
       "neutral_orders": 6,
       "long_equity": 9957.175508248589,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.337864,
+      "long_seed": 0.337659
     },
     {
       "symbol": "ATOM",
@@ -647,7 +749,9 @@
       "neutral_equity": 9917.908794582205,
       "neutral_orders": 6,
       "long_equity": 9990.97727944106,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.7566,
+      "long_seed": 1.7309
     },
     {
       "symbol": "XLM",
@@ -657,7 +761,9 @@
       "neutral_equity": 9982.660137640833,
       "neutral_orders": 6,
       "long_equity": 9948.488524921664,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.22531,
+      "long_seed": 0.226866
     },
     {
       "symbol": "APT",
@@ -667,7 +773,9 @@
       "neutral_equity": 9803.999553434383,
       "neutral_orders": 6,
       "long_equity": 9919.335195931037,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.7951,
+      "long_seed": 0.7764
     },
     {
       "symbol": "POL",
@@ -677,7 +785,9 @@
       "neutral_equity": 9963.3675473563,
       "neutral_orders": 6,
       "long_equity": 10033.781342578402,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.11372,
+      "long_seed": 0.11213
     },
     {
       "symbol": "RENDER",
@@ -687,7 +797,9 @@
       "neutral_equity": 9866.14272726008,
       "neutral_orders": 6,
       "long_equity": 9955.10263456608,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.946,
+      "long_seed": 1.911
     },
     {
       "symbol": "IMX",
@@ -697,7 +809,9 @@
       "neutral_equity": 9895.568547703795,
       "neutral_orders": 6,
       "long_equity": 9987.167217678792,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.1687,
+      "long_seed": 0.1656
     },
     {
       "symbol": "WIF",
@@ -707,7 +821,9 @@
       "neutral_equity": 9872.106154759647,
       "neutral_orders": 6,
       "long_equity": 9978.3111625264,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.2529,
+      "long_seed": 0.2475
     },
     {
       "symbol": "FLOKI",
@@ -717,7 +833,9 @@
       "neutral_equity": 9905.53799440309,
       "neutral_orders": 6,
       "long_equity": 9961.988910790653,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 2.795e-05,
+      "long_seed": 2.763e-05
     },
     {
       "symbol": "BNB",
@@ -727,7 +845,9 @@
       "neutral_equity": 9952.1122490696,
       "neutral_orders": 6,
       "long_equity": 9968.6432708544,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 769.68,
+      "long_seed": 767.12
     },
     {
       "symbol": "ETC",
@@ -737,7 +857,9 @@
       "neutral_equity": 9877.489321135925,
       "neutral_orders": 6,
       "long_equity": 9981.535250639636,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 9.037,
+      "long_seed": 8.848
     },
     {
       "symbol": "XMR",
@@ -747,7 +869,9 @@
       "neutral_equity": 9956.394358091064,
       "neutral_orders": 6,
       "long_equity": 9969.627089247602,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 545.02,
+      "long_seed": 543.57
     },
     {
       "symbol": "STX",
@@ -758,6 +882,8 @@
       "neutral_orders": 6,
       "long_equity": 10138.365876336582,
       "long_orders": 6,
+      "neutral_seed": 0.3524,
+      "long_seed": 0.3589,
       "pct_vs_seed": 5.45,
       "threat": "near upper band"
     },
@@ -769,7 +895,9 @@
       "neutral_equity": 9883.891172672727,
       "neutral_orders": 6,
       "long_equity": 9972.572627921856,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.4492,
+      "long_seed": 0.4412
     },
     {
       "symbol": "RUNE",
@@ -779,7 +907,9 @@
       "neutral_equity": 9911.083540115911,
       "neutral_orders": 6,
       "long_equity": 9941.593658740128,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.806,
+      "long_seed": 0.801
     },
     {
       "symbol": "LDO",
@@ -789,7 +919,9 @@
       "neutral_equity": 9833.12983312987,
       "neutral_orders": 6,
       "long_equity": 9906.110592385132,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.468,
+      "long_seed": 0.461
     },
     {
       "symbol": "GRT",
@@ -799,7 +931,9 @@
       "neutral_equity": 9923.326174597794,
       "neutral_orders": 6,
       "long_equity": 10010.048309178745,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.02948,
+      "long_seed": 0.02897
     },
     {
       "symbol": "SAND",
@@ -809,7 +943,9 @@
       "neutral_equity": 9915.618617650221,
       "neutral_orders": 6,
       "long_equity": 10041.07004107004,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.0442,
+      "long_seed": 0.0431
     },
     {
       "symbol": "MANA",
@@ -819,7 +955,9 @@
       "neutral_equity": 9936.182741830593,
       "neutral_orders": 6,
       "long_equity": 10019.005424502157,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.09022,
+      "long_seed": 0.08873
     },
     {
       "symbol": "AXS",
@@ -829,7 +967,9 @@
       "neutral_equity": 9938.936781609238,
       "neutral_orders": 6,
       "long_equity": 10012.405137186195,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 1.16,
+      "long_seed": 1.143
     },
     {
       "symbol": "APE",
@@ -839,7 +979,9 @@
       "neutral_equity": 9872.64733667615,
       "neutral_orders": 6,
       "long_equity": 9993.461854591647,
-      "long_orders": 6
+      "long_orders": 6,
+      "neutral_seed": 0.1532,
+      "long_seed": 0.1495
     }
   ]
 }
