@@ -138,7 +138,12 @@
     return !!hotMap(state.data)[upper(row.symbol)];
   }
 
+  /* generated_at is when Grok Bot built the snapshot. Prefer it: the
+     Last-Modified header is deploy time, which hides a feed that has stalled
+     while deploys keep happening. */
   function snapshotTime(data) {
+    var built = data.generated_at ? Date.parse(data.generated_at) : NaN;
+    if (!Number.isNaN(built)) return built;
     var header = data._revised ? Date.parse(data._revised) : NaN;
     if (!Number.isNaN(header)) return header;
     var newest = NaN;
