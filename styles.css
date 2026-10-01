@@ -277,7 +277,19 @@ button, input { font-family: inherit; }
 .mini.up { color: var(--up); }
 .mini.flat { color: var(--muted); }
 
+.hot-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .hot-item + .hot-item { margin-top: 12px; }
+
+.hot-item .mini {
+  margin: 0;
+  text-align: right;
+}
 
 .sym-name {
   font-weight: 700;
@@ -473,38 +485,6 @@ tbody tr:last-child td { border-bottom: 0; }
 .about-page {
   width: min(720px, calc(100% - 28px));
 }
-
-.about-lede {
-  margin: 18px auto 0;
-  max-width: 38rem;
-  text-align: center;
-  font-size: 17px;
-  line-height: 1.5;
-}
-
-.about-toc {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  margin: 16px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.about-toc a {
-  display: inline-block;
-  border: 1px solid var(--line);
-  background: white;
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 650;
-  text-decoration: none;
-}
-
-.about-toc a:hover { color: var(--ink); }
 
 .about-block {
   margin-top: 14px;

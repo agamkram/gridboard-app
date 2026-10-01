@@ -76,16 +76,6 @@
     });
   }
 
-  function formatDuration(seconds) {
-    if (!Number.isFinite(seconds)) return "—";
-    var s = Math.max(0, Math.round(seconds));
-    var h = Math.floor(s / 3600);
-    var m = Math.floor((s % 3600) / 60);
-    if (h > 0) return h + "h " + m + "m";
-    if (m > 0) return m + "m";
-    return s + "s";
-  }
-
   function feeRate(data) {
     var label = String(data.fee_label || "0.80%").replace("%", "");
     var n = num(label);
@@ -178,23 +168,17 @@
     var hotCard = el("article", { class: "card" });
     var names = hot && typeof hot === "object" ? Object.keys(hot) : [];
     if (!names.length) {
-      hotCard.append(el("p", { class: "empty", text: "No coins are on hot watch." }));
+      hotCard.append(el("p", { class: "empty", text: "No tokens are on hot watch." }));
     } else {
       names.forEach(function (symbol) {
         var info = hot[symbol];
         var box = el("div", { class: "hot-item" }, [
           el("div", { class: "sym-name", text: symbol }),
         ]);
-        if (!info || typeof info !== "object") {
-          box.append(el("div", { class: "mini", text: info == null ? "Hot" : String(info) }));
-        } else {
-          var bits = [];
-          var fills = num(info.fills);
-          if (fills != null) bits.push(fills + (fills === 1 ? " fill" : " fills"));
-          var left = num(info.remaining_s);
-          if (left != null) bits.push(left > 0 ? formatDuration(left) + " left" : "window ended");
-          box.append(el("div", { class: "mini", text: bits.join(" · ") || "Hot" }));
-          if (info.last_fill) box.append(el("div", { class: "mini", text: "Last fill " + formatEt(info.last_fill) }));
+        if (info && typeof info === "object" && info.last_fill) {
+          box.append(el("div", { class: "mini", text: "Last trade " + formatEt(info.last_fill) }));
+        } else if (info != null && typeof info !== "object") {
+          box.append(el("div", { class: "mini", text: String(info) }));
         }
         hotCard.append(box);
       });
