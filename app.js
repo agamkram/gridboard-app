@@ -170,14 +170,24 @@
     return box;
   }
 
+  function etPart(date, opts) {
+    opts.timeZone = "America/New_York";
+    return new Intl.DateTimeFormat("en-US", opts).format(date);
+  }
+
+  /* Date and time have to come from the same instant. Taking the date from
+     the deploy header and the time from updated_et read "10/1  11:59 PM ET"
+     across midnight. */
   function stampLine(data) {
-    var when = data._revised ? new Date(data._revised) : new Date();
-    if (Number.isNaN(when.getTime())) when = new Date();
-    var date = new Intl.DateTimeFormat("en-US", {
-      timeZone: "America/New_York",
-      month: "numeric",
-      day: "numeric",
-    }).format(when);
+    var built = data.generated_at ? Date.parse(data.generated_at) : NaN;
+    if (!Number.isNaN(built)) {
+      var at = new Date(built);
+      return etPart(at, { month: "numeric", day: "numeric" }) + "  " +
+        etPart(at, { hour: "numeric", minute: "2-digit" }) + " ET";
+    }
+    var when = snapshotTime(data);
+    var fallback = Number.isNaN(when) ? new Date() : new Date(when);
+    var date = etPart(fallback, { month: "numeric", day: "numeric" });
     var time = data.updated_et || "";
     return time ? date + "  " + time : date;
   }
