@@ -61,49 +61,46 @@
 
     <section class="about-block" id="what">
       <h2>What this is</h2>
-      <p>GridBoard shows practice trades on Kraken. The money is not real. Nothing on this site can send an order, and there is no live account behind it.</p>
-      <p>There are 75 tokens priced in US dollars. Each token has two practice accounts, Neutral and Long. That makes 150 accounts. Each one starts with $10,000.</p>
-      <p>Each buy and each sell is charged 0.80%. That is the starting fee, before any discount for trading a lot.</p>
-      <p>The buy and sell prices sit 5% apart. The next price is 5% above the one before it, or 5% below it. The gap is always 5% of the last price. It is not 5% of the original price, added again and again in equal dollar steps.</p>
+      <p>GridBoard shows practice trades on Kraken. The money is not real, and nothing on this site can send an order.</p>
+      <p>There are 75 tokens priced in US dollars. Each one has two practice accounts, Neutral and Long. That makes 150 accounts, and each starts with $10,000.</p>
+      <p>Every buy and every sell pays a 0.80% fee. Buy and sell prices sit 5% apart, and each step is 5% from the price before it.</p>
     </section>
 
     <section class="about-block" id="styles">
       <h2>Neutral and Long</h2>
-      <p><strong>Neutral</strong> starts with about half of the $10,000 already in the token. It then places three buy orders below the price and three sell orders above it. There are orders waiting if the price falls, and orders waiting if the price rises.</p>
-      <p><strong>Long</strong> also starts with about half in the token. It places four buy orders below the price and only two sell orders above it, so more of the orders are waiting for a lower price. The sells are small pieces of the tokens already held, not a sale of the whole pile.</p>
-      <p>Both use the same 5% gaps. They differ in how many orders sit below the price, and in how small the sells are.</p>
+      <p>Both styles start with about half of the $10,000 already in the token.</p>
+      <p><strong>Neutral</strong> then places three buy orders below the price and three sell orders above it. There are orders waiting whichever way the price moves.</p>
+      <p><strong>Long</strong> places four buys below and two sells above, so more of its orders wait for a lower price. Its sells are small pieces of what it already holds.</p>
     </section>
 
     <section class="about-block" id="trade">
       <h2>When a trade happens</h2>
-      <p>The orders wait. They can trade any time the market price reaches them. Nothing on a clock forces a trade.</p>
-      <p>When one trades, the opposite order is placed one step away. After a buy, a sell is placed 5% higher. After a sell, a buy is placed 5% lower. The new price stays on the same 5% ladder. It is not moved to a rounder or nearer number.</p>
-      <p>Tokens bought at the start keep their original price. Only an order that actually trades creates the next one.</p>
+      <p>The orders wait, and any of them can trade the moment the market price reaches it. Nothing on a clock forces a trade.</p>
+      <p>After a buy, a sell goes up one step. After a sell, a buy goes down one step. The new order stays on the same 5% ladder.</p>
+      <p>Only an order that trades creates the next one. The tokens bought at the start do not.</p>
     </section>
 
     <section class="about-block" id="check">
       <h2>Hot watch</h2>
-      <p>A hot watch is a token that just traded and is being watched more closely.</p>
-      <p>This site does not hear about a trade the moment it happens. A check looks through all 150 accounts and notices a trade that way.</p>
-      <p>After a trade, that token’s Neutral account and Long account are checked more often, about every 8 seconds, for about 90 minutes after the last trade. The board marks the name while it is on hot watch. When the 90 minutes end, that token goes back to the slower pass over all of the tokens, about every 25 seconds.</p>
-      <p>A separate update, about every 15 minutes, is what this site shows. That update does not place the next order. The check that noticed the trade places the next order. This website does not.</p>
+      <p>A token that just traded goes on hot watch. Its two accounts are checked every few seconds instead of every half minute, for about 90 minutes after the last trade, and the board marks the name while that lasts.</p>
+      <p>The checker places the next order. This website only reads what it did.</p>
     </section>
 
     <section class="about-block" id="vol">
       <h2>When prices jump around</h2>
-      <p>Right now every step is 5% from the last one. Five percent is the smallest gap.</p>
-      <p class="about-note">The plan is to widen the gap when a token has been jumping around, and to keep at least 5% when it has been calm. A jumpy token would then trade less often and pay the 0.80% fee less often. That wider gap is not running yet. If the board does not show a wider gap, it is not in use.</p>
+      <p>Every step is 5% today, and 5% is the smallest gap.</p>
+      <p class="about-note">The plan is to widen the gap for a token that has been jumping around, so it trades less often and pays the fee less often. That is not running yet.</p>
     </section>
 
     <section class="about-block" id="board">
       <h2>What the board shows</h2>
       <ul>
-        <li>At work is the dollars in the token. Cash is what is still waiting to buy. Now is the whole account. The change from the $10,000 start includes the fee paid to buy the tokens. It is not a count of finished trades.</li>
-        <li>Buy & hold is the same $10,000 bought once at that token’s Neutral start price and kept, after the one 0.80% buy fee. All of it is at work. Cash is zero.</li>
-        <li>Tokens on hot watch: they just traded and are being watched more closely.</li>
-        <li>Totals for Neutral and for Long.</li>
+        <li><strong>At work</strong> is the dollars in the token, <strong>Cash</strong> is what is waiting to buy, and <strong>Now</strong> is the two added together. The change from $10,000 includes the fees already paid.</li>
+        <li><strong>Buy &amp; hold</strong> is the same $10,000 bought once at that token’s Neutral start price and kept, after one 0.80% fee. All of it is at work, so there is no cash.</li>
+        <li><strong>Buy · sell</strong> is how many times that token’s two accounts have bought and sold.</li>
+        <li><strong>Hot watch</strong> lists the tokens that just traded.</li>
       </ul>
-      <p>The page only reads a saved update. There is no account login, and the browser does not connect to Kraken.</p>
+      <p>The page only reads a saved update. There is no login, and the browser never connects to Kraken.</p>
     </section>
 
     <p class="about-foot">Not financial advice · practice money only</p>
