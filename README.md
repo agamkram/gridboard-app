@@ -77,6 +77,10 @@ If Vercel’s domain panel prints a different target, use that record.
 
 Grok’s maintain job overwrites `status.json` roughly every 15 minutes. The launchd agent `com.markmaga.gridboard-publish` watches that file and runs `scripts/publish-live.py`, which deploys the folder with the Vercel CLI and logs to `~/Library/Logs/markmaga-preview/gridboard-publish.log`.
 
+Deploys are capped at one every 30 minutes (`MIN_INTERVAL`). Vercel’s free plan allows 100 production deploys a day **across every project on the account**, so publishing every status write exhausts it before noon and then deploys start failing for the other apps too. Thirty minutes is 48 a day and still lands inside the 45 minutes after which the board marks itself stale. `StartInterval` in the plist re-runs the script every 10 minutes so a throttled snapshot still publishes once the floor has passed.
+
+The Vercel CLI sometimes exits non-zero *after* the deployment has gone live, so the script confirms against the live site instead of trusting the exit code, and records progress in `gridboard-publish.state.json`. On the quota error it holds for an hour rather than retrying. Successful publishes log `live`, skipped ones log `unchanged`, `throttled`, or `quota backoff`.
+
 That watcher deploys whatever is on disk. **Pause it before a multi-file edit** so a half-finished change cannot go live, and reload it when the change is verified:
 
 ```bash
