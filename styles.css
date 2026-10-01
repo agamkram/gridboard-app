@@ -288,6 +288,24 @@ button, input { font-family: inherit; }
   white-space: nowrap;
 }
 
+/* Marks the tokens still on the 8 second cadence rather than the 25 second
+   one. The row can wrap because the trade time beside it is already long at
+   phone width. */
+.hot-item { flex-wrap: wrap; }
+
+.fast-tag {
+  margin-left: 7px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #e8f0fb;
+  color: #35587f;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+
 .empty {
   margin: 0;
   color: var(--muted);

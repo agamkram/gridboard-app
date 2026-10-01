@@ -130,6 +130,23 @@
     });
   }
 
+  /* fast_poll was true when the snapshot was written, but a snapshot can be
+     twenty minutes old by the time it is read and the fast cadence only lasts
+     fifteen, so the flag has to be expired here the way hotNames expires the
+     hot mark. Grok Bot owns the length; fast_until is used if it ever ships
+     one, and the constant below is only the fallback. */
+  var FAST_WINDOW_MS = 15 * 60 * 1000;
+
+  function isFast(info) {
+    if (!info || typeof info !== "object" || !info.fast_poll) return false;
+    var ends = info.fast_until
+      ? Date.parse(info.fast_until)
+      : info.last_fill
+      ? Date.parse(info.last_fill) + FAST_WINDOW_MS
+      : NaN;
+    return Number.isNaN(ends) ? true : ends > Date.now();
+  }
+
   function hotMap(data) {
     var hot = (data && data.rollup && data.rollup.hot) || {};
     var map = {};
@@ -229,9 +246,9 @@
     } else {
       names.forEach(function (symbol) {
         var info = hot[symbol];
-        var box = el("div", { class: "hot-item" }, [
-          el("div", { class: "sym-name", text: symbol }),
-        ]);
+        var name = el("div", { class: "sym-name", text: symbol });
+        if (isFast(info)) name.append(el("span", { class: "fast-tag", text: "fast" }));
+        var box = el("div", { class: "hot-item" }, [name]);
         if (info && typeof info === "object" && info.last_fill) {
           box.append(el("div", { class: "mini", text: "Last trade " + formatEt(info.last_fill) }));
         } else if (info != null && typeof info !== "object") {
