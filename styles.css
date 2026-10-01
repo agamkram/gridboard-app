@@ -218,7 +218,7 @@ button, input { font-family: inherit; }
 .near-grid { grid-template-columns: 1fr; }
 
 @media (min-width: 800px) {
-  .totals-grid { grid-template-columns: 1fr 1fr; }
+  .totals-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 .card {
@@ -431,14 +431,9 @@ th.sym { z-index: 2; background: #f6f8fb; }
 
 @media (max-width: 800px) {
   #books-table th,
-  #books-table td { padding: 7px 7px; }
-  #books-table td.sym,
-  #books-table th.sym {
-    padding-left: 8px;
-    padding-right: 6px;
-  }
-  #books-table .sym-name { font-size: 15px; }
-  #books-table .eq { font-size: 13px; }
+  #books-table td { padding: 7px 4px; }
+  #books-table .eq { font-size: 12px; }
+  #books-table .mini { font-size: 11px; }
 }
 
 tbody tr.is-hot td { background: #fbf8f2; }

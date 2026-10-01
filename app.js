@@ -237,9 +237,6 @@
     if (stats.count) {
       var pricedPct = stats.count ? (stats.pricedGap / (capital * stats.count)) * 100 : 0;
       card.append(deltaChip(stats.gap, (stats.gap / stats.baseline) * 100, "vs start"));
-      if (stats.heldCount) {
-        card.append(el("p", { class: "mini", text: "Held " + usd(stats.heldSum, 2) }));
-      }
       if (stats.missing) {
         card.append(deltaChip(stats.pricedGap, pricedPct, "on priced books"));
         card.append(el("p", { class: "mini", text: stats.missing + " unseeded, left out of NOW" }));
@@ -250,34 +247,38 @@
     return card;
   }
 
-  function heldStats(rows, seedKey, capital, fee) {
+  function holdBook(rows, capital, fee) {
     var sum = 0;
     var count = 0;
+    var missing = 0;
     rows.forEach(function (row) {
-      var held = holdValue(capital, row[seedKey], row.spot, fee);
-      if (held == null) return;
-      sum += held;
-      count += 1;
+      var held = holdValue(capital, row.neutral_seed, row.spot, fee);
+      if (held == null) missing += 1;
+      else {
+        sum += held;
+        count += 1;
+      }
     });
-    return { sum: sum, count: count };
+    var baseline = capital * rows.length;
+    return {
+      sum: sum,
+      count: count,
+      missing: missing,
+      baseline: baseline,
+      gap: sum - baseline,
+      pricedGap: sum - capital * count,
+    };
   }
 
   function renderTotals(data) {
     var rows = pairsOf(data);
     var capital = capitalOf(data);
     var fee = feeRate(data);
-    var neutral = sideStats(rows, "neutral_equity", capital);
-    var long = sideStats(rows, "long_equity", capital);
-    var neutralHeld = heldStats(rows, "neutral_seed", capital, fee);
-    var longHeld = heldStats(rows, "long_seed", capital, fee);
-    neutral.heldSum = neutralHeld.sum;
-    neutral.heldCount = neutralHeld.count;
-    long.heldSum = longHeld.sum;
-    long.heldCount = longHeld.count;
     var host = document.getElementById("totals");
     host.replaceChildren(
-      totalsCard("Neutral", neutral, capital),
-      totalsCard("Long", long, capital)
+      totalsCard("Neutral", sideStats(rows, "neutral_equity", capital), capital),
+      totalsCard("Long", sideStats(rows, "long_equity", capital), capital),
+      totalsCard("Buy & hold", holdBook(rows, capital, fee), capital)
     );
   }
 
@@ -285,6 +286,7 @@
     if (key === "symbol") return String(row.symbol || "");
     if (key === "neutral") return num(row.neutral_equity);
     if (key === "long") return num(row.long_equity);
+    if (key === "held") return holdValue(capitalOf(state.data), row.neutral_seed, row.spot, feeRate(state.data));
     return null;
   }
 
@@ -318,7 +320,7 @@
     return true;
   }
 
-  function equityCell(equity, capital, held) {
+  function equityCell(equity, capital) {
     var n = num(equity);
     var td = el("td", { class: "num" }, [
       el("div", { class: "eq", text: n == null ? "—" : usd(n, 2) }),
@@ -329,9 +331,6 @@
         class: "mini " + tone(d),
         text: signedUsd(d, moneyDigits(d)) + " · " + signedPct((d / capital) * 100),
       }));
-    }
-    if (held != null) {
-      td.append(el("div", { class: "mini", text: "Held " + usd(held, 2) }));
     }
     return td;
   }
@@ -346,7 +345,7 @@
     var frag = document.createDocumentFragment();
     if (!rows.length) {
       frag.append(el("tr", {}, [
-        el("td", { class: "empty", colspan: "3", text: "No pairs match." }),
+        el("td", { class: "empty", colspan: "4", text: "No pairs match." }),
       ]));
     }
     rows.forEach(function (row) {
@@ -357,8 +356,9 @@
       tr.append(el("td", { class: "sym" }, [
         el("span", { class: "sym-name", text: row.symbol || "—" }),
       ]));
-      tr.append(equityCell(row.neutral_equity, capital, holdValue(capital, row.neutral_seed, row.spot, fee)));
-      tr.append(equityCell(row.long_equity, capital, holdValue(capital, row.long_seed, row.spot, fee)));
+      tr.append(equityCell(row.neutral_equity, capital));
+      tr.append(equityCell(row.long_equity, capital));
+      tr.append(equityCell(holdValue(capital, row.neutral_seed, row.spot, fee), capital));
       frag.append(tr);
     });
     body.replaceChildren(frag);

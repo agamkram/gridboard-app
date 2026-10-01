@@ -114,7 +114,7 @@
         </div>
         <div class="table-scroll">
           <table id="books-table">
-            <caption class="sr-only">Neutral and Long paper books for each USD pair</caption>
+            <caption class="sr-only">Neutral, Long, and buy and hold for each coin</caption>
             <thead>
               <tr>
                 <th class="sym" scope="col" aria-sort="ascending">
@@ -126,11 +126,14 @@
                 <th class="num" scope="col" aria-sort="none">
                   <button type="button" data-sort="long" data-label="Long">Long</button>
                 </th>
+                <th class="num" scope="col" aria-sort="none">
+                  <button type="button" data-sort="held" data-label="Held">Held</button>
+                </th>
               </tr>
             </thead>
             <tbody id="books-body">
               <tr>
-                <td class="empty" colspan="3">Loading pairs…</td>
+                <td class="empty" colspan="4">Loading pairs…</td>
               </tr>
             </tbody>
           </table>
