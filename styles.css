@@ -75,25 +75,12 @@ button, input { font-family: inherit; }
   text-transform: none;
 }
 
-.app-kicker {
-  margin: 4px 0 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--muted);
-}
-
 .purpose {
   margin: 10px 0 0;
   max-width: 28rem;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.4;
-}
-
-.app-feed {
-  margin: 12px 0 0;
-  font-size: 15px;
-  font-weight: 650;
 }
 
 .banner {
@@ -156,7 +143,7 @@ button, input { font-family: inherit; }
 }
 
 .section-note {
-  margin: 0;
+  margin: 0 0 10px;
   color: var(--muted);
   font-size: 13px;
 }
@@ -215,12 +202,6 @@ button, input { font-family: inherit; }
   letter-spacing: 0.04em;
 }
 
-.sn {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
 .k {
   display: block;
   font-size: 10px;
@@ -229,7 +210,6 @@ button, input { font-family: inherit; }
   color: var(--muted);
 }
 
-.now-num,
 .eq,
 .delta-main {
   font-family: var(--mono);
@@ -238,7 +218,6 @@ button, input { font-family: inherit; }
   white-space: nowrap;
 }
 
-.now-num { font-size: 16px; margin-top: 2px; }
 .start-num {
   font-family: var(--mono);
   font-size: 13px;
@@ -390,8 +369,7 @@ table {
 #books-table .trades-col,
 #books-table td.trades {
   width: 14%;
-  position: relative;
-  left: -5px;
+  padding-right: 6px;
 }
 
 #books-table .trades {
@@ -428,32 +406,13 @@ th {
   top: 0;
   background: #f6f8fb;
   z-index: 1;
+  font: 700 11px var(--sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 th.num, td.num { text-align: right; }
-
-th button {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  font: 700 11px var(--sans);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-th.num button { width: 100%; text-align: right; }
-th button:hover { color: var(--ink); }
-
-th:not(:has(button)) {
-  font: 700 11px var(--sans);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
 
 td.sym, th.sym {
   position: sticky;

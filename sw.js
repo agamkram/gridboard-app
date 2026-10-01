@@ -1,11 +1,13 @@
 /** Local: stay off. Production: versioned shell. Never cache status.json. */
-const CACHE = "gridboard-v2";
+const CACHE = "gridboard-v3";
 
+/* Cache keys include the query, so these must match the pages byte for byte.
+   scripts/bump-version.py keeps them in step. */
 const SHELL = [
   "/",
   "/about.html",
-  "/styles.css?v=1",
-  "/app.js?v=1",
+  "/styles.css?v=5",
+  "/app.js?v=6",
   "/manifest.webmanifest",
   "/favicon.ico",
   "/favicon-32.png",

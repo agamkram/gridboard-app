@@ -2,11 +2,12 @@
 (function () {
   var state = {
     data: null,
-    query: "",
-    filter: "all",
     sortKey: "symbol",
     sortDir: "asc",
   };
+
+  /* The publisher writes a snapshot about every 15 minutes. */
+  var STALE_MS = 45 * 60 * 1000;
 
   function num(v) {
     if (typeof v === "number" && Number.isFinite(v)) return v;
@@ -82,6 +83,16 @@
     return n == null ? 0.008 : n / 100;
   }
 
+  /* The feed values equity and coin from two price reads a moment apart, so
+     equity can disagree with coin + cash by a few dollars. The card shows all
+     three, so it has to add up: take the two the reader can see. */
+  function bookValue(row, side) {
+    var coin = num(row[side + "_coin_usd"]);
+    var cash = num(row[side + "_cash_usd"]);
+    if (coin != null && cash != null) return coin + cash;
+    return num(row[side + "_equity"]);
+  }
+
   function holdValue(capital, seed, spot, fee) {
     var start = num(seed);
     var price = num(spot);
@@ -102,28 +113,48 @@
     return String(v || "").toUpperCase();
   }
 
-  function hotMap(data) {
-    var hot = data.rollup && data.rollup.hot;
-    var map = {};
-    if (!hot || typeof hot !== "object") return map;
-    Object.keys(hot).forEach(function (k) { map[upper(k)] = hot[k]; });
-    return map;
+  /* A snapshot can outlive the hot window it describes. Drop entries whose
+     watch has already run out rather than showing a stale name as live. */
+  function hotNames(data) {
+    var hot = data && data.rollup && data.rollup.hot;
+    if (!hot || typeof hot !== "object") return [];
+    var now = Date.now();
+    return Object.keys(hot).filter(function (symbol) {
+      var info = hot[symbol];
+      if (!info || typeof info !== "object" || !info.until) return true;
+      var until = Date.parse(info.until);
+      return Number.isNaN(until) ? true : until > now;
+    });
   }
 
-  function filledSet(data) {
-    var set = {};
-    (Array.isArray(data.fills) ? data.fills : []).forEach(function (f) {
-      if (f && f.symbol) set[upper(f.symbol)] = true;
-    });
-    return set;
+  function hotMap(data) {
+    var hot = (data && data.rollup && data.rollup.hot) || {};
+    var map = {};
+    hotNames(data).forEach(function (k) { map[upper(k)] = hot[k]; });
+    return map;
   }
 
   function isHot(row) {
     return !!hotMap(state.data)[upper(row.symbol)];
   }
 
-  function isUnseeded(row) {
-    return num(row.neutral_equity) == null || num(row.long_equity) == null;
+  function snapshotTime(data) {
+    var header = data._revised ? Date.parse(data._revised) : NaN;
+    if (!Number.isNaN(header)) return header;
+    var newest = NaN;
+    (Array.isArray(data.fills) ? data.fills : []).forEach(function (fill) {
+      var ts = fill && fill.ts ? Date.parse(fill.ts) : NaN;
+      if (!Number.isNaN(ts) && (Number.isNaN(newest) || ts > newest)) newest = ts;
+    });
+    return newest;
+  }
+
+  function describeAge(ms) {
+    var minutes = Math.round(ms / 60000);
+    if (minutes < 90) return minutes + " minutes";
+    var hours = Math.round(minutes / 60);
+    if (hours < 36) return hours + " hours";
+    return Math.round(hours / 24) + " days";
   }
 
   function deltaChip(delta, pct, caption) {
@@ -148,25 +179,33 @@
 
   function renderFeed(data) {
     document.getElementById("stamp").textContent = stampLine(data);
-    var feed = document.getElementById("app-feed");
-    if (feed) {
-      feed.textContent = "";
-      feed.hidden = true;
-    }
-    var banner = document.getElementById("banner");
+
+    var notes = [];
     if (data.paper_only === false) {
-      banner.hidden = false;
-      banner.textContent = "This update is not marked as practice only. This site still cannot place orders.";
-    } else {
-      banner.hidden = true;
-      banner.textContent = "";
+      notes.push("This update is not marked as practice only. This site still cannot place orders.");
     }
+    var when = snapshotTime(data);
+    if (!Number.isNaN(when) && Date.now() - when > STALE_MS) {
+      notes.push("This update is " + describeAge(Date.now() - when) + " old. The job that writes it may have stopped.");
+    }
+
+    var banner = document.getElementById("banner");
+    banner.textContent = notes.join(" ");
+    banner.hidden = notes.length === 0;
+  }
+
+  function renderPurpose(data) {
+    var node = document.getElementById("purpose");
+    if (!node) return;
+    var books = pairsOf(data).length * 2;
+    if (!books) return;
+    node.textContent = "This dashboard tracks " + books + " automated grids continuously managed by Grok Bot.";
   }
 
   function renderNear(data) {
-    var hot = data.rollup && data.rollup.hot;
+    var hot = (data.rollup && data.rollup.hot) || {};
     var hotCard = el("article", { class: "card" });
-    var names = hot && typeof hot === "object" ? Object.keys(hot) : [];
+    var names = hotNames(data);
     if (!names.length) {
       hotCard.append(el("p", { class: "empty", text: "No tokens are on hot watch." }));
     } else {
@@ -189,42 +228,17 @@
     host.replaceChildren(wrap);
   }
 
-  function sideStats(rows, key, capital) {
-    var sum = 0;
-    var count = 0;
-    var missing = 0;
-    rows.forEach(function (row) {
-      var v = num(row[key]);
-      if (v == null) missing += 1;
-      else {
-        sum += v;
-        count += 1;
-      }
-    });
-    var baseline = capital * rows.length;
-    return {
-      sum: sum,
-      count: count,
-      missing: missing,
-      baseline: baseline,
-      gap: sum - baseline,
-      pricedGap: sum - capital * count,
-    };
-  }
-
   function sumField(rows, key) {
     var sum = 0;
     var count = 0;
-    var missing = 0;
     rows.forEach(function (row) {
       var v = num(row[key]);
-      if (v == null) missing += 1;
-      else {
+      if (v != null) {
         sum += v;
         count += 1;
       }
     });
-    return { sum: sum, count: count, missing: missing };
+    return { sum: sum, count: count };
   }
 
   function moneyRow(label, value) {
@@ -234,12 +248,17 @@
     ]);
   }
 
-  function totalsCard(title, atWork, cash, now, baseline) {
+  /* Every row on this card is whole dollars, so Now is built from the two
+     rounded numbers above it. Summing first would let the card miss by $1. */
+  function totalsCard(title, coin, cash, baseline) {
+    var atWork = coin.count ? Math.round(coin.sum) : null;
+    var waiting = cash.count ? Math.round(cash.sum) : null;
+    var now = atWork == null && waiting == null ? null : (atWork || 0) + (waiting || 0);
     var card = el("article", { class: "card" }, [
       el("h3", { class: "card-title", text: title }),
     ]);
     card.append(moneyRow("At work", atWork));
-    card.append(moneyRow("Cash", cash));
+    card.append(moneyRow("Cash", waiting));
     card.append(moneyRow("Now", now));
     if (now != null && baseline) {
       var gap = now - baseline;
@@ -253,49 +272,33 @@
   function holdBook(rows, capital, fee) {
     var sum = 0;
     var count = 0;
-    var missing = 0;
     rows.forEach(function (row) {
       var held = holdValue(capital, row.neutral_seed, row.spot, fee);
-      if (held == null) missing += 1;
-      else {
+      if (held != null) {
         sum += held;
         count += 1;
       }
     });
-    var baseline = capital * rows.length;
-    return {
-      sum: sum,
-      count: count,
-      missing: missing,
-      baseline: baseline,
-      gap: sum - baseline,
-      pricedGap: sum - capital * count,
-    };
+    return { sum: sum, count: count };
   }
 
   function renderTotals(data) {
     var rows = pairsOf(data);
     var capital = capitalOf(data);
-    var fee = feeRate(data);
-    var neutralNow = sideStats(rows, "neutral_equity", capital);
-    var longNow = sideStats(rows, "long_equity", capital);
-    var neutralCoin = sumField(rows, "neutral_coin_usd");
-    var neutralCash = sumField(rows, "neutral_cash_usd");
-    var longCoin = sumField(rows, "long_coin_usd");
-    var longCash = sumField(rows, "long_cash_usd");
-    var held = holdBook(rows, capital, fee);
+    var baseline = capital * rows.length;
+    var held = holdBook(rows, capital, feeRate(data));
     var host = document.getElementById("totals");
     host.replaceChildren(
-      totalsCard("Neutral", neutralCoin.count ? neutralCoin.sum : null, neutralCash.count ? neutralCash.sum : null, neutralNow.count ? neutralNow.sum : null, neutralNow.baseline),
-      totalsCard("Long", longCoin.count ? longCoin.sum : null, longCash.count ? longCash.sum : null, longNow.count ? longNow.sum : null, longNow.baseline),
-      totalsCard("Buy & hold", held.count ? held.sum : null, held.count ? 0 : null, held.count ? held.sum : null, held.baseline)
+      totalsCard("Neutral", sumField(rows, "neutral_coin_usd"), sumField(rows, "neutral_cash_usd"), baseline),
+      totalsCard("Long", sumField(rows, "long_coin_usd"), sumField(rows, "long_cash_usd"), baseline),
+      totalsCard("Buy & hold", held, { sum: 0, count: held.count }, baseline)
     );
   }
 
   function sortValue(row, key) {
     if (key === "symbol") return String(row.symbol || "");
-    if (key === "neutral") return num(row.neutral_equity);
-    if (key === "long") return num(row.long_equity);
+    if (key === "neutral") return bookValue(row, "neutral");
+    if (key === "long") return bookValue(row, "long");
     if (key === "held") return holdValue(capitalOf(state.data), row.neutral_seed, row.spot, feeRate(state.data));
     if (key === "trades") {
       var t = tradeCounts(row, state.data || {});
@@ -322,13 +325,6 @@
     return state.sortDir === "asc" ? c : -c;
   }
 
-  function visible(row) {
-    if (state.filter === "hot") return isHot(row);
-    if (state.filter === "unseeded") return isUnseeded(row);
-    if (state.filter === "filled") return !!filledSet(state.data)[upper(row.symbol)];
-    return true;
-  }
-
   function equityCell(equity, capital) {
     var n = num(equity);
     var td = el("td", { class: "num" }, [
@@ -342,6 +338,30 @@
       }));
     }
     return td;
+  }
+
+  /* True when the feed carries its own totals. Without them the counts below
+     are only the fills the snapshot happens to still be carrying. */
+  function hasTradeTotals(rows) {
+    return rows.some(function (row) {
+      return num(row.buys) != null || num(row.buy_count) != null ||
+        num(row.neutral_buys) != null || num(row.long_buys) != null;
+    });
+  }
+
+  function tradesNote(data) {
+    var rows = pairsOf(data);
+    if (!rows.length || hasTradeTotals(rows)) return "";
+    var fills = Array.isArray(data.fills) ? data.fills : [];
+    if (!fills.length) return "No trades in the window this update carries.";
+    var oldest = fills.reduce(function (best, fill) {
+      var ts = fill && fill.ts ? Date.parse(fill.ts) : NaN;
+      if (Number.isNaN(ts)) return best;
+      return Number.isNaN(best) || ts < best ? ts : best;
+    }, NaN);
+    var since = Number.isNaN(oldest) ? "" : " since " + formatEt(new Date(oldest).toISOString());
+    return "Buy and sell count the " + fills.length + " trades this update carries" + since +
+      ", not the whole life of each book.";
   }
 
   function tradeCounts(row, data) {
@@ -376,25 +396,27 @@
     if (!data) return;
     var capital = capitalOf(data);
     var fee = feeRate(data);
-    var rows = pairsOf(data).filter(visible).sort(compare);
+    var rows = pairsOf(data).slice().sort(compare);
     var body = document.getElementById("books-body");
     var frag = document.createDocumentFragment();
     if (!rows.length) {
       frag.append(el("tr", {}, [
-        el("td", { class: "empty", colspan: "5", text: "No tokens match." }),
+        el("td", { class: "empty", colspan: "5", text: "No tokens to show." }),
       ]));
     }
     rows.forEach(function (row) {
       var tr = el("tr");
       if (isHot(row)) tr.classList.add("is-hot");
-      if (num(row.neutral_equity) == null && num(row.long_equity) == null) tr.classList.add("is-gap");
+      var neutral = bookValue(row, "neutral");
+      var long = bookValue(row, "long");
+      if (neutral == null && long == null) tr.classList.add("is-gap");
 
       tr.append(el("td", { class: "sym" }, [
         el("span", { class: "sym-name", text: row.symbol || "—" }),
       ]));
       var trades = tradeCounts(row, data);
-      tr.append(equityCell(row.neutral_equity, capital));
-      tr.append(equityCell(row.long_equity, capital));
+      tr.append(equityCell(neutral, capital));
+      tr.append(equityCell(long, capital));
       tr.append(equityCell(holdValue(capital, row.neutral_seed, row.spot, fee), capital));
       tr.append(el("td", { class: "num trades" }, [
         el("span", { class: "buy-n", text: String(trades.buys) }),
@@ -408,25 +430,27 @@
     var sortSelect = document.getElementById("sort-select");
     if (sortSelect) sortSelect.value = state.sortKey + ":" + state.sortDir;
 
-    var aria = {
-      symbol: state.sortKey === "symbol" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
-      neutral: state.sortKey === "neutral" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
-      long: state.sortKey === "long" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
-      held: state.sortKey === "held" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
-      trades: state.sortKey === "trades" ? (state.sortDir === "asc" ? "ascending" : "descending") : "none",
-    };
+    var order = state.sortDir === "asc" ? "ascending" : "descending";
     var heads = document.querySelectorAll("#books-table thead th");
-    if (heads[0]) heads[0].setAttribute("aria-sort", aria.symbol);
-    if (heads[1]) heads[1].setAttribute("aria-sort", aria.neutral);
-    if (heads[2]) heads[2].setAttribute("aria-sort", aria.long);
-    if (heads[3]) heads[3].setAttribute("aria-sort", aria.held);
-    if (heads[4]) heads[4].setAttribute("aria-sort", aria.trades);
+    ["symbol", "neutral", "long", "held", "trades"].forEach(function (key, i) {
+      if (heads[i]) heads[i].setAttribute("aria-sort", state.sortKey === key ? order : "none");
+    });
+  }
+
+  function renderTradesNote(data) {
+    var node = document.getElementById("trades-note");
+    if (!node) return;
+    var note = tradesNote(data);
+    node.textContent = note;
+    node.hidden = !note;
   }
 
   function render() {
     renderFeed(state.data);
+    renderPurpose(state.data);
     renderNear(state.data);
     renderTotals(state.data);
+    renderTradesNote(state.data);
     renderBooks();
   }
 
