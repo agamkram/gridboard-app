@@ -86,6 +86,19 @@
     return s + "s";
   }
 
+  function feeRate(data) {
+    var label = String(data.fee_label || "0.80%").replace("%", "");
+    var n = num(label);
+    return n == null ? 0.008 : n / 100;
+  }
+
+  function holdValue(capital, seed, spot, fee) {
+    var start = num(seed);
+    var price = num(spot);
+    if (start == null || price == null || start === 0) return null;
+    return capital * (1 - fee) * (price / start);
+  }
+
   function capitalOf(data) {
     var n = num(data.capital_per_book);
     return n == null ? 10000 : n;
@@ -223,7 +236,10 @@
     card.append(el("p", { class: "mini", text: usd(capital, 0) + " × " + (stats.count + stats.missing) }));
     if (stats.count) {
       var pricedPct = stats.count ? (stats.pricedGap / (capital * stats.count)) * 100 : 0;
-      card.append(deltaChip(stats.gap, (stats.gap / stats.baseline) * 100, "vs baseline"));
+      card.append(deltaChip(stats.gap, (stats.gap / stats.baseline) * 100, "vs start"));
+      if (stats.heldCount) {
+        card.append(el("p", { class: "mini", text: "Held " + usd(stats.heldSum, 2) }));
+      }
       if (stats.missing) {
         card.append(deltaChip(stats.pricedGap, pricedPct, "on priced books"));
         card.append(el("p", { class: "mini", text: stats.missing + " unseeded, left out of NOW" }));
@@ -234,11 +250,30 @@
     return card;
   }
 
+  function heldStats(rows, seedKey, capital, fee) {
+    var sum = 0;
+    var count = 0;
+    rows.forEach(function (row) {
+      var held = holdValue(capital, row[seedKey], row.spot, fee);
+      if (held == null) return;
+      sum += held;
+      count += 1;
+    });
+    return { sum: sum, count: count };
+  }
+
   function renderTotals(data) {
     var rows = pairsOf(data);
     var capital = capitalOf(data);
+    var fee = feeRate(data);
     var neutral = sideStats(rows, "neutral_equity", capital);
     var long = sideStats(rows, "long_equity", capital);
+    var neutralHeld = heldStats(rows, "neutral_seed", capital, fee);
+    var longHeld = heldStats(rows, "long_seed", capital, fee);
+    neutral.heldSum = neutralHeld.sum;
+    neutral.heldCount = neutralHeld.count;
+    long.heldSum = longHeld.sum;
+    long.heldCount = longHeld.count;
     var host = document.getElementById("totals");
     host.replaceChildren(
       totalsCard("Neutral", neutral, capital),
@@ -283,7 +318,7 @@
     return true;
   }
 
-  function equityCell(equity, capital) {
+  function equityCell(equity, capital, held) {
     var n = num(equity);
     var td = el("td", { class: "num" }, [
       el("div", { class: "eq", text: n == null ? "—" : usd(n, 2) }),
@@ -295,6 +330,9 @@
         text: signedUsd(d, moneyDigits(d)) + " · " + signedPct((d / capital) * 100),
       }));
     }
+    if (held != null) {
+      td.append(el("div", { class: "mini", text: "Held " + usd(held, 2) }));
+    }
     return td;
   }
 
@@ -302,6 +340,7 @@
     var data = state.data;
     if (!data) return;
     var capital = capitalOf(data);
+    var fee = feeRate(data);
     var rows = pairsOf(data).filter(visible).sort(compare);
     var body = document.getElementById("books-body");
     var frag = document.createDocumentFragment();
@@ -318,8 +357,8 @@
       tr.append(el("td", { class: "sym" }, [
         el("span", { class: "sym-name", text: row.symbol || "—" }),
       ]));
-      tr.append(equityCell(row.neutral_equity, capital));
-      tr.append(equityCell(row.long_equity, capital));
+      tr.append(equityCell(row.neutral_equity, capital, holdValue(capital, row.neutral_seed, row.spot, fee)));
+      tr.append(equityCell(row.long_equity, capital, holdValue(capital, row.long_seed, row.spot, fee)));
       frag.append(tr);
     });
     body.replaceChildren(frag);
