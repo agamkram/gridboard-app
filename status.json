@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "12:09 PM ET",
+  "updated_et": "2026-10-01 12:13:01 ET",
   "generated_at": "2026-10-01T12:09:43.027262-04:00",
   "headline": "45 recent fills",
   "fee_label": "0.80%",
@@ -2673,5 +2673,6 @@
       "spot": 0.1473,
       "pct_vs_seed": -3.85
     }
-  ]
+  ],
+  "ignore_command_verify": "2026-10-01 12:13:01 ET"
 }
