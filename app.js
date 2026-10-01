@@ -499,20 +499,44 @@
     banner.textContent = message;
   }
 
-  function load() {
-    var stamp = document.getElementById("stamp");
-    if (!state.data && stamp) stamp.textContent = "Loading…";
-    fetch("status.json", { cache: "no-cache", headers: { Accept: "application/json" } })
-      .then(function (res) {
+  /* Grok Bot pushes status.json to GitHub every 12 to 15 minutes. Reading it
+     there costs no deploy, and Vercel's free plan allows only 100 a day across
+     every project on the account, so publishing the data that often used to
+     exhaust it. The copy deployed beside this file is the fallback, kept warm
+     by a slow publish so the board still works if GitHub cannot be reached. */
+  var FEEDS = [
+    "https://raw.githubusercontent.com/agamkram/gridboard-app/main/status.json",
+    "status.json",
+  ];
+
+  function fetchSnapshot(url) {
+    return fetch(url, { cache: "no-cache", headers: { Accept: "application/json" } }).then(
+      function (res) {
         if (!res.ok) throw new Error("HTTP " + res.status);
         var revised = res.headers.get("Last-Modified");
         return res.json().then(function (data) {
-          if (data && typeof data === "object") data._revised = revised;
+          if (!data || !Array.isArray(data.pairs)) throw new Error("no pairs");
+          data._revised = revised;
           return data;
         });
-      })
+      }
+    );
+  }
+
+  function loadSnapshot(index) {
+    var at = index || 0;
+    return fetchSnapshot(FEEDS[at]).catch(function (err) {
+      if (at + 1 >= FEEDS.length) throw err;
+      console.warn("snapshot: " + FEEDS[at] + " failed, trying the next", err);
+      return loadSnapshot(at + 1);
+    });
+  }
+
+  function load() {
+    var stamp = document.getElementById("stamp");
+    if (!state.data && stamp) stamp.textContent = "Loading…";
+    loadSnapshot()
       .then(function (data) {
-        if (!data || !Array.isArray(data.pairs)) throw new Error("status.json has no pairs");
         state.data = data;
         render();
       })

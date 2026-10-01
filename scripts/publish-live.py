@@ -9,9 +9,12 @@ Two things this has to get right, both learned the hard way:
 Vercel's free plan allows 100 production deploys a day, counted across every
 project on the account, not just this one. Publishing on every status write
 burns through that before noon and then deploys start failing for all of them.
-MIN_INTERVAL is the floor between deploys. Thirty minutes is 48 a day, which
-leaves most of the budget for the other apps and still lands inside the
-45-minute window after which the board marks itself stale.
+MIN_INTERVAL is the floor between deploys.
+
+The board no longer reads its data from here: it reads the copy Grok Bot pushes
+to GitHub, which costs nothing and updates every 12 to 15 minutes. The deployed
+status.json is only the fallback for when GitHub cannot be reached, so it needs
+to be warm rather than current. Two hours is 12 deploys a day instead of 96.
 
 The CLI also reports failure *after* a deployment has already gone live, so the
 exit code cannot be trusted. The live site decides whether a snapshot
@@ -24,6 +27,7 @@ import datetime
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -35,11 +39,25 @@ LOG_DIR = os.path.expanduser("~/Library/Logs/markmaga-preview")
 STATE = os.path.join(LOG_DIR, "gridboard-publish.state.json")
 LOG = os.path.join(LOG_DIR, "gridboard-publish.log")
 VERCEL = "/usr/local/bin/vercel"
-LIVE_URL = "https://gridboard.markmaga.com/status.json"
+SITE_URL = "https://gridboard.markmaga.com/"
+LIVE_URL = SITE_URL + "status.json"
 
-MIN_INTERVAL = 30 * 60
-QUOTA_BACKOFF = 60 * 60
+MIN_INTERVAL = 2 * 60 * 60
+QUOTA_BACKOFF = 20 * 60
 QUOTA_MARK = "api-deployments-free-per-day"
+
+# A data update can wait for the floor. A code change cannot: it is the whole
+# point of a deploy, and waiting means looking at a board that is not the one
+# on disk. These bypass MIN_INTERVAL when any of them differs from what is live.
+CODE_FILES = (
+    "index.html",
+    "about.html",
+    "app.js",
+    "styles.css",
+    "sw.js",
+    "vercel.json",
+    "manifest.webmanifest",
+)
 
 
 def log(msg):
@@ -79,6 +97,17 @@ def wait_stable():
     return last
 
 
+def code_digest():
+    sha = hashlib.sha256()
+    for name in CODE_FILES:
+        try:
+            sha.update(open(os.path.join(ROOT, name), "rb").read())
+        except OSError:
+            sha.update(b"missing")
+        sha.update(b"\0")
+    return sha.hexdigest()
+
+
 def moment(value):
     try:
         return datetime.datetime.fromisoformat(str(value)).timestamp()
@@ -94,6 +123,26 @@ def live_built():
             return moment(json.load(response).get("generated_at"))
     except Exception:
         return None
+
+
+def asset_markers():
+    """The versioned asset names index.html on disk is asking for."""
+    try:
+        html = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
+    except OSError:
+        return []
+    return sorted(set(re.findall(r"(?:app\.js|styles\.css)\?v=\d+", html)))
+
+
+def live_serves(markers):
+    """True when the live page asks for these same assets."""
+    url = SITE_URL + "?probe=" + str(int(time.time()))
+    try:
+        with urllib.request.urlopen(url, timeout=20) as response:
+            html = response.read().decode("utf-8", "replace")
+    except Exception:
+        return False
+    return all(marker in html for marker in markers)
 
 
 def main():
@@ -116,14 +165,19 @@ def main():
     state = load_state()
     now = time.time()
 
-    if state.get("live_digest") == digest:
+    code = code_digest()
+    code_changed = state.get("live_code") != code
+
+    if state.get("live_digest") == digest and not code_changed:
         log("unchanged " + stamp)
         return 0
 
     waited = now - float(state.get("last_deploy") or 0)
-    if waited < MIN_INTERVAL:
+    if waited < MIN_INTERVAL and not code_changed:
         log("throttled %s, %.0f min to go" % (stamp, (MIN_INTERVAL - waited) / 60))
         return 0
+    if code_changed:
+        log("code changed")
 
     quiet_until = float(state.get("quota_quiet_until") or 0)
     if now < quiet_until:
@@ -142,14 +196,20 @@ def main():
         save_state(state)
         log("quota reached, holding %d min" % (QUOTA_BACKOFF // 60))
 
-    # Accept anything at least as new as what we handed over: status.json can
-    # be rewritten mid-deploy, in which case a newer snapshot is what landed.
+    # Data: accept anything at least as new as what we handed over, since
+    # status.json can be rewritten mid-deploy and the newer snapshot is what
+    # landed. Code: the live page has to be asking for the assets on disk.
+    # Without that check a code-only deploy would confirm itself against a
+    # snapshot that never changed.
+    markers = asset_markers() if code_changed else []
     for _ in range(12):
         there = live_built()
-        if there is not None and (built is None or there >= built):
+        data_ok = there is not None and (built is None or there >= built)
+        if data_ok and (not markers or live_serves(markers)):
             state["live_digest"] = digest
+            state["live_code"] = code
             save_state(state)
-            log("live " + stamp)
+            log("live " + stamp + (" + code" if code_changed else ""))
             return 0
         time.sleep(6)
 
