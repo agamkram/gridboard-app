@@ -80,10 +80,10 @@ If Vercel’s domain panel prints a different target, use that record.
 Grok Bot pushes a new `status.json` to `main` every 5 to 15 minutes. Those must not each trigger a build — Vercel’s free plan allows 100 production deploys a day across every project on the account, and status writes alone are about 100. The `ignoreCommand` in `vercel.json` skips the build when `status.json` is the only changed file:
 
 ```
-git diff --quiet HEAD^ HEAD -- . ':!status.json'
+[ $(git rev-list --parents -n 1 HEAD | wc -w) -eq 2 ] && git diff --quiet HEAD^ HEAD -- . ':!status.json'
 ```
 
-Exit 0 skips, exit 1 builds. It does not appear to cover merge commits, so merging a run of Grok Bot's status pushes can still cost one deploy.
+Exit 0 skips, exit 1 builds, so only a plain commit touching nothing but `status.json` is skipped. A merge always builds. That costs a deploy on a merge that carried no code, but the rule used to compare a merge against its first parent, and when that parent was the code commit being shipped the diff came back empty and the deploy was silently skipped. Erring toward one wasted build is much cheaper than serving yesterday's code and not knowing it.
 
 There is no local publisher. A launchd agent used to deploy the folder with the Vercel CLI on every status write, which is what exhausted the quota; it was retired once the board started reading its data from GitHub instead, and the Mac stopped being sent a copy of `status.json` at all. Deploying from two places also meant a stale checkout could overwrite current code, which happened. Do not add a second deploy path.
 
