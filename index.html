@@ -48,7 +48,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
   <a class="skip" href="#books">Skip to tokens</a>
@@ -58,6 +58,7 @@
         <h1 class="app-title">GridBoard</h1>
       </div>
       <p class="purpose" id="purpose">This dashboard tracks 150 automated grids continuously managed by Grok Bot.</p>
+      <p class="build-mark" id="build-mark">js 16 · css 13</p>
       <p class="banner" id="banner" hidden></p>
       <div class="header-actions">
         <a class="about-link" href="about.html">About</a>
@@ -106,6 +107,7 @@
             </select>
           </label>
         </div>
+        <p class="section-note" id="held-note" hidden></p>
         <p class="section-note" id="trades-note" hidden></p>
         <div class="table-scroll">
           <table id="books-table">
@@ -144,6 +146,6 @@
       document.head.appendChild(gbAnalytics);
     }
   </script>
-  <script src="app.js?v=15"></script>
+  <script src="app.js?v=16"></script>
 </body>
 </html>

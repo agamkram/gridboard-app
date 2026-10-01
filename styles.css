@@ -83,6 +83,14 @@ button, input { font-family: inherit; }
   line-height: 1.4;
 }
 
+.build-mark {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
 .banner {
   margin: 12px 0 0;
   width: min(100%, 40rem);
@@ -378,6 +386,17 @@ table {
   margin-top: 4px;
 }
 
+.totals-grid .card.card-hold {
+  padding: 8px 10px;
+}
+
+.totals-grid .bench-pct {
+  margin-top: 0;
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
 #books-table {
   width: 100%;
   min-width: 0;
@@ -404,6 +423,13 @@ table {
 
 #books-table .eq { font-size: 12px; }
 #books-table .mini { margin-top: 1px; font-size: 10px; }
+#books-table .held-book + .held-book { margin-top: 5px; }
+#books-table .held-tag {
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
 #books-table .sym-name { font-size: 13px; }
 #books-table .trades-col,
 #books-table td.trades {

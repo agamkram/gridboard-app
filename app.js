@@ -311,17 +311,70 @@
     return card;
   }
 
-  function holdBook(rows, capital, fee) {
+  /* Neutral and Long were meant to open at the same price. When the snapshot
+     has two prints, a hold scored only from the Neutral print credits Long
+     with the cheaper entry. Each hold uses that book's own seed. */
+  function seedGap(row) {
+    var n = num(row.neutral_seed);
+    var l = num(row.long_seed);
+    if (n == null || l == null || n === 0) return 0;
+    return Math.abs(l - n) / Math.abs(n);
+  }
+
+  function holdsDiverge(rows) {
+    return rows.some(function (row) { return seedGap(row) > 0.0001; });
+  }
+
+  function holdSeed(row, side) {
+    if (side === "long") {
+      var l = num(row.long_seed);
+      if (l != null && l !== 0) return l;
+    }
+    return row.neutral_seed;
+  }
+
+  function holdBook(rows, capital, fee, side) {
     var sum = 0;
     var count = 0;
     rows.forEach(function (row) {
-      var held = holdValue(capital, row.neutral_seed, row.spot, fee);
+      var held = holdValue(capital, holdSeed(row, side), row.spot, fee);
       if (held != null) {
         sum += held;
         count += 1;
       }
     });
     return { sum: sum, count: count };
+  }
+
+  function benchmarkRow(label, now, baseline, title) {
+    var row = moneyRow(label, now);
+    if (title) row.title = title;
+    if (now != null && baseline) {
+      var gap = now - baseline;
+      row.append(el("span", {
+        class: "mini bench-pct " + tone(gap),
+        text: signedPct((gap / baseline) * 100),
+      }));
+    }
+    return row;
+  }
+
+  /* Two start prices, so the card cannot show one Now. Each line is the
+     hold a fair compare uses for that book. */
+  function holdBenchmarkCard(neutralHold, longHold, baseline, fees) {
+    var nNow = neutralHold.count ? Math.round(neutralHold.sum) : null;
+    var lNow = longHold.count ? Math.round(longHold.sum) : null;
+    var card = el("article", { class: "card card-hold" }, [
+      el("h3", { class: "card-title", text: "Buy & hold" }),
+    ]);
+    card.append(benchmarkRow("Neutral", nNow, baseline, "Buy and hold from the Neutral start price"));
+    card.append(benchmarkRow("Long", lNow, baseline, "Buy and hold from the Long start price"));
+    if (fees != null) {
+      var feeRow = moneyRow("Fees each", Math.round(fees));
+      feeRow.classList.add("money-row-note");
+      card.append(feeRow);
+    }
+    return card;
   }
 
   function feesTotal(rows, key) {
@@ -334,18 +387,23 @@
     var capital = capitalOf(data);
     var baseline = capital * rows.length;
     var fee = feeRate(data);
-    var held = holdBook(rows, capital, fee);
+    var heldN = holdBook(rows, capital, fee, "neutral");
+    var heldL = holdBook(rows, capital, fee, "long");
     var neutralFees = feesTotal(rows, "neutral_fees_paid");
     var longFees = feesTotal(rows, "long_fees_paid");
     /* Buy & hold pays its one fee going in, so its total is that fee on every
        book the column can price. Show it only when the grids report theirs, or
-       the cards would not be comparable. */
-    var heldFees = neutralFees == null && longFees == null ? null : held.count * capital * fee;
+       the cards would not be comparable. The fee is on the stake, so both
+       start prices pay the same dollars. */
+    var heldFees = neutralFees == null && longFees == null ? null : heldN.count * capital * fee;
+    var holdCard = holdsDiverge(rows)
+      ? holdBenchmarkCard(heldN, heldL, baseline, heldFees)
+      : totalsCard("Buy & hold", heldN, { sum: 0, count: heldN.count }, baseline, heldFees);
     var host = document.getElementById("totals");
     host.replaceChildren(
       totalsCard("Neutral", sumField(rows, "neutral_coin_usd"), sumField(rows, "neutral_cash_usd"), baseline, neutralFees),
       totalsCard("Long", sumField(rows, "long_coin_usd"), sumField(rows, "long_cash_usd"), baseline, longFees),
-      totalsCard("Buy & hold", held, { sum: 0, count: held.count }, baseline, heldFees)
+      holdCard
     );
   }
 
@@ -353,7 +411,7 @@
     if (key === "symbol") return String(row.symbol || "");
     if (key === "neutral") return bookValue(row, "neutral");
     if (key === "long") return bookValue(row, "long");
-    if (key === "held") return holdValue(capitalOf(state.data), row.neutral_seed, row.spot, feeRate(state.data));
+    if (key === "held") return holdValue(capitalOf(state.data), holdSeed(row, "neutral"), row.spot, feeRate(state.data));
     if (key === "trades") {
       var t = tradeCounts(row, state.data || {});
       return (t.buys || 0) + (t.sells || 0);
@@ -379,18 +437,48 @@
     return state.sortDir === "asc" ? c : -c;
   }
 
-  function equityCell(equity, capital) {
+  function equityBits(equity, capital) {
     var n = num(equity);
-    var td = el("td", { class: "num" }, [
-      el("div", { class: "eq", text: n == null ? "—" : usd(n, 2) }),
-    ]);
+    var price = el("div", { class: "eq", text: n == null ? "—" : usd(n, 2) });
+    var pct = null;
     if (n != null) {
       var d = n - capital;
-      td.append(el("div", {
+      pct = el("div", {
         class: "mini " + tone(d),
         text: signedPct((d / capital) * 100),
-      }));
+      });
     }
+    return { price: price, pct: pct, value: n };
+  }
+
+  function equityCell(equity, capital) {
+    var bits = equityBits(equity, capital);
+    var td = el("td", { class: "num" }, [bits.price]);
+    if (bits.pct) td.append(bits.pct);
+    return td;
+  }
+
+  function heldStack(equity, capital, tag) {
+    var bits = equityBits(equity, capital);
+    var box = el("div", { class: "held-book" }, [bits.price]);
+    if (bits.pct) {
+      bits.pct.insertBefore(el("span", { class: "held-tag", text: tag }), bits.pct.firstChild);
+      bits.pct.insertBefore(document.createTextNode(" "), bits.pct.childNodes[1]);
+      box.append(bits.pct);
+    }
+    return box;
+  }
+
+  function heldCell(row, capital, fee) {
+    var neutralHold = holdValue(capital, holdSeed(row, "neutral"), row.spot, fee);
+    if (!(seedGap(row) > 0.0001)) return equityCell(neutralHold, capital);
+    var longHold = holdValue(capital, holdSeed(row, "long"), row.spot, fee);
+    var td = el("td", { class: "num held-split" });
+    td.append(heldStack(neutralHold, capital, "N"));
+    td.append(heldStack(longHold, capital, "L"));
+    td.setAttribute("aria-label",
+      "Buy and hold from the Neutral start " + (neutralHold == null ? "unknown" : usd(neutralHold, 2)) +
+      ", from the Long start " + (longHold == null ? "unknown" : usd(longHold, 2)));
     return td;
   }
 
@@ -471,7 +559,7 @@
       var trades = tradeCounts(row, data);
       tr.append(equityCell(neutral, capital));
       tr.append(equityCell(long, capital));
-      tr.append(equityCell(holdValue(capital, row.neutral_seed, row.spot, fee), capital));
+      tr.append(heldCell(row, capital, fee));
       tr.append(el("td", { class: "num trades" }, [
         el("span", { class: "buy-n", text: String(trades.buys) }),
         el("span", { class: "trade-dot", text: "·" }),
@@ -499,11 +587,22 @@
     node.hidden = !note;
   }
 
+  function renderHeldNote(data) {
+    var node = document.getElementById("held-note");
+    if (!node) return;
+    var show = holdsDiverge(pairsOf(data));
+    node.textContent = show
+      ? "Held is priced from each book’s own start. Two numbers mean Neutral and Long did not open at the same price."
+      : "";
+    node.hidden = !show;
+  }
+
   function render() {
     renderFeed(state.data);
     renderPurpose(state.data);
     renderNear(state.data);
     renderTotals(state.data);
+    renderHeldNote(state.data);
     renderTradesNote(state.data);
     renderBooks();
   }
