@@ -24,6 +24,7 @@ what exhausted the quota in the first place.
 """
 
 import datetime
+import fcntl
 import hashlib
 import json
 import os
@@ -37,6 +38,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATUS = os.path.join(ROOT, "status.json")
 LOG_DIR = os.path.expanduser("~/Library/Logs/markmaga-preview")
 STATE = os.path.join(LOG_DIR, "gridboard-publish.state.json")
+LOCK = os.path.join(LOG_DIR, "gridboard-publish.lock")
 LOG = os.path.join(LOG_DIR, "gridboard-publish.log")
 VERCEL = "/usr/local/bin/vercel"
 SITE_URL = "https://gridboard.markmaga.com/"
@@ -145,7 +147,7 @@ def live_serves(markers):
     return all(marker in html for marker in markers)
 
 
-def main():
+def run():
     raw = wait_stable()
     if not raw:
         log("no status.json")
@@ -215,6 +217,27 @@ def main():
 
     log("not live %s, exit %d" % (stamp, result.returncode))
     return 1
+
+
+def main():
+    """One publish at a time.
+
+    WatchPaths and StartInterval can both fire, and a deploy takes long enough
+    that two runs overlapped and each called vercel --prod. That wastes a
+    deploy from the daily allowance and lets the two race over the state file.
+    """
+    os.makedirs(LOG_DIR, exist_ok=True)
+    handle = open(LOCK, "a+")
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        log("busy, a publish is already running")
+        return 0
+    try:
+        return run()
+    finally:
+        fcntl.flock(handle, fcntl.LOCK_UN)
+        handle.close()
 
 
 if __name__ == "__main__":
