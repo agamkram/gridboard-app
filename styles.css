@@ -327,6 +327,16 @@ table {
   margin-top: 2px;
 }
 
+.totals-grid .money-row-note {
+  margin-top: 7px;
+}
+
+.totals-grid .money-row-note .k,
+.totals-grid .money-row-note .start-num {
+  font-size: 11px;
+  color: #6b7784;
+}
+
 .totals-grid .delta {
   min-width: 0;
   margin-top: 6px;

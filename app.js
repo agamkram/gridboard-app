@@ -77,9 +77,12 @@
     });
   }
 
+  /* fee_rate is the number the simulator charges. fee_label is only how it is
+     written on screen, so it is the fallback for snapshots older than the field. */
   function feeRate(data) {
-    var label = String(data.fee_label || "0.80%").replace("%", "");
-    var n = num(label);
+    var rate = num(data.fee_rate);
+    if (rate != null && rate >= 0 && rate < 1) return rate;
+    var n = num(String(data.fee_label || "").replace("%", ""));
     return n == null ? 0.008 : n / 100;
   }
 
@@ -267,7 +270,7 @@
 
   /* Every row on this card is whole dollars, so Now is built from the two
      rounded numbers above it. Summing first would let the card miss by $1. */
-  function totalsCard(title, coin, cash, baseline) {
+  function totalsCard(title, coin, cash, baseline, fees) {
     var atWork = coin.count ? Math.round(coin.sum) : null;
     var waiting = cash.count ? Math.round(cash.sum) : null;
     var now = atWork == null && waiting == null ? null : (atWork || 0) + (waiting || 0);
@@ -277,6 +280,13 @@
     card.append(moneyRow("At work", atWork));
     card.append(moneyRow("Cash", waiting));
     card.append(moneyRow("Now", now));
+    /* Fees are already spent and already inside Now. The muted row keeps it
+       from reading as one more number to subtract. */
+    if (fees != null) {
+      var feeRow = moneyRow("Fees paid", Math.round(fees));
+      feeRow.classList.add("money-row-note");
+      card.append(feeRow);
+    }
     if (now != null && baseline) {
       var gap = now - baseline;
       var chip = deltaChip(gap, (gap / baseline) * 100, "vs start");
@@ -299,16 +309,28 @@
     return { sum: sum, count: count };
   }
 
+  function feesTotal(rows, key) {
+    var total = sumField(rows, key);
+    return total.count ? total.sum : null;
+  }
+
   function renderTotals(data) {
     var rows = pairsOf(data);
     var capital = capitalOf(data);
     var baseline = capital * rows.length;
-    var held = holdBook(rows, capital, feeRate(data));
+    var fee = feeRate(data);
+    var held = holdBook(rows, capital, fee);
+    var neutralFees = feesTotal(rows, "neutral_fees_paid");
+    var longFees = feesTotal(rows, "long_fees_paid");
+    /* Buy & hold pays its one fee going in, so its total is that fee on every
+       book the column can price. Show it only when the grids report theirs, or
+       the cards would not be comparable. */
+    var heldFees = neutralFees == null && longFees == null ? null : held.count * capital * fee;
     var host = document.getElementById("totals");
     host.replaceChildren(
-      totalsCard("Neutral", sumField(rows, "neutral_coin_usd"), sumField(rows, "neutral_cash_usd"), baseline),
-      totalsCard("Long", sumField(rows, "long_coin_usd"), sumField(rows, "long_cash_usd"), baseline),
-      totalsCard("Buy & hold", held, { sum: 0, count: held.count }, baseline)
+      totalsCard("Neutral", sumField(rows, "neutral_coin_usd"), sumField(rows, "neutral_cash_usd"), baseline, neutralFees),
+      totalsCard("Long", sumField(rows, "long_coin_usd"), sumField(rows, "long_cash_usd"), baseline, longFees),
+      totalsCard("Buy & hold", held, { sum: 0, count: held.count }, baseline, heldFees)
     );
   }
 
