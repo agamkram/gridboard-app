@@ -46,7 +46,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
   <div class="wrap about-page">
@@ -63,7 +63,7 @@
       <h2>What this is</h2>
       <p>GridBoard shows practice trades on Kraken. The money is not real, and nothing on this site can send an order.</p>
       <p>There are 75 tokens priced in US dollars. Each one has two accounts, Neutral and Long. That makes 150 accounts, and each starts with $10,000.</p>
-      <p>Every buy and every sell pays a 0.80% fee. Buy and sell prices sit 5% apart, and each step is 5% from the price before it.</p>
+      <p>Every buy and every sell pays a <span data-fee>0.80%</span> fee. Buy and sell prices sit 5% apart, and each step is 5% from the price before it.</p>
     </section>
 
     <section class="about-block" id="styles">
@@ -97,7 +97,7 @@
       <ul>
         <li><strong>At work</strong> is the dollars in the token, <strong>Cash</strong> is what is waiting to buy, and <strong>Now</strong> is the two added together. The change from $10,000 includes the fees already paid.</li>
         <li><strong>Fees paid</strong> is what that style has spent on fees, already taken out of Now. Buy &amp; hold pays once on the whole $10,000. A grid pays on half that to start, then on every trade after.</li>
-        <li><strong>Buy &amp; hold</strong> is the same $10,000 bought once at that token’s Neutral start price and kept, after one 0.80% fee. All of it is at work, so there is no cash.</li>
+        <li><strong>Buy &amp; hold</strong> is the same $10,000 bought once at that token’s Neutral start price and kept, after one <span data-fee>0.80%</span> fee. All of it is at work, so there is no cash.</li>
         <li><strong>Buy · sell</strong> is how many times that token’s two accounts have bought and sold, counting the opening purchase as the first buy. A token that has not traded yet shows 2 · 0.</li>
         <li><strong>Hot watch</strong> lists the tokens still inside that 90 minutes, with when each one last traded.</li>
       </ul>
@@ -106,6 +106,40 @@
 
     <p class="about-foot">Not financial advice</p>
   </div>
+
+  <script>
+    /* The simulator owns the fee, so the two places this page names it are
+       filled in from the feed. The number written into the markup is the
+       fallback: if the fetch fails the page still reads correctly, it just
+       cannot prove it is current. Formatted here rather than printed from
+       fee_label, which is free text and has no fixed shape. */
+    (function () {
+      var feeds = [
+        "https://raw.githubusercontent.com/agamkram/gridboard-app/main/status.json",
+        "status.json"
+      ];
+      function show(text) {
+        var nodes = document.querySelectorAll("[data-fee]");
+        for (var i = 0; i < nodes.length; i++) nodes[i].textContent = text;
+      }
+      function read(at) {
+        fetch(feeds[at], { cache: "no-cache", headers: { Accept: "application/json" } })
+          .then(function (res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            var rate = typeof data.fee_rate === "number" ? data.fee_rate : null;
+            if (rate !== null && rate >= 0 && rate < 1) show((rate * 100).toFixed(2) + "%");
+            else if (data.fee_label) show(String(data.fee_label));
+          })
+          .catch(function () {
+            if (at + 1 < feeds.length) read(at + 1);
+          });
+      }
+      read(0);
+    })();
+  </script>
 
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
