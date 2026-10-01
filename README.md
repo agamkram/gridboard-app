@@ -75,22 +75,31 @@ If Vercel’s domain panel prints a different target, use that record.
 
 ## Publishing
 
-Grok’s maintain job overwrites `status.json` roughly every 15 minutes. The launchd agent `com.markmaga.gridboard-publish` watches that file and runs `scripts/publish-live.py`, which deploys the folder with the Vercel CLI and logs to `~/Library/Logs/markmaga-preview/gridboard-publish.log`.
+**Pushing to `main` is the only way the site deploys.** Vercel builds this repo on push, so anything committed but unpushed is a pending rollback: the next build publishes what GitHub has, not what is on your disk.
 
-Deploys are capped at one every 30 minutes (`MIN_INTERVAL`). Vercel’s free plan allows 100 production deploys a day **across every project on the account**, so publishing every status write exhausts it before noon and then deploys start failing for the other apps too. Thirty minutes is 48 a day and still lands inside the 45 minutes after which the board marks itself stale. `StartInterval` in the plist re-runs the script every 10 minutes so a throttled snapshot still publishes once the floor has passed.
+Grok Bot pushes a new `status.json` to `main` every 5 to 15 minutes. Those must not each trigger a build — Vercel’s free plan allows 100 production deploys a day across every project on the account, and status writes alone are about 100. The `ignoreCommand` in `vercel.json` skips the build when `status.json` is the only changed file:
 
-The Vercel CLI sometimes exits non-zero *after* the deployment has gone live, so the script confirms against the live site instead of trusting the exit code, and records progress in `gridboard-publish.state.json`. On the quota error it holds for an hour rather than retrying. Successful publishes log `live`, skipped ones log `unchanged`, `throttled`, or `quota backoff`.
-
-That watcher deploys whatever is on disk. **Pause it before a multi-file edit** so a half-finished change cannot go live, and reload it when the change is verified:
-
-```bash
-launchctl unload ~/Library/LaunchAgents/com.markmaga.gridboard-publish.plist
-launchctl load   ~/Library/LaunchAgents/com.markmaga.gridboard-publish.plist
 ```
+git diff --quiet HEAD^ HEAD -- . ':!status.json'
+```
+
+Exit 0 skips, exit 1 builds. It does not appear to cover merge commits, so merging a run of Grok Bot's status pushes can still cost one deploy.
+
+There is no local publisher. A launchd agent used to deploy the folder with the Vercel CLI on every status write, which is what exhausted the quota; it was retired once the board started reading its data from GitHub instead, and the Mac stopped being sent a copy of `status.json` at all. Deploying from two places also meant a stale checkout could overwrite current code, which happened. Do not add a second deploy path.
 
 ## status.json
 
-There is no backend in this repo. The page fetches `/status.json` and that is the whole data path. `vercel.json` sends `Cache-Control: public, max-age=0, must-revalidate` for it, and the page asks the browser to revalidate.
+There is no backend in this repo. The page reads one file, and that is the whole data path.
+
+It reads it from GitHub, not from this site:
+
+```
+https://raw.githubusercontent.com/agamkram/gridboard-app/main/status.json
+```
+
+Grok Bot pushes there every 5 to 15 minutes, so the board sees new numbers without anything being deployed. GitHub caches for 5 minutes, which is why the board can be a few minutes behind the latest push. The copy deployed next to `index.html` is only the fallback for when GitHub cannot be reached, and it is as old as the last build — the staleness notice will say so. `connect-src` in `vercel.json` has to list `raw.githubusercontent.com` or the browser blocks the fetch.
+
+The board fetches once on load and once per Reload. It does not poll.
 
 Fields the board actually reads:
 
