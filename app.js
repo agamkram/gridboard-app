@@ -178,18 +178,20 @@
   /* Date and time have to come from the same instant. Taking the date from
      the deploy header and the time from updated_et read "10/1  11:59 PM ET"
      across midnight. */
+  /* "10/1" next to "1:14" reads as "10/11:14". A month name and a separator
+     keep the date and the time apart on every day and hour. */
   function stampLine(data) {
     var built = data.generated_at ? Date.parse(data.generated_at) : NaN;
     if (!Number.isNaN(built)) {
       var at = new Date(built);
-      return etPart(at, { month: "numeric", day: "numeric" }) + "  " +
+      return etPart(at, { month: "short", day: "numeric" }) + " · " +
         etPart(at, { hour: "numeric", minute: "2-digit" }) + " ET";
     }
     var when = snapshotTime(data);
     var fallback = Number.isNaN(when) ? new Date() : new Date(when);
-    var date = etPart(fallback, { month: "numeric", day: "numeric" });
+    var date = etPart(fallback, { month: "short", day: "numeric" });
     var time = data.updated_et || "";
-    return time ? date + "  " + time : date;
+    return time ? date + " · " + time : date;
   }
 
   function renderFeed(data) {
