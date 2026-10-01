@@ -7,15 +7,15 @@
   <meta name="color-scheme" content="light">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="GridBoard">
-  <meta name="description" content="How GridBoard’s paper geometric grids work. Simulated books only. Not financial advice.">
+  <meta name="description" content="How GridBoard’s geometric grids work. Practice money, not financial advice.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="GridBoard">
   <meta property="og:title" content="About — GridBoard">
-  <meta property="og:description" content="How GridBoard’s paper geometric grids work. Simulated books only. Not financial advice.">
+  <meta property="og:description" content="How GridBoard’s geometric grids work. Practice money, not financial advice.">
   <meta property="og:url" content="https://gridboard.markmaga.com/about.html">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="About — GridBoard">
-  <meta name="twitter:description" content="How GridBoard’s paper geometric grids work. Simulated books only. Not financial advice.">
+  <meta name="twitter:description" content="How GridBoard’s geometric grids work. Practice money, not financial advice.">
   <meta property="og:image" content="https://gridboard.markmaga.com/icon-512.png?v=2">
   <meta name="twitter:image" content="https://gridboard.markmaga.com/icon-512.png?v=2">
   <title>About — GridBoard</title>
@@ -62,7 +62,7 @@
     <section class="about-block" id="what">
       <h2>What this is</h2>
       <p>GridBoard shows practice trades on Kraken. The money is not real, and nothing on this site can send an order.</p>
-      <p>There are 75 tokens priced in US dollars. Each one has two practice accounts, Neutral and Long. That makes 150 accounts, and each starts with $10,000.</p>
+      <p>There are 75 tokens priced in US dollars. Each one has two accounts, Neutral and Long. That makes 150 accounts, and each starts with $10,000.</p>
       <p>Every buy and every sell pays a 0.80% fee. Buy and sell prices sit 5% apart, and each step is 5% from the price before it.</p>
     </section>
 
@@ -82,8 +82,8 @@
 
     <section class="about-block" id="check">
       <h2>Hot watch</h2>
-      <p>A token that just traded goes on hot watch. Its two accounts are checked every few seconds instead of every half minute, for about 90 minutes after the last trade, and the board marks the name while that lasts.</p>
-      <p>The checker places the next order. This website only reads what it did.</p>
+      <p>A token that just traded goes on hot watch for 90 minutes, and is checked more often while that lasts so a fast move is not missed. The board marks the name until the 90 minutes run out.</p>
+      <p>Grok Bot places the next order. This website only reads what it did.</p>
     </section>
 
     <section class="about-block" id="vol">
@@ -98,13 +98,13 @@
         <li><strong>At work</strong> is the dollars in the token, <strong>Cash</strong> is what is waiting to buy, and <strong>Now</strong> is the two added together. The change from $10,000 includes the fees already paid.</li>
         <li><strong>Fees paid</strong> is what that style has spent on fees, already taken out of Now. Buy &amp; hold pays once on the whole $10,000. A grid pays on half that to start, then on every trade after.</li>
         <li><strong>Buy &amp; hold</strong> is the same $10,000 bought once at that token’s Neutral start price and kept, after one 0.80% fee. All of it is at work, so there is no cash.</li>
-        <li><strong>Buy · sell</strong> is how many times that token’s two accounts have bought and sold.</li>
-        <li><strong>Hot watch</strong> lists the tokens that just traded.</li>
+        <li><strong>Buy · sell</strong> is how many times that token’s two accounts have bought and sold, counting the opening purchase as the first buy. A token that has not traded yet shows 2 · 0.</li>
+        <li><strong>Hot watch</strong> lists the tokens still inside that 90 minutes, with when each one last traded.</li>
       </ul>
       <p>The page only reads a saved update. There is no login, and the browser never connects to Kraken.</p>
     </section>
 
-    <p class="about-foot">Not financial advice · practice money only</p>
+    <p class="about-foot">Not financial advice</p>
   </div>
 
   <script>
