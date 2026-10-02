@@ -191,6 +191,99 @@ button, input { font-family: inherit; }
   gap: 12px;
 }
 
+/* A short strip of the three totals. The plot stays one card tall on a phone
+   so the cards themselves remain the page. */
+.trend {
+  margin: 0 0 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 8px 10px 8px;
+}
+
+.trend-plot {
+  position: relative;
+  height: 84px;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+
+.trend svg {
+  display: block;
+  width: 100%;
+  height: 84px;
+}
+
+.trend svg .series,
+.trend svg .rule,
+.trend svg .base {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.trend svg .series { stroke-width: 1.75; }
+.trend svg .base { stroke: #d5dbe3; stroke-width: 1; stroke-dasharray: 3 3; }
+.trend svg .rule { stroke: #9aa6b2; stroke-width: 1; }
+
+.trend-start {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  color: #8b98a5;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.trend-scale {
+  margin-top: 2px;
+  color: #8b98a5;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.trend-key {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.trend-key div {
+  min-width: 0;
+  border-top: 2px solid currentColor;
+  padding-top: 3px;
+}
+
+.trend-n { color: #2f4d6f; }
+.trend-l { color: #1b7a34; }
+.trend-h { color: #b06a12; }
+
+.trend-key .name {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.trend-key .val {
+  display: block;
+  margin-top: 1px;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .near-grid { grid-template-columns: 1fr; }
 
 @media (min-width: 800px) {

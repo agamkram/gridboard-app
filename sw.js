@@ -1,13 +1,13 @@
-/** Local: stay off. Production: versioned shell. Never cache status.json. */
-const CACHE = "gridboard-v3";
+/** Local: stay off. Production: versioned shell. Never cache status.json or history.json. */
+const CACHE = "gridboard-v4";
 
 /* Cache keys include the query, so these must match the pages byte for byte.
    scripts/bump-version.py keeps them in step. */
 const SHELL = [
   "/",
   "/about.html",
-  "/styles.css?v=15",
-  "/app.js?v=17",
+  "/styles.css?v=16",
+  "/app.js?v=19",
   "/manifest.webmanifest",
   "/favicon.ico",
   "/favicon-32.png",
@@ -39,7 +39,7 @@ self.addEventListener("activate", (event) => {
 });
 
 function isSnapshot(url) {
-  return url.pathname === "/status.json";
+  return url.pathname === "/status.json" || url.pathname === "/history.json";
 }
 
 self.addEventListener("fetch", (event) => {

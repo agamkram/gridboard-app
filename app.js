@@ -4,6 +4,8 @@
     data: null,
     sortKey: "symbol",
     sortDir: "asc",
+    trend: [],
+    trendAt: null,
   };
 
   /* The publisher writes a snapshot about every 15 minutes. */
@@ -499,11 +501,258 @@
     node.hidden = !note;
   }
 
+  /* Whole dollars, matching the three Totals cards, so the line ends on the
+     numbers printed under it. */
+  function trendPoint(data) {
+    var rows = pairsOf(data);
+    if (!rows.length || !data.generated_at) return null;
+    function side(coinKey, cashKey) {
+      var coin = sumField(rows, coinKey);
+      var cash = sumField(rows, cashKey);
+      var at = coin.count ? Math.round(coin.sum) : null;
+      var waiting = cash.count ? Math.round(cash.sum) : null;
+      if (at == null && waiting == null) return null;
+      return (at || 0) + (waiting || 0);
+    }
+    var held = holdBook(rows, capitalOf(data), feeRate(data));
+    var h = held.count ? Math.round(held.sum) : null;
+    var n = side("neutral_coin_usd", "neutral_cash_usd");
+    var l = side("long_coin_usd", "long_cash_usd");
+    if (n == null || l == null || h == null) return null;
+    return { t: data.generated_at, n: n, l: l, h: h };
+  }
+
+  function validTrend(p) {
+    return p && typeof p.t === "string" && num(p.n) != null && num(p.l) != null && num(p.h) != null;
+  }
+
+  var TREND_KEY = "gridboard-trend";
+
+  function readTrend() {
+    try {
+      var raw = localStorage.getItem(TREND_KEY);
+      var data = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(data)) return [];
+      return data.filter(validTrend);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /* The file is the shared backfill. This browser keeps any newer point it
+     has already seen, and the open snapshot is always the last one. */
+  function mergeTrend(filePoints, stored, live) {
+    var map = {};
+    function put(p) {
+      if (!validTrend(p)) return;
+      map[p.t] = { t: p.t, n: num(p.n), l: num(p.l), h: num(p.h) };
+    }
+    stored.forEach(put);
+    (filePoints || []).forEach(put);
+    put(live);
+    var points = Object.keys(map).map(function (k) { return map[k]; });
+    points.sort(function (a, b) {
+      if (a.t < b.t) return -1;
+      if (a.t > b.t) return 1;
+      return 0;
+    });
+    if (points.length > 4000) points = points.slice(points.length - 4000);
+    try { localStorage.setItem(TREND_KEY, JSON.stringify(points)); } catch (e) {}
+    return points;
+  }
+
+  var HISTORY_FEEDS = [
+    "https://raw.githubusercontent.com/agamkram/gridboard-app/main/history.json",
+    "history.json",
+  ];
+
+  function loadHistory(index) {
+    var at = index || 0;
+    if (at >= HISTORY_FEEDS.length) return Promise.resolve([]);
+    return fetch(HISTORY_FEEDS[at], { cache: "no-cache", headers: { Accept: "application/json" } }).then(
+      function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      }
+    ).then(function (data) {
+      return data && Array.isArray(data.points) ? data.points : [];
+    }).catch(function () {
+      return loadHistory(at + 1);
+    });
+  }
+
+  var TREND_STROKE = { n: "#2f4d6f", l: "#1b7a34", h: "#b06a12" };
+
+  function svgNode(name, attrs) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", name);
+    Object.keys(attrs || {}).forEach(function (key) {
+      node.setAttribute(key, String(attrs[key]));
+    });
+    return node;
+  }
+
+  function trendDomain(points, base) {
+    var lo = base;
+    var hi = base;
+    points.forEach(function (p) {
+      ["n", "l", "h"].forEach(function (key) {
+        if (p[key] < lo) lo = p[key];
+        if (p[key] > hi) hi = p[key];
+      });
+    });
+    var pad = (hi - lo) * 0.14 || 1000;
+    return { lo: lo - pad, hi: hi + pad };
+  }
+
+  function trendX(i, n) {
+    if (n <= 1) return 0;
+    return (i / (n - 1)) * 860;
+  }
+
+  function trendY(v, domain) {
+    var span = domain.hi - domain.lo || 1;
+    return 96 - ((v - domain.lo) / span) * 90;
+  }
+
+  function seriesPath(points, key, domain) {
+    return points.map(function (p, i) {
+      var cmd = i ? "L" : "M";
+      return cmd + trendX(i, points.length).toFixed(2) + " " + trendY(p[key], domain).toFixed(2);
+    }).join(" ");
+  }
+
+  function trendWhen(iso, withTime) {
+    var d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    if (withTime) {
+      return etPart(d, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    }
+    return etPart(d, { month: "short", day: "numeric" });
+  }
+
+  function paintTrend() {
+    var host = document.getElementById("trend");
+    var plot = document.getElementById("trend-plot");
+    var points = state.trend || [];
+    if (!host || !plot || !state.data || points.length < 2) return;
+    var base = capitalOf(state.data) * pairsOf(state.data).length;
+    var domain = trendDomain(points, base);
+    var at = state.trendAt;
+    var scrubbing = at != null && at >= 0 && at < points.length;
+    if (!scrubbing) at = points.length - 1;
+    var focus = points[at];
+
+    var svg = svgNode("svg", {
+      viewBox: "0 0 1000 100",
+      preserveAspectRatio: "none",
+      "aria-hidden": "true",
+    });
+    var yBase = trendY(base, domain);
+    svg.append(svgNode("path", { class: "base", d: "M0 " + yBase.toFixed(2) + " H860" }));
+    ["n", "l", "h"].forEach(function (key) {
+      svg.append(svgNode("path", {
+        class: "series",
+        d: seriesPath(points, key, domain),
+        stroke: TREND_STROKE[key],
+      }));
+    });
+    if (scrubbing) {
+      var x = trendX(at, points.length).toFixed(2);
+      svg.append(svgNode("path", { class: "rule", d: "M" + x + " 4 V96" }));
+    }
+    var old = plot.querySelector("svg");
+    if (old) old.remove();
+    plot.insertBefore(svg, plot.firstChild);
+    var start = document.getElementById("trend-start");
+    if (start) start.style.top = yBase.toFixed(2) + "%";
+
+    var scale = document.getElementById("trend-scale");
+    if (scale) {
+      if (scrubbing) {
+        scale.textContent = trendWhen(focus.t, true);
+      } else {
+        var from = trendWhen(points[0].t, false);
+        var to = trendWhen(points[points.length - 1].t, false);
+        scale.textContent = from === to ? from : from + " – " + to;
+      }
+    }
+    ["n", "l", "h"].forEach(function (key) {
+      var node = document.getElementById("trend-val-" + key);
+      if (node) node.textContent = usd(focus[key], 0);
+    });
+
+    var latest = points[points.length - 1];
+    host.setAttribute(
+      "aria-label",
+      "Neutral, Long, and buy and hold from " + trendWhen(points[0].t, false) +
+      " to " + trendWhen(latest.t, true) +
+      ". Latest Neutral " + usd(latest.n, 0) +
+      ", Long " + usd(latest.l, 0) +
+      ", buy and hold " + usd(latest.h, 0) + "."
+    );
+  }
+
+  function renderTrend() {
+    var host = document.getElementById("trend");
+    if (!host) return;
+    var points = state.trend || [];
+    if (!state.data || points.length < 2) {
+      host.hidden = true;
+      return;
+    }
+    host.hidden = false;
+    if (!document.getElementById("trend-plot")) {
+      var plot = el("div", { class: "trend-plot", id: "trend-plot" });
+      plot.append(el("span", { class: "trend-start", id: "trend-start", text: "start" }));
+      var key = el("div", { class: "trend-key" });
+      [
+        ["n", "Neutral", "trend-n"],
+        ["l", "Long", "trend-l"],
+        ["h", "Buy & hold", "trend-h"],
+      ].forEach(function (spec) {
+        key.append(el("div", { class: spec[2] }, [
+          el("span", { class: "name", text: spec[1] }),
+          el("span", { class: "val", id: "trend-val-" + spec[0], text: "—" }),
+        ]));
+      });
+      host.setAttribute("role", "img");
+      host.replaceChildren(
+        plot,
+        el("div", { class: "trend-scale", id: "trend-scale" }),
+        key
+      );
+      if (!host._trendBound) {
+        host._trendBound = true;
+        host.addEventListener("pointermove", function (event) {
+          var box = document.getElementById("trend-plot");
+          var series = state.trend || [];
+          if (!box || series.length < 2) return;
+          var rect = box.getBoundingClientRect();
+          if (!rect.width) return;
+          var u = (event.clientX - rect.left) / rect.width / 0.86;
+          if (u < 0) u = 0;
+          if (u > 1) u = 1;
+          var idx = Math.round(u * (series.length - 1));
+          if (idx === state.trendAt) return;
+          state.trendAt = idx;
+          paintTrend();
+        });
+        host.addEventListener("pointerleave", function () {
+          if (state.trendAt == null) return;
+          state.trendAt = null;
+          paintTrend();
+        });
+      }
+    }
+    paintTrend();
+  }
+
   function render() {
     renderFeed(state.data);
     renderPurpose(state.data);
     renderNear(state.data);
     renderTotals(state.data);
+    renderTrend();
     renderTradesNote(state.data);
     renderBooks();
   }
@@ -567,10 +816,13 @@
       button.disabled = true;
       button.textContent = "Checking…";
     }
-    loadSnapshot()
-      .then(function (data) {
+    Promise.all([loadSnapshot(), loadHistory()])
+      .then(function (both) {
+        var data = both[0];
         var moved = !before || data.generated_at !== before;
         state.data = data;
+        state.trendAt = null;
+        state.trend = mergeTrend(both[1], readTrend(), trendPoint(data));
         render();
         if (button) say(button, moved ? "Updated" : "No change yet");
       })

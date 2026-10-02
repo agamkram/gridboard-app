@@ -1,0 +1,34 @@
+name: Chart history
+
+# Grok Bot only writes status.json. This rebuilds history.json from those
+# commits so the chart keeps going. The push does not include status.json,
+# so this workflow does not run again on its own commit.
+on:
+  push:
+    branches: [main]
+    paths:
+      - status.json
+
+permissions:
+  contents: write
+
+jobs:
+  history:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+      - name: Rebuild history.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+          python3 scripts/build-history.py
+          git add history.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Update GridBoard history [skip vercel]"
+          git push origin HEAD:main
