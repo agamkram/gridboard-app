@@ -13,8 +13,8 @@ This site does not place orders, does not hold secrets, and does not call the Kr
 Header, then three sections:
 
 - **Hot watch** — tokens whose watch window is still open. Entries whose `until` has already passed are dropped, so a stale snapshot cannot show an expired name as live.
-- **Totals** — one card each for Neutral, Long, and Buy & hold. Neutral and Long read At work, Cash, Now, with a chip comparing Now to $10,000 × 75. Buy & hold is that stake bought once at the book’s own start price. When the two opens differ, the card lists a Neutral hold and a Long hold.
-- **Tokens** — one row per symbol with Neutral, Long, Held, and a buy·sell count, plus a sort menu. When the two opens differ, Held shows both. There is no filter and no footer.
+- **Totals** — one card each for Neutral, Long, and Buy & hold. Each card reads At work, Cash, Now, with a chip comparing Now to $10,000 × 75.
+- **Tokens** — one row per symbol with Neutral, Long, Held, and a buy·sell count, plus a sort menu. There is no filter and no footer.
 
 A banner appears above the sections only when `paper_only` is false, or when the snapshot is more than 45 minutes old.
 
@@ -111,9 +111,9 @@ Fields the board actually reads:
 | `capital_per_book` | Seed per book and the $10k × pair-count baseline |
 | `rollup.hot` | Hot watch, filtered by each entry’s `until` |
 | `fills[]` | Fallback source for the buy·sell counts, and the trades note |
-| `pairs[]` | One row per symbol: `symbol`, `spot`, `neutral_seed`, `long_seed`, and `coin_usd` / `cash_usd` / `equity` per side. Each hold uses that book’s seed. One figure means the seeds match. |
+| `pairs[]` | One row per symbol: `symbol`, `spot`, `neutral_seed`, and `coin_usd` / `cash_usd` / `equity` per side |
 
-Everything else in the file — `headline`, `scanned`, `spacing`, `neutral_spec`, `long_spec`, `core_symbols`, `threats[]`, the quiet counts, and the per-pair `pair`, `*_ws`, `*_orders`, `pct_vs_seed`, `threat` — is shipped and ignored. Dropping it would cut the payload roughly in half.
+Everything else in the file — `headline`, `scanned`, `spacing`, `neutral_spec`, `long_spec`, `core_symbols`, `threats[]`, the quiet counts, and the per-pair `pair`, `*_ws`, `*_orders`, `long_seed`, `pct_vs_seed`, `threat` — is shipped and ignored. Dropping it would cut the payload roughly in half.
 
 ### Two known feed problems
 
@@ -130,7 +130,6 @@ Both come from the maintain job, not from this repo:
 - On each Totals card, At work + Cash equals Now exactly.
 - The Neutral column of the token table sums to the Neutral card’s Now.
 - The token table lists all 75 symbols and sorts by every option in the menu.
-- At 390px wide, the `HELD` header is fully readable and not overlapped by `BUY/SELL`. When a token’s seeds differ, the cell shows an N figure and an L figure.
-- The N figures in Held sum to the Buy & hold card’s Neutral line, and the L figures sum to its Long line.
+- At 390px wide, the `HELD` header is fully readable and not overlapped by `BUY/SELL`.
 - `python3 scripts/bump-version.py --check` exits 0.
 - `python3 serve-https.py` prints `https://127.0.0.1:8912/`.

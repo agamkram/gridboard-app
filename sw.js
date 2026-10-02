@@ -6,8 +6,8 @@ const CACHE = "gridboard-v3";
 const SHELL = [
   "/",
   "/about.html",
-  "/styles.css?v=13",
-  "/app.js?v=16",
+  "/styles.css?v=14",
+  "/app.js?v=17",
   "/manifest.webmanifest",
   "/favicon.ico",
   "/favicon-32.png",
