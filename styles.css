@@ -83,14 +83,6 @@ button, input { font-family: inherit; }
   line-height: 1.4;
 }
 
-.build-mark {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-}
-
 .banner {
   margin: 12px 0 0;
   width: min(100%, 40rem);

@@ -37,29 +37,6 @@ def pattern(asset):
     return re.compile(re.escape(asset) + r"\?v=(\d+)")
 
 
-MARKER = re.compile(r'(id="build-mark">js )(\d+)( · css )(\d+)')
-
-
-def marker_versions():
-    match = MARKER.search(read("index.html"))
-    if not match:
-        return None
-    return {"js": int(match.group(2)), "css": int(match.group(4))}
-
-
-def write_marker(key, version):
-    text = read("index.html")
-
-    def repl(match):
-        js = version if key == "js" else int(match.group(2))
-        css = version if key == "css" else int(match.group(4))
-        return f"{match.group(1)}{js}{match.group(3)}{css}"
-
-    fresh = MARKER.sub(repl, text, count=1)
-    if fresh != text:
-        write("index.html", fresh)
-
-
 def versions(asset):
     """Every version this asset is referenced with, per file."""
     found = {}
@@ -86,13 +63,6 @@ def check():
             print(f"{asset}: MISMATCH")
             for name in sorted(found):
                 print(f"    {name}: {', '.join('v' + str(v) for v in found[name])}")
-        mark = marker_versions()
-        if mark is None:
-            ok = False
-            print("build-mark: missing from index.html")
-        elif len(every) == 1 and mark[key] != every[0]:
-            ok = False
-            print(f"build-mark {key}: v{mark[key]} but {asset} is v{every[0]}")
     return 0 if ok else 1
 
 
@@ -109,10 +79,6 @@ def bump(keys):
             fresh = pattern(asset).sub(f"{asset}?v={nxt}", text)
             if fresh != text:
                 write(name, fresh)
-        if marker_versions() is None:
-            print("build-mark: missing from index.html")
-            return 1
-        write_marker(key, nxt)
         print(f"{asset}: v{nxt}")
     return 0
 
