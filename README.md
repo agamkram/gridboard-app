@@ -12,7 +12,7 @@ This site does not place orders, does not hold secrets, and does not call the Kr
 
 Header, then three sections:
 
-- **Hot watch** — tokens whose watch window is still open. Entries whose `until` has already passed are dropped, so a stale snapshot cannot show an expired name as live.
+- **Hot watch** — tokens whose watch window is still open. The section is left off the page when none are. Entries whose `until` has already passed are dropped, so a stale snapshot cannot show an expired name as live.
 - **Totals** — one card each for Neutral, Long, and Buy & hold. Each card reads At work, Cash, Now, with a chip comparing Now to $10,000 × 75.
 - **Tokens** — one row per symbol with Neutral, Long, Held, and a buy·sell count, plus a sort menu. There is no filter and no footer.
 

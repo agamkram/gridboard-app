@@ -240,13 +240,16 @@
   }
 
   function renderNear(data) {
+    var section = document.getElementById("near-section");
     var hot = (data.rollup && data.rollup.hot) || {};
-    var hotCard = el("article", { class: "card" });
     var names = hotNames(data);
     if (!names.length) {
-      hotCard.append(el("p", { class: "empty", text: "No tokens are on hot watch." }));
-    } else {
-      names.forEach(function (symbol) {
+      if (section) section.hidden = true;
+      return;
+    }
+    if (section) section.hidden = false;
+    var hotCard = el("article", { class: "card" });
+    names.forEach(function (symbol) {
         var info = hot[symbol];
         var name = el("div", { class: "sym-name", text: symbol });
         if (isFast(info)) name.append(el("span", { class: "fast-tag", text: "fast" }));
@@ -257,8 +260,7 @@
           box.append(el("div", { class: "mini", text: String(info) }));
         }
         hotCard.append(box);
-      });
-    }
+    });
 
     var wrap = el("div", { class: "near-grid" }, [hotCard]);
     var host = document.getElementById("near");

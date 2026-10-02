@@ -7,7 +7,7 @@ const SHELL = [
   "/",
   "/about.html",
   "/styles.css?v=17",
-  "/app.js?v=19",
+  "/app.js?v=20",
   "/manifest.webmanifest",
   "/favicon.ico",
   "/favicon-32.png",
