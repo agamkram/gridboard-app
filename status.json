@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "11:56 PM ET",
-  "generated_at": "2026-10-02T23:56:15.750893-04:00",
-  "headline": "continuous DOWN \u2014 holes may accumulate; 42 recent fills",
+  "updated_et": "12:03 AM ET",
+  "generated_at": "2026-10-03T00:03:23.252883-04:00",
+  "headline": "42 recent fills",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
   "capital_per_book": 10000,
@@ -122,10 +122,10 @@
         "fast_poll": true
       }
     },
-    "continuous_alive": false,
-    "continuous_last_cycle": 1087,
-    "continuous_updated_at": "2026-10-02T21:43:38.761206-04:00",
-    "continuous_pid": 2074248
+    "continuous_alive": true,
+    "continuous_last_cycle": 61,
+    "continuous_updated_at": "2026-10-03T00:02:54.279758-04:00",
+    "continuous_pid": 771623
   },
   "fills": [
     {
@@ -4438,10 +4438,10 @@
         "l_fills": 0,
         "continuous_fills_since_last_ping": 0,
         "hot": {},
-        "continuous_alive": false,
-        "continuous_last_cycle": null,
-        "continuous_updated_at": null,
-        "continuous_pid": null
+        "continuous_alive": true,
+        "continuous_last_cycle": 61,
+        "continuous_updated_at": "2026-10-03T00:02:54.279758-04:00",
+        "continuous_pid": 771623
       }
     }
   }
