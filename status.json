@@ -3908,10 +3908,20 @@
         "n_fills": 0,
         "l_fills": 1,
         "continuous_fills_since_last_ping": 1,
-        "hot": {},
+        "hot": {
+          "ZRO": {
+            "until": "2026-10-03T17:03:32-04:00",
+            "last_fill": "2026-10-03T09:03:32-04:00",
+            "fast_until": "2026-10-03T09:18:32-04:00",
+            "fills": 1,
+            "remaining_s": 19274,
+            "quiet_s": 9525,
+            "fast_poll": false
+          }
+        },
         "continuous_alive": true,
-        "continuous_last_cycle": 1161,
-        "continuous_updated_at": "2026-10-03T11:41:50.353930-04:00",
+        "continuous_last_cycle": 1166,
+        "continuous_updated_at": "2026-10-03T11:44:59.240063-04:00",
         "continuous_pid": 771623
       }
     }
