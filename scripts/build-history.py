@@ -209,8 +209,17 @@ def collect():
         # git log is newest first, so keep the first one we see.
         points.setdefault(point["t"], point)
     # Backfill timestamps this shallow clone can no longer see.
+    # Also keep n25/l25/h25 when an older status commit lacked sets["25"].
     for t, point in load_existing().items():
-        points.setdefault(t, point)
+        if t not in points:
+            points[t] = point
+            continue
+        kept = points[t]
+        if all(k in point for k in ("n25", "l25", "h25")) and not all(
+            k in kept for k in ("n25", "l25", "h25")
+        ):
+            for k in ("n25", "l25", "h25"):
+                kept[k] = point[k]
     ordered = sorted(points.values(), key=lambda p: p["t"])
     for point in ordered:
         point.pop("books", None)
