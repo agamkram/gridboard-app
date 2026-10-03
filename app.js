@@ -1,7 +1,21 @@
-/* GridBoard — read-only. The only request is status.json. No orders, no Kraken API. */
+/* GridBoard — read-only. The only request is status.json. No orders, no Kraken API.
+   The 5% books are the snapshot itself. The 25% books are sets["25"], with the
+   same pairs, fills, and rollup. History points for that set use n25, l25, h25. */
 (function () {
+  var GAP_KEY = "gridboard-gap";
+
+  function storedGap() {
+    try {
+      return localStorage.getItem(GAP_KEY) === "25" ? "25" : "5";
+    } catch (e) {
+      return "5";
+    }
+  }
+
   var state = {
     data: null,
+    view: null,
+    gap: storedGap(),
     sortKey: "symbol",
     sortDir: "asc",
     trend: [],
@@ -111,8 +125,37 @@
   }
 
   function pairsOf(data) {
-    return Array.isArray(data.pairs) ? data.pairs : [];
+    return data && Array.isArray(data.pairs) ? data.pairs : [];
   }
+
+  /* The 25% books arrive inside the same snapshot. Until that block has pairs,
+     the 25% screen stays empty rather than repeating the 5% numbers. */
+  function set25(data) {
+    if (!data || !data.sets || typeof data.sets !== "object") return null;
+    var s = data.sets["25"];
+    if (!s || typeof s !== "object" || !Array.isArray(s.pairs) || !s.pairs.length) return null;
+    return s;
+  }
+
+  function viewFrom(root) {
+    if (!root) return null;
+    if (state.gap !== "25") return root;
+    var s = set25(root);
+    if (!s) return null;
+    return {
+      pairs: s.pairs,
+      fills: Array.isArray(s.fills) ? s.fills : [],
+      rollup: s.rollup && typeof s.rollup === "object" ? s.rollup : {},
+      generated_at: s.generated_at || root.generated_at,
+      capital_per_book: s.capital_per_book != null ? s.capital_per_book : root.capital_per_book,
+      fee_rate: s.fee_rate != null ? s.fee_rate : root.fee_rate,
+      fee_label: s.fee_label || root.fee_label,
+      paper_only: s.paper_only != null ? s.paper_only : root.paper_only,
+      _revised: root._revised,
+    };
+  }
+
+  var WAITING = "The 25% books are not in this update yet.";
 
   function upper(v) {
     return String(v || "").toUpperCase();
@@ -140,7 +183,7 @@
   }
 
   function isHot(row) {
-    return !!hotMap(state.data)[upper(row.symbol)];
+    return !!hotMap(state.view)[upper(row.symbol)];
   }
 
   /* generated_at is when Grok Bot built the snapshot. Prefer it: the
@@ -339,9 +382,9 @@
     if (key === "symbol") return String(row.symbol || "");
     if (key === "neutral") return bookValue(row, "neutral");
     if (key === "long") return bookValue(row, "long");
-    if (key === "held") return holdValue(capitalOf(state.data), row.neutral_seed, row.spot, feeRate(state.data));
+    if (key === "held") return holdValue(capitalOf(state.view), row.neutral_seed, row.spot, feeRate(state.view));
     if (key === "trades") {
-      var t = tradeCounts(row, state.data || {});
+      var t = tradeCounts(row, state.view || {});
       return (t.buys || 0) + (t.sells || 0);
     }
     return null;
@@ -432,7 +475,7 @@
   }
 
   function renderBooks() {
-    var data = state.data;
+    var data = state.view;
     if (!data) return;
     var capital = capitalOf(data);
     var fee = feeRate(data);
@@ -506,8 +549,12 @@
     return { t: data.generated_at, n: n, l: l, h: h };
   }
 
-  function validTrend(p) {
-    return p && typeof p.t === "string" && num(p.n) != null && num(p.l) != null && num(p.h) != null;
+  function trio(p, a, b, c) {
+    return num(p[a]) != null && num(p[b]) != null && num(p[c]) != null;
+  }
+
+  function keepTrend(p) {
+    return p && typeof p.t === "string" && (trio(p, "n", "l", "h") || trio(p, "n25", "l25", "h25"));
   }
 
   var TREND_KEY = "gridboard-trend";
@@ -517,7 +564,7 @@
       var raw = localStorage.getItem(TREND_KEY);
       var data = raw ? JSON.parse(raw) : [];
       if (!Array.isArray(data)) return [];
-      return data.filter(validTrend);
+      return data.filter(keepTrend);
     } catch (e) {
       return [];
     }
@@ -528,8 +575,13 @@
   function mergeTrend(filePoints, stored, live) {
     var map = {};
     function put(p) {
-      if (!validTrend(p)) return;
-      map[p.t] = { t: p.t, n: num(p.n), l: num(p.l), h: num(p.h) };
+      if (!p || typeof p.t !== "string") return;
+      var prev = map[p.t] || { t: p.t };
+      ["n", "l", "h", "n25", "l25", "h25"].forEach(function (key) {
+        if (num(p[key]) != null) prev[key] = num(p[key]);
+      });
+      if (!keepTrend(prev)) return;
+      map[p.t] = prev;
     }
     stored.forEach(put);
     (filePoints || []).forEach(put);
@@ -614,12 +666,25 @@
     return etPart(d, { month: "short", day: "numeric" });
   }
 
+  /* The chart follows the gap on screen. 5% reads n, l, h. 25% reads n25, l25, h25. */
+  function seriesForGap() {
+    var src = state.trend || [];
+    if (state.gap === "25") {
+      return src.filter(function (p) { return trio(p, "n25", "l25", "h25"); }).map(function (p) {
+        return { t: p.t, n: p.n25, l: p.l25, h: p.h25 };
+      });
+    }
+    return src.filter(function (p) { return trio(p, "n", "l", "h"); }).map(function (p) {
+      return { t: p.t, n: p.n, l: p.l, h: p.h };
+    });
+  }
+
   function paintTrend() {
     var host = document.getElementById("trend");
     var plot = document.getElementById("trend-plot");
-    var points = state.trend || [];
-    if (!host || !plot || !state.data || points.length < 2) return;
-    var base = capitalOf(state.data) * pairsOf(state.data).length;
+    var points = seriesForGap();
+    if (!host || !plot || !state.view || points.length < 2) return;
+    var base = capitalOf(state.view) * pairsOf(state.view).length;
     var domain = trendDomain(points, base);
     var at = state.trendAt;
     var scrubbing = at != null && at >= 0 && at < points.length;
@@ -679,8 +744,8 @@
   function renderTrend() {
     var host = document.getElementById("trend");
     if (!host) return;
-    var points = state.trend || [];
-    if (!state.data || points.length < 2) {
+    var points = seriesForGap();
+    if (!state.view || points.length < 2) {
       host.hidden = true;
       return;
     }
@@ -709,7 +774,7 @@
         host._trendBound = true;
         host.addEventListener("pointermove", function (event) {
           var box = document.getElementById("trend-plot");
-          var series = state.trend || [];
+          var series = seriesForGap();
           if (!box || series.length < 2) return;
           var rect = box.getBoundingClientRect();
           if (!rect.width) return;
@@ -731,14 +796,77 @@
     paintTrend();
   }
 
-  function render() {
+  function liveTrend(root) {
+    var point = trendPoint(root);
+    var wide = set25(root);
+    var extra = null;
+    if (wide && root.generated_at) {
+      extra = trendPoint({
+        pairs: wide.pairs,
+        generated_at: wide.generated_at || root.generated_at,
+        capital_per_book: wide.capital_per_book != null ? wide.capital_per_book : root.capital_per_book,
+        fee_rate: wide.fee_rate != null ? wide.fee_rate : root.fee_rate,
+        fee_label: wide.fee_label || root.fee_label,
+      });
+    }
+    if (!point && !extra) return null;
+    var out = { t: (point && point.t) || (extra && extra.t) };
+    if (point) { out.n = point.n; out.l = point.l; out.h = point.h; }
+    if (extra) { out.n25 = extra.n; out.l25 = extra.l; out.h25 = extra.h; }
+    return out;
+  }
+
+  function syncGap() {
+    var five = document.getElementById("gap-5");
+    var wide = document.getElementById("gap-25");
+    if (five) five.setAttribute("aria-pressed", state.gap === "5" ? "true" : "false");
+    if (wide) wide.setAttribute("aria-pressed", state.gap === "25" ? "true" : "false");
+  }
+
+  function renderWaiting() {
     renderFeed(state.data);
-    renderPurpose(state.data);
-    renderNear(state.data);
-    renderTotals(state.data);
+    var purpose = document.getElementById("purpose");
+    if (purpose) purpose.textContent = WAITING;
+    var near = document.getElementById("near-section");
+    if (near) near.hidden = true;
+    var totals = document.getElementById("totals");
+    if (totals) totals.replaceChildren(el("p", { class: "empty", text: WAITING }));
+    var trend = document.getElementById("trend");
+    if (trend) trend.hidden = true;
+    var note = document.getElementById("trades-note");
+    if (note) { note.textContent = ""; note.hidden = true; }
+    var body = document.getElementById("books-body");
+    if (body) {
+      body.replaceChildren(el("tr", {}, [
+        el("td", { class: "empty", colspan: "5", text: WAITING }),
+      ]));
+    }
+  }
+
+  function render() {
+    syncGap();
+    state.view = viewFrom(state.data);
+    if (state.gap === "25" && !state.view) {
+      renderWaiting();
+      return;
+    }
+    var near = document.getElementById("near-section");
+    if (near) near.hidden = false;
+    renderFeed(state.view);
+    renderPurpose(state.view);
+    renderNear(state.view);
+    renderTotals(state.view);
     renderTrend();
-    renderTradesNote(state.data);
+    renderTradesNote(state.view);
     renderBooks();
+  }
+
+  function chooseGap(gap) {
+    state.gap = gap === "25" ? "25" : "5";
+    try { localStorage.setItem(GAP_KEY, state.gap); } catch (e) {}
+    state.trendAt = null;
+    if (state.data) render();
+    else syncGap();
   }
 
   function fail(message) {
@@ -806,7 +934,7 @@
         var moved = !before || data.generated_at !== before;
         state.data = data;
         state.trendAt = null;
-        state.trend = mergeTrend(both[1], readTrend(), trendPoint(data));
+        state.trend = mergeTrend(both[1], readTrend(), liveTrend(data));
         render();
         if (button) say(button, moved ? "Updated" : "No change yet");
       })
@@ -821,6 +949,10 @@
         }
       });
   }
+
+  document.getElementById("gap-5").addEventListener("click", function () { chooseGap("5"); });
+  document.getElementById("gap-25").addEventListener("click", function () { chooseGap("25"); });
+  syncGap();
 
   document.getElementById("reload").addEventListener("click", function () {
     load(this);

@@ -46,7 +46,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body>
   <div class="wrap about-page">
@@ -62,34 +62,30 @@
     <section class="about-block" id="what">
       <h2>What this is</h2>
       <p>GridBoard shows practice trades on Kraken. The money is not real, and nothing on this site can send an order.</p>
-      <p>There are 75 tokens priced in US dollars. Each one has two accounts, Neutral and Long. That makes 150 accounts, and each starts with $10,000.</p>
-      <p>Every buy and every sell pays a <span data-fee>0.80%</span> fee. Buy and sell prices sit 5% apart, and each step is 5% from the price before it.</p>
+      <p>There are 75 tokens priced in US dollars. Each one has two accounts, Neutral and Long, and each account starts with $10,000.</p>
+      <p>Those accounts run as two sets. One set spaces its orders 5% apart. The other spaces them 25% apart. The buttons at the top of the board switch the whole page from one set to the other.</p>
+      <p>Every buy and every sell pays a <span data-fee>0.80%</span> fee.</p>
     </section>
 
     <section class="about-block" id="styles">
       <h2>Neutral and Long</h2>
-      <p>Both styles start with about half of the $10,000 already in the token.</p>
-      <p><strong>Neutral</strong> then places three buy orders below the price and three sell orders above it. There are orders waiting whichever way the price moves.</p>
-      <p><strong>Long</strong> places four buys below and two sells above, so more of its orders wait for a lower price. Its sells are small pieces of what it already holds.</p>
+      <p>Both styles start with about half of the $10,000 already in the token. That opening purchase does not place an order.</p>
+      <p><strong>Neutral</strong> places up to three buy orders below the price and three sell orders above it.</p>
+      <p><strong>Long</strong> places up to four buys below and two sells above, so more of its orders wait for a lower price. Its sells are small pieces of what it already holds.</p>
+      <p>A sell is placed only while the account still holds the token. A buy is placed only while the cash covers it. The nearest prices are placed first.</p>
     </section>
 
     <section class="about-block" id="trade">
       <h2>When a trade happens</h2>
       <p>The orders wait, and any of them can trade the moment the market price reaches it. Nothing on a clock forces a trade.</p>
-      <p>After a buy, a sell goes up one step. After a sell, a buy goes down one step. The new order stays on the same 5% ladder.</p>
-      <p>Only an order that trades creates the next one. The tokens bought at the start do not.</p>
+      <p>After a trade, the resting orders are cancelled and a new ladder is placed around the price that just traded. The coins and the cash stay as that trade left them. No order sits on the trade price.</p>
+      <p>The gap stays the gap of that set. On the 5% set, each step is 5% from the one inside it. On the 25% set, each step is 25%.</p>
     </section>
 
     <section class="about-block" id="check">
       <h2>Hot watch</h2>
       <p>A trade puts that token on hot watch for 90 minutes. For the first 15 quiet minutes it is checked about every 8 seconds instead of the usual 25, so a fast move is not missed. It then goes back to 25 seconds, still marked, until the 90 minutes run out. Another trade starts the 15 over.</p>
-      <p>Grok Bot places the next order. This website only reads what it did.</p>
-    </section>
-
-    <section class="about-block" id="vol">
-      <h2>When prices jump around</h2>
-      <p>Every step is 5% today, and 5% is the smallest gap.</p>
-      <p class="about-note">The plan is to widen the gap for a token that has been jumping around, so it trades less often and pays the fee less often. That is not running yet.</p>
+      <p>Grok Bot places the orders. This website only reads what it did.</p>
     </section>
 
     <section class="about-block" id="board">
@@ -97,7 +93,7 @@
       <ul>
         <li><strong>At work</strong> is the dollars in the token, <strong>Cash</strong> is what is waiting to buy, and <strong>Now</strong> is the two added together. The change from $10,000 includes the fees already paid.</li>
         <li><strong>Fees paid</strong> is what that style has spent on fees, already taken out of Now. Buy &amp; hold pays once on the whole $10,000. A grid pays on half that to start, then on every trade after.</li>
-        <li><strong>Buy &amp; hold</strong> is the same $10,000 bought once at that token’s Neutral start price and kept, after one <span data-fee>0.80%</span> fee. All of it is at work, so there is no cash.</li>
+        <li><strong>Buy &amp; hold</strong> is the same $10,000 bought once at that token’s Neutral start price and kept, after one <span data-fee>0.80%</span> fee. All of it is at work, so there is no cash. It stays the same when you switch sets.</li>
         <li><strong>Buy · sell</strong> is how many times that token’s two accounts have bought and sold, counting the opening purchase as the first buy. A token that has not traded yet shows 2 · 0.</li>
         <li><strong>Hot watch</strong> lists the tokens still inside that 90 minutes, with when each one last traded.</li>
       </ul>

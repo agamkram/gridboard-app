@@ -75,6 +75,32 @@ button, input { font-family: inherit; }
   text-transform: none;
 }
 
+.gap-switch {
+  display: inline-flex;
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: white;
+}
+
+.gap-switch button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  padding: 5px 16px;
+  cursor: pointer;
+}
+
+.gap-switch button[aria-pressed="true"] {
+  background: var(--ink);
+  color: white;
+}
+
 .purpose {
   margin: 10px 0 0;
   max-width: 28rem;

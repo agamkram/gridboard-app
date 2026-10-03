@@ -4,7 +4,7 @@ Read-only paper grid ops for Mark Maga’s Kraken paper books.
 
 **Live:** [gridboard.markmaga.com](https://gridboard.markmaga.com)
 
-75 USD pairs × Neutral + Long = 150 paper books. Each book is $10,000, fee 0.80% per side, geometric spacing r = 1.05 (5%). Neutral is ~50% seed with 3 buys / 3 sells. Long is ~50% seed with 4 buys / 2 sells.
+75 USD pairs × Neutral + Long = 150 paper books, run as two sets. Each book is $10,000, fee 0.80% per side. One set steps 5% (r = 1.05). The other steps 25% (r = 1.25) and is published at `sets["25"]`. Both recenter: after a trade, resting orders are cancelled and a new ladder is placed on that price. Neutral is ~50% seed with up to 3 buys / 3 sells. Long is ~50% seed with up to 4 buys / 2 sells. The header 5%/25% control switches the whole screen. Buy and hold stays the same.
 
 This site does not place orders, does not hold secrets, and does not call the Kraken API. The browser only reads `/status.json`.
 
