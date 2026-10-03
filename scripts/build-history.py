@@ -74,12 +74,12 @@ def card_now(total, count):
     return js_round(total)
 
 
-def point_from(data):
-    rows = data.get("pairs")
-    if not isinstance(rows, list) or not rows:
-        return None
-    capital = capital_of(data)
-    fee = fee_rate(data)
+def card_triple(rows, capital, fee):
+    """Whole-dollar Neutral, Long, and Buy & hold, matching the page cards.
+
+    Held is capital * (1 - fee) * (spot / neutral_seed), summed then rounded.
+    Cash on Buy & hold is zero. Returns None for a side that has no rows.
+    """
     neutral = card_now(*sum_field(rows, "neutral_coin_usd"))
     neutral_cash = card_now(*sum_field(rows, "neutral_cash_usd"))
     long = card_now(*sum_field(rows, "long_coin_usd"))
@@ -102,8 +102,16 @@ def point_from(data):
         held += capital * (1 - fee) * (spot / seed)
         held_n += 1
     h = card_now(held, held_n)
-    if h is not None:
-        h += 0  # cash on the Buy & hold card is zero
+    return n, l, h
+
+
+def point_from(data):
+    rows = data.get("pairs")
+    if not isinstance(rows, list) or not rows:
+        return None
+    capital = capital_of(data)
+    fee = fee_rate(data)
+    n, l, h = card_triple(rows, capital, fee)
     when = data.get("generated_at")
     if not isinstance(when, str) or not when:
         when = data.get("_commit_at")
@@ -111,7 +119,18 @@ def point_from(data):
         return None
     if n is None or l is None or h is None:
         return None
-    return {"t": when, "n": n, "l": l, "h": h, "books": len(rows)}
+    point = {"t": when, "n": n, "l": l, "h": h, "books": len(rows)}
+    # 25% set only. Never fold these dollars into n/l/h.
+    sets = data.get("sets") if isinstance(data.get("sets"), dict) else {}
+    block = sets.get("25") if isinstance(sets.get("25"), dict) else {}
+    rows25 = block.get("pairs")
+    if isinstance(rows25, list) and rows25:
+        n25, l25, h25 = card_triple(rows25, capital, fee)
+        if n25 is not None and l25 is not None and h25 is not None:
+            point["n25"] = n25
+            point["l25"] = l25
+            point["h25"] = h25
+    return point
 
 
 def commits():
@@ -166,9 +185,14 @@ def render(points):
     lines = ["{", '  "points": [']
     for i, point in enumerate(points):
         comma = "," if i < len(points) - 1 else ""
+        extra = ""
+        if "n25" in point and "l25" in point and "h25" in point:
+            extra = ', "n25": %d, "l25": %d, "h25": %d' % (
+                point["n25"], point["l25"], point["h25"]
+            )
         lines.append(
-            '    {"t": "%s", "n": %d, "l": %d, "h": %d}%s'
-            % (point["t"], point["n"], point["l"], point["h"], comma)
+            '    {"t": "%s", "n": %d, "l": %d, "h": %d%s}%s'
+            % (point["t"], point["n"], point["l"], point["h"], extra, comma)
         )
     lines.append("  ]")
     lines.append("}")
