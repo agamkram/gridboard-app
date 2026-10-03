@@ -262,7 +262,15 @@
     if (!node) return;
     var books = pairsOf(data).length * 2;
     if (!books) return;
-    node.textContent = "This dashboard tracks " + books + " automated grids continuously managed by Grok Bot.";
+    var here = state.gap === "25" ? "25%" : "5%";
+    var other = state.gap === "25" ? "5%" : "25%";
+    var otherBooks = books;
+    var otherData = state.gap === "25" ? state.data : set25(state.data);
+    if (otherData) {
+      var counted = pairsOf(otherData).length * 2;
+      if (counted) otherBooks = counted;
+    }
+    node.textContent = "This " + here + " set has " + books + " books. The " + other + " set has another " + otherBooks + ".";
   }
 
   function renderNear(data) {
