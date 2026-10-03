@@ -157,6 +157,39 @@ def snapshot(sha):
     return json.loads(raw)
 
 
+def load_existing():
+    """Points already in history.json.
+
+    This clone is often shallow, so git log cannot see the early status
+    commits. Those points live only in this file and have to be kept.
+    """
+    if not os.path.exists(OUT):
+        return {}
+    try:
+        with open(OUT, encoding="utf-8") as handle:
+            doc = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    kept = {}
+    for point in doc.get("points") or []:
+        if not isinstance(point, dict):
+            continue
+        if not isinstance(point.get("t"), str):
+            continue
+        if not all(isinstance(point.get(k), int) for k in ("n", "l", "h")):
+            continue
+        kept[point["t"]] = {
+            "t": point["t"],
+            "n": point["n"],
+            "l": point["l"],
+            "h": point["h"],
+        }
+        for k in ("n25", "l25", "h25"):
+            if isinstance(point.get(k), int):
+                kept[point["t"]][k] = point[k]
+    return kept
+
+
 def collect():
     points = {}
     skipped = 0
@@ -175,6 +208,9 @@ def collect():
         # A later commit with the same generated_at replaces an earlier one.
         # git log is newest first, so keep the first one we see.
         points.setdefault(point["t"], point)
+    # Backfill timestamps this shallow clone can no longer see.
+    for t, point in load_existing().items():
+        points.setdefault(t, point)
     ordered = sorted(points.values(), key=lambda p: p["t"])
     for point in ordered:
         point.pop("books", None)
