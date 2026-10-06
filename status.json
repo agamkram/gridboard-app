@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "4:32 AM ET",
-  "generated_at": "2026-10-06T04:32:58.074680-04:00",
+  "updated_et": "4:33 AM ET",
+  "generated_at": "2026-10-06T04:33:44.419958-04:00",
   "headline": "quiet",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
@@ -68,8 +68,8 @@
     "continuous_fills_since_last_ping": 0,
     "hot": {},
     "continuous_alive": true,
-    "continuous_last_cycle": 1180,
-    "continuous_updated_at": "2026-10-06T04:32:19.504319-04:00",
+    "continuous_last_cycle": 1181,
+    "continuous_updated_at": "2026-10-06T04:33:27.239605-04:00",
     "continuous_pid": 21419
   },
   "fills": [],
@@ -3793,8 +3793,8 @@
             "last_fill": "2026-10-05T21:01:07-04:00",
             "fast_until": "2026-10-05T21:16:07-04:00",
             "fills": 1,
-            "remaining_s": 1688,
-            "quiet_s": 27111,
+            "remaining_s": 1642,
+            "quiet_s": 27157,
             "fast_poll": false
           },
           "MON": {
@@ -3802,14 +3802,14 @@
             "last_fill": "2026-10-06T01:24:20-04:00",
             "fast_until": "2026-10-06T01:39:20-04:00",
             "fills": 1,
-            "remaining_s": 17481,
-            "quiet_s": 11318,
+            "remaining_s": 17435,
+            "quiet_s": 11364,
             "fast_poll": false
           }
         },
         "continuous_alive": true,
-        "continuous_last_cycle": 1180,
-        "continuous_updated_at": "2026-10-06T04:32:19.504319-04:00",
+        "continuous_last_cycle": 1181,
+        "continuous_updated_at": "2026-10-06T04:33:27.239605-04:00",
         "continuous_pid": 21419
       }
     }
