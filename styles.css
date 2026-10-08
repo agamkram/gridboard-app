@@ -228,6 +228,14 @@ button, input { font-family: inherit; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 6px 8px 5px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.trend * {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .trend-plot {

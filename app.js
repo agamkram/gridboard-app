@@ -780,6 +780,9 @@
       );
       if (!host._trendBound) {
         host._trendBound = true;
+        host.addEventListener("selectstart", function (event) {
+          event.preventDefault();
+        });
         host.addEventListener("pointermove", function (event) {
           var box = document.getElementById("trend-plot");
           var series = seriesForGap();
