@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "5:23 AM ET",
-  "generated_at": "2026-10-09T05:23:08.129269-04:00",
+  "updated_et": "5:32 AM ET",
+  "generated_at": "2026-10-09T05:32:44.028147-04:00",
   "headline": "34 recent fills",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
@@ -67,31 +67,13 @@
     "l_fills": 20,
     "continuous_fills_since_last_ping": 0,
     "hot": {
-      "LTC": {
-        "until": "2026-10-09T05:32:18.395120-04:00",
-        "last_fill": "2026-10-09T04:02:18.395120-04:00",
-        "fast_until": "2026-10-09T04:17:18.395120-04:00",
-        "fills": 1,
-        "remaining_s": 550,
-        "quiet_s": 4849,
-        "fast_poll": false
-      },
-      "SN64": {
-        "until": "2026-10-09T05:32:18.935766-04:00",
-        "last_fill": "2026-10-09T04:02:18.935766-04:00",
-        "fast_until": "2026-10-09T04:17:18.935766-04:00",
-        "fills": 2,
-        "remaining_s": 550,
-        "quiet_s": 4849,
-        "fast_poll": false
-      },
       "MON": {
         "until": "2026-10-09T05:51:13.266568-04:00",
         "last_fill": "2026-10-09T04:21:13.266568-04:00",
         "fast_until": "2026-10-09T04:36:13.266568-04:00",
         "fills": 1,
-        "remaining_s": 1685,
-        "quiet_s": 3714,
+        "remaining_s": 1109,
+        "quiet_s": 4290,
         "fast_poll": false
       },
       "DRV": {
@@ -99,8 +81,8 @@
         "last_fill": "2026-10-09T05:00:47.250973-04:00",
         "fast_until": "2026-10-09T05:15:47.250973-04:00",
         "fills": 1,
-        "remaining_s": 4059,
-        "quiet_s": 1340,
+        "remaining_s": 3483,
+        "quiet_s": 1916,
         "fast_poll": false
       },
       "IMX": {
@@ -108,14 +90,14 @@
         "last_fill": "2026-10-09T05:07:31.437877-04:00",
         "fast_until": "2026-10-09T05:22:31.437877-04:00",
         "fills": 1,
-        "remaining_s": 4463,
-        "quiet_s": 936,
+        "remaining_s": 3887,
+        "quiet_s": 1512,
         "fast_poll": false
       }
     },
     "continuous_alive": true,
     "continuous_last_cycle": 939,
-    "continuous_updated_at": "2026-10-09T05:23:05.169387-04:00",
+    "continuous_updated_at": "2026-10-09T05:32:31.239407-04:00",
     "continuous_pid": 3418330
   },
   "fills": [
@@ -4293,7 +4275,7 @@
         "hot": {},
         "continuous_alive": true,
         "continuous_last_cycle": 939,
-        "continuous_updated_at": "2026-10-09T05:23:05.169387-04:00",
+        "continuous_updated_at": "2026-10-09T05:32:31.239407-04:00",
         "continuous_pid": 3418330
       }
     }
