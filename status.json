@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "3:43 AM ET",
-  "generated_at": "2026-10-10T03:43:40.717782-04:00",
-  "headline": "35 recent fills",
+  "updated_et": "3:56 AM ET",
+  "generated_at": "2026-10-10T03:56:15.872751-04:00",
+  "headline": "36 recent fills",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
   "capital_per_book": 10000,
@@ -62,9 +62,9 @@
   "rollup": {
     "other_pairs": 71,
     "n_quiet": 71,
-    "l_quiet": 71,
+    "l_quiet": 70,
     "n_fills": 18,
-    "l_fills": 17,
+    "l_fills": 18,
     "continuous_fills_since_last_ping": 0,
     "hot": {
       "TIA": {
@@ -72,8 +72,8 @@
         "last_fill": "2026-10-10T02:41:09.077514-04:00",
         "fast_until": "2026-10-10T02:56:09.077514-04:00",
         "fills": 1,
-        "remaining_s": 1648,
-        "quiet_s": 3751,
+        "remaining_s": 893,
+        "quiet_s": 4506,
         "fast_poll": false
       },
       "COMP": {
@@ -81,8 +81,8 @@
         "last_fill": "2026-10-10T02:56:12.733823-04:00",
         "fast_until": "2026-10-10T03:11:12.733823-04:00",
         "fills": 1,
-        "remaining_s": 2552,
-        "quiet_s": 2847,
+        "remaining_s": 1796,
+        "quiet_s": 3603,
         "fast_poll": false
       },
       "ATOM": {
@@ -90,8 +90,8 @@
         "last_fill": "2026-10-10T02:56:13.354594-04:00",
         "fast_until": "2026-10-10T03:11:13.354594-04:00",
         "fills": 1,
-        "remaining_s": 2552,
-        "quiet_s": 2847,
+        "remaining_s": 1797,
+        "quiet_s": 3602,
         "fast_poll": false
       },
       "FIL": {
@@ -99,8 +99,8 @@
         "last_fill": "2026-10-10T03:26:19.468453-04:00",
         "fast_until": "2026-10-10T03:41:19.468453-04:00",
         "fills": 1,
-        "remaining_s": 4358,
-        "quiet_s": 1041,
+        "remaining_s": 3603,
+        "quiet_s": 1796,
         "fast_poll": false
       },
       "HBAR": {
@@ -108,23 +108,23 @@
         "last_fill": "2026-10-10T03:16:28.448884-04:00",
         "fast_until": "2026-10-10T03:31:28.448884-04:00",
         "fills": 1,
-        "remaining_s": 3767,
-        "quiet_s": 1632,
+        "remaining_s": 3012,
+        "quiet_s": 2387,
         "fast_poll": false
       },
       "NIGHT": {
-        "until": "2026-10-10T05:08:25.193015-04:00",
-        "last_fill": "2026-10-10T03:38:25.193015-04:00",
-        "fast_until": "2026-10-10T03:53:25.193015-04:00",
-        "fills": 1,
-        "remaining_s": 5084,
-        "quiet_s": 315,
+        "until": "2026-10-10T05:25:59.498178-04:00",
+        "last_fill": "2026-10-10T03:55:59.498178-04:00",
+        "fast_until": "2026-10-10T04:10:59.498178-04:00",
+        "fills": 2,
+        "remaining_s": 5383,
+        "quiet_s": 16,
         "fast_poll": true
       }
     },
     "continuous_alive": true,
     "continuous_last_cycle": 188,
-    "continuous_updated_at": "2026-10-10T03:43:36.227084-04:00",
+    "continuous_updated_at": "2026-10-10T03:56:04.705199-04:00",
     "continuous_pid": 3275345
   },
   "fills": [
@@ -582,6 +582,19 @@
       "placed": false,
       "note": "digest_only_skip",
       "ts": "2026-10-10T03:38:25.193015-04:00"
+    },
+    {
+      "symbol": "NIGHT",
+      "style": "Long",
+      "workspace": "mark-10k-night-geo",
+      "side": "sell",
+      "price": 0.05045,
+      "volume": 32954.54066,
+      "reladder_side": "buy",
+      "reladder_price": 0.04805,
+      "placed": false,
+      "note": "duplicate_skip",
+      "ts": "2026-10-10T03:55:59.498178-04:00"
     }
   ],
   "pairs": [
@@ -1567,13 +1580,13 @@
       "neutral_buys": 14,
       "neutral_sells": 19,
       "neutral_fees_paid": 507.6184704627992,
-      "long_equity": 11594.756958271464,
-      "long_coin_usd": 2708.3002980882,
-      "long_cash_usd": 8886.456660183265,
-      "long_orders": 6,
+      "long_equity": 11584.09286891389,
+      "long_coin_usd": 1048.380085044,
+      "long_cash_usd": 10535.712783869889,
+      "long_orders": 5,
       "long_buys": 15,
-      "long_sells": 19,
-      "long_fees_paid": 427.371859334536,
+      "long_sells": 20,
+      "long_fees_paid": 440.672311944912,
       "neutral_seed": 0.03739,
       "long_seed": 0.03764,
       "spot": 0.05037,
@@ -4349,8 +4362,8 @@
             "last_fill": "2026-10-09T23:46:32-04:00",
             "fast_until": "2026-10-10T00:01:32-04:00",
             "fills": 1,
-            "remaining_s": 14571,
-            "quiet_s": 14228,
+            "remaining_s": 13816,
+            "quiet_s": 14983,
             "fast_poll": false
           },
           "MINA": {
@@ -4358,14 +4371,14 @@
             "last_fill": "2026-10-10T01:08:17-04:00",
             "fast_until": "2026-10-10T01:23:17-04:00",
             "fills": 1,
-            "remaining_s": 19476,
-            "quiet_s": 9323,
+            "remaining_s": 18721,
+            "quiet_s": 10078,
             "fast_poll": false
           }
         },
         "continuous_alive": true,
         "continuous_last_cycle": 188,
-        "continuous_updated_at": "2026-10-10T03:43:36.227084-04:00",
+        "continuous_updated_at": "2026-10-10T03:56:04.705199-04:00",
         "continuous_pid": 3275345
       }
     }
