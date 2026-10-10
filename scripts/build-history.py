@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build history.json from every committed status.json.
+"""Build history.json from every committed status.json on the data branch.
 
 The chart reads this file from GitHub, the same way the board reads
 status.json, so a new point does not need a site deploy. Each point is the

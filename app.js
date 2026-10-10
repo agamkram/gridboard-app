@@ -606,7 +606,7 @@
   }
 
   var HISTORY_FEEDS = [
-    "https://raw.githubusercontent.com/agamkram/gridboard-app/main/history.json",
+    "https://raw.githubusercontent.com/agamkram/gridboard-app/data/history.json",
     "history.json",
   ];
 
@@ -886,13 +886,11 @@
     banner.textContent = message;
   }
 
-  /* Grok Bot pushes status.json to GitHub every 12 to 15 minutes. Reading it
-     there costs no deploy, and Vercel's free plan allows only 100 a day across
-     every project on the account, so publishing the data that often used to
-     exhaust it. The copy deployed beside this file is the fallback, kept warm
-     by a slow publish so the board still works if GitHub cannot be reached. */
+  /* Grok Bot pushes status.json to the data branch every 12 to 15 minutes.
+     That branch is not deployed, so the writes never spend a Vercel build.
+     The copy beside this file is the fallback if GitHub cannot be reached. */
   var FEEDS = [
-    "https://raw.githubusercontent.com/agamkram/gridboard-app/main/status.json",
+    "https://raw.githubusercontent.com/agamkram/gridboard-app/data/status.json",
     "status.json",
   ];
 

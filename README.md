@@ -6,7 +6,7 @@ Read-only paper grid ops for Mark Maga’s Kraken paper books.
 
 75 USD pairs × Neutral + Long = 150 paper books, run as two sets. Each book is $10,000, fee 0.80% per side. One set steps 5% (r = 1.05). The other steps 25% (r = 1.25) and is published at `sets["25"]`. Both recenter: after a trade, resting orders are cancelled and a new ladder is placed on that price. Neutral is ~50% seed with up to 3 buys / 3 sells. Long is ~50% seed with up to 4 buys / 2 sells. The header 5%/25% control switches the whole screen. Buy and hold stays the same.
 
-This site does not place orders, does not hold secrets, and does not call the Kraken API. The browser only reads `/status.json`.
+This site does not place orders, does not hold secrets, and does not call the Kraken API. The browser reads `status.json` from the `data` branch on GitHub.
 
 ## What the page shows
 
@@ -77,13 +77,17 @@ If Vercel’s domain panel prints a different target, use that record.
 
 **Pushing to `main` is the only way the site deploys.** Vercel builds this repo on push, so anything committed but unpushed is a pending rollback: the next build publishes what GitHub has, not what is on your disk.
 
-Grok Bot pushes a new `status.json` to `main` every 5 to 15 minutes. Those must not each trigger a build — Vercel’s free plan allows 100 production deploys a day across every project on the account, and status writes alone are about 100. The `ignoreCommand` in `vercel.json` skips the build when `status.json` is the only changed file, and the same for `history.json`. The chart is drawn from `history.json`, which a GitHub Action rewrites after each status push. That file is fetched from GitHub like the snapshot, so keeping it current must not spend a deploy:
+Grok Bot pushes `status.json` to the `data` branch every 5 to 15 minutes. `vercel.json` sets `git.deploymentEnabled.data` to false, so those writes never open a deployment. Hobby is 100 deployments a day across the whole account, and ignored builds still count, which is why the snapshots had to leave `main`.
+
+A GitHub Action on `data` rewrites `history.json` after each status push. The page reads both files from that branch. Do not merge `data` into `main`.
+
+`ignoreCommand` is only a backstop if a snapshot is committed to `main` by mistake:
 
 ```
 [ $(git rev-list --parents -n 1 HEAD | wc -w) -eq 2 ] && git diff --quiet HEAD^ HEAD -- . ':!status.json' ':!history.json'
 ```
 
-Exit 0 skips, exit 1 builds, so a plain commit is skipped when the only files it changes are `status.json`, `history.json`, or both. A merge always builds. That costs a deploy on a merge that carried no code, but the rule used to compare a merge against its first parent, and when that parent was the code commit being shipped the diff came back empty and the deploy was silently skipped. Erring toward one wasted build is much cheaper than serving yesterday's code and not knowing it.
+Exit 0 skips, exit 1 builds. A merge always builds.
 
 There is no local publisher. A launchd agent used to deploy the folder with the Vercel CLI on every status write, which is what exhausted the quota; it was retired once the board started reading its data from GitHub instead, and the Mac stopped being sent a copy of `status.json` at all. Deploying from two places also meant a stale checkout could overwrite current code, which happened. Do not add a second deploy path.
 
@@ -91,10 +95,10 @@ There is no local publisher. A launchd agent used to deploy the folder with the 
 
 There is no backend in this repo. The page reads one file, and that is the whole data path.
 
-It reads it from GitHub, not from this site:
+It reads it from the `data` branch on GitHub, not from this site:
 
 ```
-https://raw.githubusercontent.com/agamkram/gridboard-app/main/status.json
+https://raw.githubusercontent.com/agamkram/gridboard-app/data/status.json
 ```
 
 Grok Bot pushes there every 5 to 15 minutes, so the board sees new numbers without anything being deployed. GitHub caches for 5 minutes, which is why the board can be a few minutes behind the latest push. The copy deployed next to `index.html` is only the fallback for when GitHub cannot be reached, and it is as old as the last build — the staleness notice will say so. `connect-src` in `vercel.json` has to list `raw.githubusercontent.com` or the browser blocks the fetch.
