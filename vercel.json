@@ -1,6 +1,12 @@
 {
   "framework": null,
   "installCommand": "echo skip",
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "data": false
+    }
+  },
   "ignoreCommand": "[ $(git rev-list --parents -n 1 HEAD | wc -w) -eq 2 ] && git diff --quiet HEAD^ HEAD -- . ':!status.json' ':!history.json'",
   "headers": [
     {
