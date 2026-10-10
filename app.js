@@ -22,8 +22,8 @@
     trendAt: null,
   };
 
-  /* The publisher writes a snapshot about every 15 minutes. */
-  var STALE_MS = 45 * 60 * 1000;
+  /* The publisher writes a snapshot about every 30 minutes. */
+  var STALE_MS = 90 * 60 * 1000;
 
   function num(v) {
     if (typeof v === "number" && Number.isFinite(v)) return v;
@@ -886,7 +886,7 @@
     banner.textContent = message;
   }
 
-  /* Grok Bot pushes status.json to the data branch every 12 to 15 minutes.
+  /* Grok Bot pushes status.json to the data branch every 30 minutes.
      That branch is not deployed, so the writes never spend a Vercel build.
      The copy beside this file is the fallback if GitHub cannot be reached. */
   var FEEDS = [

@@ -16,7 +16,7 @@ Header, then three sections:
 - **Totals** — one card each for Neutral, Long, and Buy & hold. Each card reads At work, Cash, Now, with a chip comparing Now to $10,000 × 75.
 - **Tokens** — one row per symbol with Neutral, Long, Held, and a buy·sell count, plus a sort menu. There is no filter and no footer.
 
-A banner appears above the sections only when `paper_only` is false, or when the snapshot is more than 45 minutes old.
+A banner appears above the sections only when `paper_only` is false, or when the snapshot is more than 90 minutes old.
 
 ## Local preview
 
@@ -77,7 +77,7 @@ If Vercel’s domain panel prints a different target, use that record.
 
 **Pushing to `main` is the only way the site deploys.** Vercel builds this repo on push, so anything committed but unpushed is a pending rollback: the next build publishes what GitHub has, not what is on your disk.
 
-Grok Bot pushes `status.json` to the `data` branch every 5 to 15 minutes. `vercel.json` sets `git.deploymentEnabled.data` to false, so those writes never open a deployment. Hobby is 100 deployments a day across the whole account, and ignored builds still count, which is why the snapshots had to leave `main`.
+Grok Bot pushes `status.json` to the `data` branch every 30 minutes. `vercel.json` sets `git.deploymentEnabled.data` to false, so those writes never open a deployment. Hobby is 100 deployments a day across the whole account, and ignored builds still count, which is why the snapshots had to leave `main`.
 
 A GitHub Action on `data` rewrites `history.json` after each status push. The page reads both files from that branch. Do not merge `data` into `main`.
 
@@ -101,7 +101,7 @@ It reads it from the `data` branch on GitHub, not from this site:
 https://raw.githubusercontent.com/agamkram/gridboard-app/data/status.json
 ```
 
-Grok Bot pushes there every 5 to 15 minutes, so the board sees new numbers without anything being deployed. GitHub caches for 5 minutes, which is why the board can be a few minutes behind the latest push. The copy deployed next to `index.html` is only the fallback for when GitHub cannot be reached, and it is as old as the last build — the staleness notice will say so. `connect-src` in `vercel.json` has to list `raw.githubusercontent.com` or the browser blocks the fetch.
+Grok Bot pushes there every 30 minutes, so the board sees new numbers without anything being deployed. GitHub caches for 5 minutes, which is why the board can be a few minutes behind the latest push. The copy deployed next to `index.html` is only the fallback for when GitHub cannot be reached, and it is as old as the last build — the staleness notice will say so. `connect-src` in `vercel.json` has to list `raw.githubusercontent.com` or the browser blocks the fetch.
 
 The board fetches once on load and once per Reload. It does not poll.
 
