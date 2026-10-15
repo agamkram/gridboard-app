@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "11:35 PM ET",
-  "generated_at": "2026-10-14T23:35:54.558518-04:00",
-  "headline": "53 recent fills",
+  "updated_et": "12:02 AM ET",
+  "generated_at": "2026-10-15T00:02:48.607961-04:00",
+  "headline": "51 recent fills",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
   "capital_per_book": 10000,
@@ -63,412 +63,26 @@
     "other_pairs": 71,
     "n_quiet": 71,
     "l_quiet": 71,
-    "n_fills": 21,
-    "l_fills": 32,
+    "n_fills": 20,
+    "l_fills": 31,
     "continuous_fills_since_last_ping": 0,
     "hot": {
-      "MANA": {
-        "until": "2026-10-14T23:54:22.313908-04:00",
-        "last_fill": "2026-10-14T22:24:22.313908-04:00",
-        "fast_until": "2026-10-14T22:39:22.313908-04:00",
-        "fills": 3,
-        "remaining_s": 1107,
-        "quiet_s": 4292,
-        "fast_poll": false
-      },
-      "LDO": {
-        "until": "2026-10-14T23:54:21.562719-04:00",
-        "last_fill": "2026-10-14T22:24:21.562719-04:00",
-        "fast_until": "2026-10-14T22:39:21.562719-04:00",
-        "fills": 2,
-        "remaining_s": 1107,
-        "quiet_s": 4292,
-        "fast_poll": false
-      },
-      "ALGO": {
-        "until": "2026-10-14T23:58:22.212308-04:00",
-        "last_fill": "2026-10-14T22:28:22.212308-04:00",
-        "fast_until": "2026-10-14T22:43:22.212308-04:00",
-        "fills": 3,
-        "remaining_s": 1347,
-        "quiet_s": 4052,
-        "fast_poll": false
-      },
-      "SYRUP": {
-        "until": "2026-10-14T23:53:57.892123-04:00",
-        "last_fill": "2026-10-14T22:23:57.892123-04:00",
-        "fast_until": "2026-10-14T22:38:57.892123-04:00",
-        "fills": 2,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "GRASS": {
-        "until": "2026-10-14T23:53:56.243890-04:00",
-        "last_fill": "2026-10-14T22:23:56.243890-04:00",
-        "fast_until": "2026-10-14T22:38:56.243890-04:00",
-        "fills": 1,
-        "remaining_s": 1081,
-        "quiet_s": 4318,
-        "fast_poll": false
-      },
-      "ZRO": {
-        "until": "2026-10-14T23:53:56.423275-04:00",
-        "last_fill": "2026-10-14T22:23:56.423275-04:00",
-        "fast_until": "2026-10-14T22:38:56.423275-04:00",
-        "fills": 2,
-        "remaining_s": 1081,
-        "quiet_s": 4318,
-        "fast_poll": false
-      },
       "NEAR": {
         "until": "2026-10-15T01:01:37.077985-04:00",
         "last_fill": "2026-10-14T23:31:37.077985-04:00",
         "fast_until": "2026-10-14T23:46:37.077985-04:00",
         "fills": 2,
-        "remaining_s": 5142,
-        "quiet_s": 257,
-        "fast_poll": true
-      },
-      "SUI": {
-        "until": "2026-10-14T23:53:56.720177-04:00",
-        "last_fill": "2026-10-14T22:23:56.720177-04:00",
-        "fast_until": "2026-10-14T22:38:56.720177-04:00",
-        "fills": 1,
-        "remaining_s": 1082,
-        "quiet_s": 4317,
-        "fast_poll": false
-      },
-      "FIL": {
-        "until": "2026-10-14T23:53:56.957769-04:00",
-        "last_fill": "2026-10-14T22:23:56.957769-04:00",
-        "fast_until": "2026-10-14T22:38:56.957769-04:00",
-        "fills": 1,
-        "remaining_s": 1082,
-        "quiet_s": 4317,
-        "fast_poll": false
-      },
-      "CRV": {
-        "until": "2026-10-14T23:53:57.172023-04:00",
-        "last_fill": "2026-10-14T22:23:57.172023-04:00",
-        "fast_until": "2026-10-14T22:38:57.172023-04:00",
-        "fills": 1,
-        "remaining_s": 1082,
-        "quiet_s": 4317,
-        "fast_poll": false
-      },
-      "OP": {
-        "until": "2026-10-14T23:58:22.599990-04:00",
-        "last_fill": "2026-10-14T22:28:22.599990-04:00",
-        "fast_until": "2026-10-14T22:43:22.599990-04:00",
-        "fills": 2,
-        "remaining_s": 1348,
-        "quiet_s": 4051,
-        "fast_poll": false
-      },
-      "JUP": {
-        "until": "2026-10-14T23:53:57.414498-04:00",
-        "last_fill": "2026-10-14T22:23:57.414498-04:00",
-        "fast_until": "2026-10-14T22:38:57.414498-04:00",
-        "fills": 1,
-        "remaining_s": 1082,
-        "quiet_s": 4317,
-        "fast_poll": false
-      },
-      "SEI": {
-        "until": "2026-10-14T23:53:57.417555-04:00",
-        "last_fill": "2026-10-14T22:23:57.417555-04:00",
-        "fast_until": "2026-10-14T22:38:57.417555-04:00",
-        "fills": 1,
-        "remaining_s": 1082,
-        "quiet_s": 4317,
-        "fast_poll": false
-      },
-      "ICP": {
-        "until": "2026-10-14T23:53:57.637344-04:00",
-        "last_fill": "2026-10-14T22:23:57.637344-04:00",
-        "fast_until": "2026-10-14T22:38:57.637344-04:00",
-        "fills": 1,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "LTC": {
-        "until": "2026-10-14T23:53:57.639792-04:00",
-        "last_fill": "2026-10-14T22:23:57.639792-04:00",
-        "fast_until": "2026-10-14T22:38:57.639792-04:00",
-        "fills": 1,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "ARB": {
-        "until": "2026-10-14T23:53:57.667192-04:00",
-        "last_fill": "2026-10-14T22:23:57.667192-04:00",
-        "fast_until": "2026-10-14T22:38:57.667192-04:00",
-        "fills": 2,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "AAVE": {
-        "until": "2026-10-14T23:53:57.874660-04:00",
-        "last_fill": "2026-10-14T22:23:57.874660-04:00",
-        "fast_until": "2026-10-14T22:38:57.874660-04:00",
-        "fills": 1,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "TAO": {
-        "until": "2026-10-14T23:53:58.090364-04:00",
-        "last_fill": "2026-10-14T22:23:58.090364-04:00",
-        "fast_until": "2026-10-14T22:38:58.090364-04:00",
-        "fills": 2,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "INJ": {
-        "until": "2026-10-14T23:53:58.337810-04:00",
-        "last_fill": "2026-10-14T22:23:58.337810-04:00",
-        "fast_until": "2026-10-14T22:38:58.337810-04:00",
-        "fills": 1,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "DOT": {
-        "until": "2026-10-14T23:53:58.548283-04:00",
-        "last_fill": "2026-10-14T22:23:58.548283-04:00",
-        "fast_until": "2026-10-14T22:38:58.548283-04:00",
-        "fills": 1,
-        "remaining_s": 1083,
-        "quiet_s": 4316,
-        "fast_poll": false
-      },
-      "COMP": {
-        "until": "2026-10-14T23:53:58.592906-04:00",
-        "last_fill": "2026-10-14T22:23:58.592906-04:00",
-        "fast_until": "2026-10-14T22:38:58.592906-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "ADA": {
-        "until": "2026-10-14T23:53:58.738056-04:00",
-        "last_fill": "2026-10-14T22:23:58.738056-04:00",
-        "fast_until": "2026-10-14T22:38:58.738056-04:00",
-        "fills": 2,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "PEPE": {
-        "until": "2026-10-14T23:58:23.716113-04:00",
-        "last_fill": "2026-10-14T22:28:23.716113-04:00",
-        "fast_until": "2026-10-14T22:43:23.716113-04:00",
-        "fills": 2,
-        "remaining_s": 1349,
-        "quiet_s": 4050,
-        "fast_poll": false
-      },
-      "TON": {
-        "until": "2026-10-14T23:53:58.771862-04:00",
-        "last_fill": "2026-10-14T22:23:58.771862-04:00",
-        "fast_until": "2026-10-14T22:38:58.771862-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "SHIB": {
-        "until": "2026-10-14T23:53:58.828986-04:00",
-        "last_fill": "2026-10-14T22:23:58.828986-04:00",
-        "fast_until": "2026-10-14T22:38:58.828986-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "XRP": {
-        "until": "2026-10-14T23:53:58.884890-04:00",
-        "last_fill": "2026-10-14T22:23:58.884890-04:00",
-        "fast_until": "2026-10-14T22:38:58.884890-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "BCH": {
-        "until": "2026-10-14T23:53:58.925032-04:00",
-        "last_fill": "2026-10-14T22:23:58.925032-04:00",
-        "fast_until": "2026-10-14T22:38:58.925032-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "APT": {
-        "until": "2026-10-14T23:53:59.378798-04:00",
-        "last_fill": "2026-10-14T22:23:59.378798-04:00",
-        "fast_until": "2026-10-14T22:38:59.378798-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "RENDER": {
-        "until": "2026-10-14T23:53:59.465666-04:00",
-        "last_fill": "2026-10-14T22:23:59.465666-04:00",
-        "fast_until": "2026-10-14T22:38:59.465666-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "IMX": {
-        "until": "2026-10-14T23:53:59.534098-04:00",
-        "last_fill": "2026-10-14T22:23:59.534098-04:00",
-        "fast_until": "2026-10-14T22:38:59.534098-04:00",
-        "fills": 1,
-        "remaining_s": 1084,
-        "quiet_s": 4315,
-        "fast_poll": false
-      },
-      "FLOKI": {
-        "until": "2026-10-14T23:53:59.687744-04:00",
-        "last_fill": "2026-10-14T22:23:59.687744-04:00",
-        "fast_until": "2026-10-14T22:38:59.687744-04:00",
-        "fills": 2,
-        "remaining_s": 1085,
-        "quiet_s": 4314,
-        "fast_poll": false
-      },
-      "ETC": {
-        "until": "2026-10-14T23:57:48.817614-04:00",
-        "last_fill": "2026-10-14T22:27:48.817614-04:00",
-        "fast_until": "2026-10-14T22:42:48.817614-04:00",
-        "fills": 2,
-        "remaining_s": 1314,
-        "quiet_s": 4085,
-        "fast_poll": false
-      },
-      "AXS": {
-        "until": "2026-10-14T23:54:00.376954-04:00",
-        "last_fill": "2026-10-14T22:24:00.376954-04:00",
-        "fast_until": "2026-10-14T22:39:00.376954-04:00",
-        "fills": 2,
-        "remaining_s": 1085,
-        "quiet_s": 4314,
-        "fast_poll": false
-      },
-      "APE": {
-        "until": "2026-10-14T23:54:00.378817-04:00",
-        "last_fill": "2026-10-14T22:24:00.378817-04:00",
-        "fast_until": "2026-10-14T22:39:00.378817-04:00",
-        "fills": 2,
-        "remaining_s": 1085,
-        "quiet_s": 4314,
-        "fast_poll": false
-      },
-      "ZBCN": {
-        "until": "2026-10-14T23:54:06.708514-04:00",
-        "last_fill": "2026-10-14T22:24:06.708514-04:00",
-        "fast_until": "2026-10-14T22:39:06.708514-04:00",
-        "fills": 1,
-        "remaining_s": 1092,
-        "quiet_s": 4307,
-        "fast_poll": false
-      },
-      "AVAX": {
-        "until": "2026-10-14T23:54:09.523634-04:00",
-        "last_fill": "2026-10-14T22:24:09.523634-04:00",
-        "fast_until": "2026-10-14T22:39:09.523634-04:00",
-        "fills": 1,
-        "remaining_s": 1094,
-        "quiet_s": 4305,
-        "fast_poll": false
-      },
-      "SOL": {
-        "until": "2026-10-14T23:54:17.675015-04:00",
-        "last_fill": "2026-10-14T22:24:17.675015-04:00",
-        "fast_until": "2026-10-14T22:39:17.675015-04:00",
-        "fills": 1,
-        "remaining_s": 1103,
-        "quiet_s": 4296,
-        "fast_poll": false
-      },
-      "POL": {
-        "until": "2026-10-14T23:54:18.938658-04:00",
-        "last_fill": "2026-10-14T22:24:18.938658-04:00",
-        "fast_until": "2026-10-14T22:39:18.938658-04:00",
-        "fills": 1,
-        "remaining_s": 1104,
-        "quiet_s": 4295,
-        "fast_poll": false
-      },
-      "DRV": {
-        "until": "2026-10-14T23:56:04.943786-04:00",
-        "last_fill": "2026-10-14T22:26:04.943786-04:00",
-        "fast_until": "2026-10-14T22:41:04.943786-04:00",
-        "fills": 2,
-        "remaining_s": 1210,
-        "quiet_s": 4189,
-        "fast_poll": false
-      },
-      "FET": {
-        "until": "2026-10-14T23:57:45.951557-04:00",
-        "last_fill": "2026-10-14T22:27:45.951557-04:00",
-        "fast_until": "2026-10-14T22:42:45.951557-04:00",
-        "fills": 1,
-        "remaining_s": 1311,
-        "quiet_s": 4088,
-        "fast_poll": false
-      },
-      "GRT": {
-        "until": "2026-10-14T23:58:24.788802-04:00",
-        "last_fill": "2026-10-14T22:28:24.788802-04:00",
-        "fast_until": "2026-10-14T22:43:24.788802-04:00",
-        "fills": 1,
-        "remaining_s": 1350,
-        "quiet_s": 4049,
+        "remaining_s": 3528,
+        "quiet_s": 1871,
         "fast_poll": false
       }
     },
     "continuous_alive": true,
     "continuous_last_cycle": 3176,
-    "continuous_updated_at": "2026-10-14T23:35:47.363686-04:00",
+    "continuous_updated_at": "2026-10-15T00:02:39.806807-04:00",
     "continuous_pid": 3275345
   },
   "fills": [
-    {
-      "symbol": "FET",
-      "style": "Neutral",
-      "workspace": "mark-10k-fet",
-      "side": "buy",
-      "price": 0.1951,
-      "volume": 2563.52104721,
-      "reladder_side": "sell",
-      "reladder_price": 0.2049,
-      "placed": false,
-      "note": "duplicate_skip",
-      "ts": "2026-10-14T15:54:47.548100-04:00"
-    },
-    {
-      "symbol": "SYRUP",
-      "style": "Long",
-      "workspace": "mark-10k-syrup-geo",
-      "side": "buy",
-      "price": 0.2155,
-      "volume": 6179.40495,
-      "reladder_side": "sell",
-      "reladder_price": 0.22628,
-      "placed": false,
-      "note": "duplicate_skip",
-      "ts": "2026-10-14T15:54:50.090277-04:00"
-    },
     {
       "symbol": "DRV",
       "style": "Neutral",
@@ -5017,8 +4631,8 @@
             "last_fill": "2026-10-14T17:22:40-04:00",
             "fast_until": "2026-10-14T17:37:40-04:00",
             "fills": 1,
-            "remaining_s": 6405,
-            "quiet_s": 22394,
+            "remaining_s": 4791,
+            "quiet_s": 24008,
             "fast_poll": false
           },
           "XPL": {
@@ -5026,8 +4640,8 @@
             "last_fill": "2026-10-14T22:01:26-04:00",
             "fast_until": "2026-10-14T22:16:26-04:00",
             "fills": 1,
-            "remaining_s": 23131,
-            "quiet_s": 5668,
+            "remaining_s": 21517,
+            "quiet_s": 7282,
             "fast_poll": false
           },
           "PUMP": {
@@ -5035,8 +4649,8 @@
             "last_fill": "2026-10-14T22:01:26-04:00",
             "fast_until": "2026-10-14T22:16:26-04:00",
             "fills": 1,
-            "remaining_s": 23131,
-            "quiet_s": 5668,
+            "remaining_s": 21517,
+            "quiet_s": 7282,
             "fast_poll": false
           },
           "BONK": {
@@ -5044,8 +4658,8 @@
             "last_fill": "2026-10-14T22:01:26-04:00",
             "fast_until": "2026-10-14T22:16:26-04:00",
             "fills": 1,
-            "remaining_s": 23131,
-            "quiet_s": 5668,
+            "remaining_s": 21517,
+            "quiet_s": 7282,
             "fast_poll": false
           },
           "DRV": {
@@ -5053,8 +4667,8 @@
             "last_fill": "2026-10-14T22:25:18-04:00",
             "fast_until": "2026-10-14T22:40:18-04:00",
             "fills": 2,
-            "remaining_s": 24563,
-            "quiet_s": 4236,
+            "remaining_s": 22949,
+            "quiet_s": 5850,
             "fast_poll": false
           },
           "MON": {
@@ -5062,8 +4676,8 @@
             "last_fill": "2026-10-14T22:25:18-04:00",
             "fast_until": "2026-10-14T22:40:18-04:00",
             "fills": 1,
-            "remaining_s": 24563,
-            "quiet_s": 4236,
+            "remaining_s": 22949,
+            "quiet_s": 5850,
             "fast_poll": false
           },
           "SAND": {
@@ -5071,8 +4685,8 @@
             "last_fill": "2026-10-14T22:25:18-04:00",
             "fast_until": "2026-10-14T22:40:18-04:00",
             "fills": 1,
-            "remaining_s": 24563,
-            "quiet_s": 4236,
+            "remaining_s": 22949,
+            "quiet_s": 5850,
             "fast_poll": false
           },
           "SEI": {
@@ -5080,14 +4694,14 @@
             "last_fill": "2026-10-14T23:33:12-04:00",
             "fast_until": "2026-10-14T23:48:12-04:00",
             "fills": 1,
-            "remaining_s": 28637,
-            "quiet_s": 162,
-            "fast_poll": true
+            "remaining_s": 27023,
+            "quiet_s": 1776,
+            "fast_poll": false
           }
         },
         "continuous_alive": true,
         "continuous_last_cycle": 3176,
-        "continuous_updated_at": "2026-10-14T23:35:47.363686-04:00",
+        "continuous_updated_at": "2026-10-15T00:02:39.806807-04:00",
         "continuous_pid": 3275345
       }
     }
