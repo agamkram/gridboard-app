@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "2:34 PM ET",
-  "generated_at": "2026-10-15T14:34:04.154310-04:00",
-  "headline": "40 recent fills",
+  "updated_et": "2:53 PM ET",
+  "generated_at": "2026-10-15T14:53:02.337586-04:00",
+  "headline": "41 recent fills",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
   "capital_per_book": 10000,
@@ -61,9 +61,9 @@
   ],
   "rollup": {
     "other_pairs": 71,
-    "n_quiet": 70,
+    "n_quiet": 69,
     "l_quiet": 71,
-    "n_fills": 14,
+    "n_fills": 15,
     "l_fills": 26,
     "continuous_fills_since_last_ping": 0,
     "hot": {
@@ -72,8 +72,8 @@
         "last_fill": "2026-10-15T13:58:22.278941-04:00",
         "fast_until": "2026-10-15T14:13:22.278941-04:00",
         "fills": 4,
-        "remaining_s": 3258,
-        "quiet_s": 2141,
+        "remaining_s": 2119,
+        "quiet_s": 3280,
         "fast_poll": false
       },
       "DOT": {
@@ -81,8 +81,8 @@
         "last_fill": "2026-10-15T14:02:04.636651-04:00",
         "fast_until": "2026-10-15T14:17:04.636651-04:00",
         "fills": 2,
-        "remaining_s": 3480,
-        "quiet_s": 1919,
+        "remaining_s": 2342,
+        "quiet_s": 3057,
         "fast_poll": false
       },
       "NEAR": {
@@ -90,8 +90,8 @@
         "last_fill": "2026-10-15T13:58:19.064402-04:00",
         "fast_until": "2026-10-15T14:13:19.064402-04:00",
         "fills": 1,
-        "remaining_s": 3254,
-        "quiet_s": 2145,
+        "remaining_s": 2116,
+        "quiet_s": 3283,
         "fast_poll": false
       },
       "FIL": {
@@ -99,8 +99,8 @@
         "last_fill": "2026-10-15T13:58:19.962944-04:00",
         "fast_until": "2026-10-15T14:13:19.962944-04:00",
         "fills": 1,
-        "remaining_s": 3255,
-        "quiet_s": 2144,
+        "remaining_s": 2117,
+        "quiet_s": 3282,
         "fast_poll": false
       },
       "DRV": {
@@ -108,8 +108,8 @@
         "last_fill": "2026-10-15T13:58:20.405175-04:00",
         "fast_until": "2026-10-15T14:13:20.405175-04:00",
         "fills": 1,
-        "remaining_s": 3256,
-        "quiet_s": 2143,
+        "remaining_s": 2118,
+        "quiet_s": 3281,
         "fast_poll": false
       },
       "BCH": {
@@ -117,17 +117,26 @@
         "last_fill": "2026-10-15T13:58:23.396028-04:00",
         "fast_until": "2026-10-15T14:13:23.396028-04:00",
         "fills": 1,
-        "remaining_s": 3259,
-        "quiet_s": 2140,
+        "remaining_s": 2121,
+        "quiet_s": 3278,
         "fast_poll": false
       },
       "ONDO": {
-        "until": "2026-10-15T16:03:47.129984-04:00",
-        "last_fill": "2026-10-15T14:33:47.129984-04:00",
-        "fast_until": "2026-10-15T14:48:47.129984-04:00",
+        "until": "2026-10-15T16:22:32.603471-04:00",
+        "last_fill": "2026-10-15T14:52:32.603471-04:00",
+        "fast_until": "2026-10-15T15:07:32.603471-04:00",
         "fills": 1,
-        "remaining_s": 5382,
-        "quiet_s": 17,
+        "remaining_s": 5370,
+        "quiet_s": 29,
+        "fast_poll": true
+      },
+      "AVAX": {
+        "until": "2026-10-15T16:22:36.722894-04:00",
+        "last_fill": "2026-10-15T14:52:36.722894-04:00",
+        "fast_until": "2026-10-15T15:07:36.722894-04:00",
+        "fills": 1,
+        "remaining_s": 5374,
+        "quiet_s": 25,
         "fast_poll": true
       },
       "ZEC": {
@@ -135,14 +144,14 @@
         "last_fill": "2026-10-15T14:28:48.935288-04:00",
         "fast_until": "2026-10-15T14:43:48.935288-04:00",
         "fills": 1,
-        "remaining_s": 5084,
-        "quiet_s": 315,
-        "fast_poll": true
+        "remaining_s": 3946,
+        "quiet_s": 1453,
+        "fast_poll": false
       }
     },
     "continuous_alive": true,
     "continuous_last_cycle": 3567,
-    "continuous_updated_at": "2026-10-15T14:33:56.257692-04:00",
+    "continuous_updated_at": "2026-10-15T14:52:43.839473-04:00",
     "continuous_pid": 3275345
   },
   "fills": [
@@ -664,7 +673,20 @@
       "reladder_price": 0.44198,
       "placed": false,
       "note": "digest_only_skip",
-      "ts": "2026-10-15T14:33:47.129984-04:00"
+      "ts": "2026-10-15T14:52:32.603471-04:00"
+    },
+    {
+      "symbol": "AVAX",
+      "style": "Neutral",
+      "workspace": "mark-10k-avax",
+      "side": "sell",
+      "price": 9.999,
+      "volume": 149.95820364,
+      "reladder_side": "buy",
+      "reladder_price": 9.523,
+      "placed": false,
+      "note": "digest_only_skip",
+      "ts": "2026-10-15T14:52:36.722894-04:00"
     }
   ],
   "pairs": [
@@ -1246,13 +1268,13 @@
       "pair": "AVAXUSD",
       "neutral_ws": "mark-10k-avax",
       "long_ws": "mark-10k-avax-geo",
-      "neutral_equity": 9624.047742494758,
-      "neutral_coin_usd": 9624.04774244208,
-      "neutral_cash_usd": 5.267872e-08,
-      "neutral_orders": 3,
+      "neutral_equity": 9617.450781200228,
+      "neutral_coin_usd": 8130.01415957676,
+      "neutral_cash_usd": 1487.4366216234678,
+      "neutral_orders": 2,
       "neutral_buys": 9,
-      "neutral_sells": 5,
-      "neutral_fees_paid": 209.37884192054128,
+      "neutral_sells": 6,
+      "neutral_fees_paid": 221.37429854611216,
       "long_equity": 9582.051347758987,
       "long_coin_usd": 7640.96171919804,
       "long_cash_usd": 1941.0896285609474,
@@ -4425,14 +4447,14 @@
             "last_fill": "2026-10-15T09:08:15-04:00",
             "fast_until": "2026-10-15T09:23:15-04:00",
             "fills": 1,
-            "remaining_s": 9250,
-            "quiet_s": 19549,
+            "remaining_s": 8112,
+            "quiet_s": 20687,
             "fast_poll": false
           }
         },
         "continuous_alive": true,
         "continuous_last_cycle": 3567,
-        "continuous_updated_at": "2026-10-15T14:33:56.257692-04:00",
+        "continuous_updated_at": "2026-10-15T14:52:43.839473-04:00",
         "continuous_pid": 3275345
       }
     }
