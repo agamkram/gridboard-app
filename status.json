@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "paper_only": true,
-  "updated_et": "5:01 PM ET",
-  "generated_at": "2026-10-16T17:01:10.471628-04:00",
+  "updated_et": "5:03 PM ET",
+  "generated_at": "2026-10-16T17:03:03.849145-04:00",
   "headline": "19 recent fills",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
@@ -72,8 +72,8 @@
         "last_fill": "2026-10-16T15:44:29.339609-04:00",
         "fast_until": "2026-10-16T15:59:29.339609-04:00",
         "fills": 4,
-        "remaining_s": 798,
-        "quiet_s": 4601,
+        "remaining_s": 685,
+        "quiet_s": 4714,
         "fast_poll": false
       },
       "STX": {
@@ -81,14 +81,14 @@
         "last_fill": "2026-10-16T15:44:31.935949-04:00",
         "fast_until": "2026-10-16T15:59:31.935949-04:00",
         "fills": 1,
-        "remaining_s": 801,
-        "quiet_s": 4598,
+        "remaining_s": 688,
+        "quiet_s": 4711,
         "fast_poll": false
       }
     },
     "continuous_alive": true,
-    "continuous_last_cycle": 4230,
-    "continuous_updated_at": "2026-10-16T17:00:22.705729-04:00",
+    "continuous_last_cycle": 4231,
+    "continuous_updated_at": "2026-10-16T17:02:41.717523-04:00",
     "continuous_pid": 3275345
   },
   "fills": [
@@ -4078,8 +4078,8 @@
         "continuous_fills_since_last_ping": 0,
         "hot": {},
         "continuous_alive": true,
-        "continuous_last_cycle": 4230,
-        "continuous_updated_at": "2026-10-16T17:00:22.705729-04:00",
+        "continuous_last_cycle": 4231,
+        "continuous_updated_at": "2026-10-16T17:02:41.717523-04:00",
         "continuous_pid": 3275345
       }
     }
