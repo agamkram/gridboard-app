@@ -655,15 +655,6 @@ tbody tr:last-child td { border-bottom: 0; }
   font-size: 14px;
 }
 
-.about-foot {
-  margin-top: 18px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.about-foot a { color: inherit; }
-
 .sr-only {
   position: absolute;
   width: 1px;

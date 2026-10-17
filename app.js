@@ -22,7 +22,9 @@
     trendAt: null,
   };
 
-  /* The publisher writes a snapshot about every 30 minutes. */
+  /* The publisher writes a snapshot once an hour, around :21 ET.
+     90 minutes is one missed hour plus a little slack, so a late
+     write does not raise the banner. */
   var STALE_MS = 90 * 60 * 1000;
 
   function num(v) {
@@ -150,7 +152,6 @@
       capital_per_book: s.capital_per_book != null ? s.capital_per_book : root.capital_per_book,
       fee_rate: s.fee_rate != null ? s.fee_rate : root.fee_rate,
       fee_label: s.fee_label || root.fee_label,
-      paper_only: s.paper_only != null ? s.paper_only : root.paper_only,
       _revised: root._revised,
     };
   }
@@ -244,9 +245,6 @@
     document.getElementById("stamp").textContent = stampLine(data);
 
     var notes = [];
-    if (data.paper_only === false) {
-      notes.push("This update is not marked as practice only. This site still cannot place orders.");
-    }
     var when = snapshotTime(data);
     if (!Number.isNaN(when) && Date.now() - when > STALE_MS) {
       notes.push("This update is " + describeAge(Date.now() - when) + " old. The job that writes it may have stopped.");
@@ -886,7 +884,7 @@
     banner.textContent = message;
   }
 
-  /* Grok Bot pushes status.json to the data branch every 30 minutes.
+  /* Grok Bot pushes status.json to the data branch once an hour, around :21 ET.
      That branch is not deployed, so the writes never spend a Vercel build.
      The copy beside this file is the fallback if GitHub cannot be reached. */
   var FEEDS = [

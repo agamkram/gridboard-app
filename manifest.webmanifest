@@ -1,7 +1,7 @@
 {
   "name": "GridBoard",
   "short_name": "GridBoard",
-  "description": "Read-only paper grid ops for 75 Kraken USD pairs. Neutral and Long books, $10,000 each.",
+  "description": "Trades on 75 Kraken USD pairs. Neutral and Long books, $10,000 each.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f4f6f8",

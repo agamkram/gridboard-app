@@ -7,15 +7,15 @@
   <meta name="color-scheme" content="light">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="GridBoard">
-  <meta name="description" content="How GridBoard’s geometric grids work. Practice money, not financial advice.">
+  <meta name="description" content="How GridBoard’s geometric grids work.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="GridBoard">
   <meta property="og:title" content="About — GridBoard">
-  <meta property="og:description" content="How GridBoard’s geometric grids work. Practice money, not financial advice.">
+  <meta property="og:description" content="How GridBoard’s geometric grids work.">
   <meta property="og:url" content="https://gridboard.markmaga.com/about.html">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="About — GridBoard">
-  <meta name="twitter:description" content="How GridBoard’s geometric grids work. Practice money, not financial advice.">
+  <meta name="twitter:description" content="How GridBoard’s geometric grids work.">
   <meta property="og:image" content="https://gridboard.markmaga.com/icon-512.png?v=2">
   <meta name="twitter:image" content="https://gridboard.markmaga.com/icon-512.png?v=2">
   <title>About — GridBoard</title>
@@ -46,7 +46,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@500;600&family=Michroma&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20">
+  <link rel="stylesheet" href="styles.css?v=21">
 </head>
 <body>
   <div class="wrap about-page">
@@ -61,7 +61,7 @@
 
     <section class="about-block" id="what">
       <h2>What this is</h2>
-      <p>GridBoard shows practice trades on Kraken. The money is not real, and nothing on this site can send an order.</p>
+      <p>GridBoard shows trades on Kraken.</p>
       <p>There are 75 tokens priced in US dollars. Each token has a Neutral account and a Long account, and each account starts with $10,000.</p>
       <p>The 5% set has 150 books. The 25% set has another 150. One set spaces its orders 5% apart. The other spaces them 25% apart. The buttons at the top of the board switch the whole page from one set to the other.</p>
       <p>Every buy and every sell pays a <span data-fee>0.80%</span> fee.</p>
@@ -97,10 +97,8 @@
         <li><strong>Buy · sell</strong> is how many times that token’s two accounts have bought and sold, counting the opening purchase as the first buy. A token that has not traded yet shows 2 · 0.</li>
         <li><strong>Hot watch</strong> lists the tokens still inside that window, with when each one last traded.</li>
       </ul>
-      <p>The page only reads a saved update. There is no login, and the browser never connects to Kraken.</p>
+      <p>The page only reads a saved update. That update is written once an hour, around 21 minutes past the hour, Eastern time. Trades keep happening between those updates. There is no login, and the browser never connects to Kraken.</p>
     </section>
-
-    <p class="about-foot">Not financial advice</p>
   </div>
 
   <script>
