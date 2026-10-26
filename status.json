@@ -2,7 +2,7 @@
   "schema_version": 1,
   "paper_only": true,
   "updated_et": "9:31 PM ET",
-  "generated_at": "2026-10-25T21:31:13.460745-04:00",
+  "generated_at": "2026-10-25T21:31:38.835192-04:00",
   "headline": "7 recent fills",
   "fee_label": "0.80%",
   "fee_rate": 0.008,
@@ -72,14 +72,14 @@
         "last_fill": "2026-10-25T21:31:03.499265-04:00",
         "fast_until": "2026-10-25T21:46:03.499265-04:00",
         "fills": 1,
-        "remaining_s": 5390,
-        "quiet_s": 9,
+        "remaining_s": 5364,
+        "quiet_s": 35,
         "fast_poll": true
       }
     },
     "continuous_alive": true,
-    "continuous_last_cycle": 656,
-    "continuous_updated_at": "2026-10-25T21:30:47.787669-04:00",
+    "continuous_last_cycle": 657,
+    "continuous_updated_at": "2026-10-25T21:31:32.523179-04:00",
     "continuous_pid": 3735728
   },
   "fills": [
@@ -3892,13 +3892,13 @@
           "pair": "APEUSD",
           "neutral_ws": "mark-10k-ape",
           "long_ws": "mark-10k-ape-geo",
-          "neutral_equity": 9025.922119447572,
-          "neutral_coin_usd": 4035.732452997504,
-          "neutral_cash_usd": 4990.189666450069,
+          "neutral_equity": 9035.633202145957,
+          "neutral_coin_usd": 5510.413468230524,
+          "neutral_cash_usd": 3525.2197339154327,
           "neutral_orders": 6,
-          "neutral_buys": 1,
+          "neutral_buys": 2,
           "neutral_sells": 0,
-          "neutral_fees_paid": 39.760399472618495,
+          "neutral_fees_paid": 51.387144968925135,
           "long_equity": 9387.07717267004,
           "long_coin_usd": 4268.921416824192,
           "long_cash_usd": 5118.155755845847,
@@ -3913,18 +3913,44 @@
           "threat": "near lower band"
         }
       ],
-      "fills": [],
+      "fills": [
+        {
+          "ts": "2026-10-25T21:04:59-04:00",
+          "cycle": null,
+          "mode": "recenter-25pct",
+          "symbol": "APE",
+          "style": "Neutral",
+          "workspace": "mark-10k-ape",
+          "side": "buy",
+          "price": 0.1226,
+          "volume": 11854.34899705,
+          "reladder_side": "sell",
+          "reladder_price": 0.1533,
+          "placed": true,
+          "note": "recenter"
+        }
+      ],
       "rollup": {
         "other_pairs": 71,
-        "n_quiet": 71,
+        "n_quiet": 70,
         "l_quiet": 71,
-        "n_fills": 0,
+        "n_fills": 1,
         "l_fills": 0,
-        "continuous_fills_since_last_ping": 0,
-        "hot": {},
+        "continuous_fills_since_last_ping": 1,
+        "hot": {
+          "APE": {
+            "until": "2026-10-26T05:04:59-04:00",
+            "last_fill": "2026-10-25T21:04:59-04:00",
+            "fast_until": "2026-10-25T21:19:59-04:00",
+            "fills": 1,
+            "remaining_s": 27200,
+            "quiet_s": 1599,
+            "fast_poll": false
+          }
+        },
         "continuous_alive": true,
-        "continuous_last_cycle": 656,
-        "continuous_updated_at": "2026-10-25T21:30:47.787669-04:00",
+        "continuous_last_cycle": 657,
+        "continuous_updated_at": "2026-10-25T21:31:32.523179-04:00",
         "continuous_pid": 3735728
       }
     }
