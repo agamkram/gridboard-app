@@ -4,11 +4,18 @@ name: Chart history
 # from those commits so the chart keeps going. The push does not include
 # status.json, so this workflow does not run again on its own commit.
 # Vercel is set not to deploy `data`, so these writes never spend a build.
+#
+# Two status pushes a few seconds apart used to start two of these jobs.
+# Both tried to push history.json; one lost and GitHub mailed a failure.
 on:
   push:
     branches: [data]
     paths:
       - status.json
+
+concurrency:
+  group: gridboard-chart-history
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -23,13 +30,26 @@ jobs:
           ref: data
       - name: Rebuild history.json
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin data
-          python3 scripts/build-history.py
-          git add history.json
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m "Update GridBoard history [skip vercel]"
-          git push origin HEAD:data
+          attempt=1
+          while [ "$attempt" -le 5 ]; do
+            git fetch origin data
+            git reset --hard origin/data
+            python3 scripts/build-history.py
+            git add history.json
+            if git diff --cached --quiet; then
+              echo "history.json already current"
+              exit 0
+            fi
+            git commit -m "Update GridBoard history [skip vercel]"
+            if git push origin HEAD:data; then
+              exit 0
+            fi
+            echo "push rejected, retry $attempt"
+            attempt=$((attempt + 1))
+            sleep 3
+          done
+          echo "could not push history.json"
+          exit 1
