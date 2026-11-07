@@ -22,10 +22,10 @@
     trendAt: null,
   };
 
-  /* The publisher writes a snapshot once an hour, around :21 ET.
-     90 minutes is one missed hour plus a little slack, so a late
+  /* The publisher writes a snapshot every two hours, around :21 ET.
+     150 minutes is one missed cycle plus a little slack, so a late
      write does not raise the banner. */
-  var STALE_MS = 90 * 60 * 1000;
+  var STALE_MS = 150 * 60 * 1000;
 
   function num(v) {
     if (typeof v === "number" && Number.isFinite(v)) return v;
@@ -884,7 +884,7 @@
     banner.textContent = message;
   }
 
-  /* Grok Bot pushes status.json to the data branch once an hour, around :21 ET.
+  /* Grok Bot pushes status.json to the data branch every two hours, around :21 ET.
      That branch is not deployed, so the writes never spend a Vercel build.
      The copy beside this file is the fallback if GitHub cannot be reached. */
   var FEEDS = [
